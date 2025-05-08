@@ -10,7 +10,7 @@
 		<ProjectReference Include="..\UserService.Domain\UserService.Domain.csproj" />
 		<ProjectReference Include="..\UserService.Application\UserService.Application.csproj" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.15" />		
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.15" />
 	</ItemGroup>
 
 </Project>

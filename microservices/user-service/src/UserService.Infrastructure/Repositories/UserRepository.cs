@@ -19,9 +19,10 @@ namespace UserService.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<User?> GetUserByIdAsync(string userId)
+        public async Task<User?> GetUserByIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            var user = await userManager.FindByIdAsync(userId);
+            return user;
         }
 
         public async Task<RegisterUserResponse?> RegisterUserAsync(RegisterUserRequest request)
@@ -36,6 +37,15 @@ namespace UserService.Infrastructure.Repositories
                 throw new Exception(result.Errors.First().Description);
 
             return new RegisterUserResponse(UserId: user.Id, Message: "User registered successfully");
+        }
+
+        public async Task<User?> UpdateUserAsync(User user)
+        {
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new Exception(result.Errors.First().Description);
+
+            return user;
         }
     }
 }

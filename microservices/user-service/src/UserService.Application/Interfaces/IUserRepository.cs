@@ -9,5 +9,6 @@ namespace UserService.Application.Interfaces
         Task<User?> GetUserByEmailAsync(string email);
         Task<User?> GetUserByIdAsync(string userId);
         Task<RegisterUserResponse?> RegisterUserAsync(RegisterUserRequest request);
+        Task<User?> UpdateUserAsync(User user);
     }
 }
