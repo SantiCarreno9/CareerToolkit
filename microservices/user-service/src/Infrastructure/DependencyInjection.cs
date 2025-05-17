@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Infrastructure.Authentication;
@@ -7,6 +8,7 @@ using Infrastructure.DomainEvents;
 using Infrastructure.Time;
 using Infrastructure.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +27,7 @@ public static class DependencyInjection
             .AddServices()
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
-            .AddAuthenticationInternal(configuration)
+            .AddAuthenticationInternal()
             .AddAuthorizationInternal();
 
     private static IServiceCollection AddServices(this IServiceCollection services)
@@ -34,6 +36,8 @@ public static class DependencyInjection
 
         services.AddTransient<DomainEventsDispatcher>();
 
+        services.AddIdentityApiEndpoints<UserDb>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
         return services;
     }
 
@@ -47,7 +51,7 @@ public static class DependencyInjection
                     npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default))
                 .UseSnakeCaseNamingConvention());
 
-        services.AddScoped<IUserRepository>(sp => sp.GetRequiredService<UserRepository>());
+        services.AddScoped<IUserRepository,UserRepository>();
 
         return services;
     }
@@ -62,24 +66,23 @@ public static class DependencyInjection
     }
 
     private static IServiceCollection AddAuthenticationInternal(
-        this IServiceCollection services,
-        IConfiguration configuration)
+        this IServiceCollection services)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(o =>
-            {
-                o.RequireHttpsMetadata = false;
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+        //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddJwtBearer(o =>
+        //    {
+        //        o.RequireHttpsMetadata = false;
+        //        o.TokenValidationParameters = new TokenValidationParameters
+        //        {
+        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
+        //            ValidIssuer = configuration["Jwt:Issuer"],
+        //            ValidAudience = configuration["Jwt:Audience"],
+        //            ClockSkew = TimeSpan.Zero
+        //        };
+        //    });
 
         services.AddHttpContextAccessor();
-        services.AddScoped<IUserContext, UserContext>();        
+        services.AddScoped<IUserContext, UserContext>();
 
         return services;
     }
@@ -87,8 +90,8 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
     {
         services.AddAuthorization();
-        
+
         return services;
     }
-    
+
 }

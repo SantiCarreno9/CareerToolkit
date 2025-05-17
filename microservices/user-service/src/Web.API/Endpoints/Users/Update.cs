@@ -30,7 +30,8 @@ internal sealed class Update : IEndpoint
 
             return result.Match(Results.NoContent, CustomResults.Problem);
         })
-        .WithTags(Tags.Users)
-        .RequireAuthorization();
+            .Produces(StatusCodes.Status204NoContent)
+            .RequireAuthorization()
+            .WithTags(Tags.Users);
     }
 }

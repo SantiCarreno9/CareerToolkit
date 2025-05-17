@@ -10,13 +10,13 @@ using SharedKernel;
 namespace Application.Users.Register;
 
 internal sealed class RegisterUserCommandHandler(IUserRepository userRepository)
-    : ICommandHandler<RegisterUserCommand, string>
+    : ICommandHandler<RegisterUserCommand>
 {
-    public async Task<Result<string>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         if (await userRepository.IsEmailRegistered(command.Email, cancellationToken))
         {
-            return Result.Failure<string>(UserErrors.EmailNotUnique);
+            return Result.Failure(UserErrors.EmailNotUnique);
         }
 
         var user = new User
@@ -30,6 +30,6 @@ internal sealed class RegisterUserCommandHandler(IUserRepository userRepository)
 
         await userRepository.RegisterUserAsync(user, command.Password, cancellationToken);
 
-        return user.Id;
+        return Result.Success();
     }
 }

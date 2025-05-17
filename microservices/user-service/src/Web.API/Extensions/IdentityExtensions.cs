@@ -10,7 +10,8 @@ public static class IdentityExtensions
         this WebApplication app
         )
     {
-        app.MapCustomIdentityApi<UserDb>();
+        app.MapIdentityApi<UserDb>();
+        //app.MapCustomIdentityApi<UserDb>();
 
         return app;
     }

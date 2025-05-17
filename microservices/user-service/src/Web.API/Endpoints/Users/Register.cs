@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Users.Register;
+using Application.Users.Shared;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -14,7 +15,7 @@ internal sealed class Register : IEndpoint
     {
         app.MapPost("api/users/register", async (
             Request request,
-            ICommandHandler<RegisterUserCommand, string> handler,
+            ICommandHandler<RegisterUserCommand> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new RegisterUserCommand(
@@ -22,10 +23,11 @@ internal sealed class Register : IEndpoint
                 request.FullName,
                 request.Password);
 
-            Result<string> result = await handler.Handle(command, cancellationToken);
+            Result result = await handler.Handle(command, cancellationToken);
 
-            return result.Match(Results.Ok, CustomResults.Problem);
+            return result.Match(Results.NoContent, CustomResults.Problem);
         })
-        .WithTags(Tags.Users);
+            .Produces(StatusCodes.Status204NoContent)
+            .WithTags(Tags.Users);
     }
 }

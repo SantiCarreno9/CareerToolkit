@@ -25,7 +25,9 @@ internal sealed class GetByEmail : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .HasPermission(Permissions.UsersAccess)
-        .WithTags(Tags.Users);
+            .Produces<UserResponse>(StatusCodes.Status200OK)
+            .RequireAuthorization()
+        //.HasPermission(Permissions.UsersAccess)
+            .WithTags(Tags.Users);
     }
 }
