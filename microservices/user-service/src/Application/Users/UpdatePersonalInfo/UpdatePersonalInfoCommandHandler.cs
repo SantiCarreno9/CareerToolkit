@@ -9,6 +9,7 @@ using Application.Abstractions.Messaging;
 using Domain.Entities;
 using Domain.Errors;
 using Domain.Events;
+using Domain.Extensions;
 using SharedKernel;
 
 namespace Application.Users.UpdatePersonalInfo;

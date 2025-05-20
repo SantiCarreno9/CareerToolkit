@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Domain.Entities;
+using Domain.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserService.Infrastructure.Data;
@@ -23,7 +19,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<Use
                 Email = u.Email!,
                 Address = u.Address,
                 PhoneNumber = u.PhoneNumber,
-                AdditionalContactInfo = u.AdditionalContactInfo
+                AdditionalContactInfo = u.AdditionalContactInfo.ConvertToDictionary()
             })
             .AsNoTracking()
             .SingleOrDefaultAsync(cancellationToken);
@@ -39,7 +35,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<Use
                 Email = u.Email!,
                 Address = u.Address,
                 PhoneNumber = u.PhoneNumber,
-                AdditionalContactInfo = u.AdditionalContactInfo
+                AdditionalContactInfo = u.AdditionalContactInfo.ConvertToDictionary()
             })
             .AsNoTracking()
             .SingleOrDefaultAsync(cancellationToken);
@@ -70,7 +66,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<Use
         userdb.FullName = user.FullName;
         userdb.Address = user.Address;
         userdb.PhoneNumber = user.PhoneNumber;
-        userdb.AdditionalContactInfo = user.AdditionalContactInfo;
+        userdb.AdditionalContactInfo = user.AdditionalContactInfo.ConvertToJson();
 
         await context.SaveChangesAsync(cancellationToken);
 
@@ -81,7 +77,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<Use
             Email = userdb.Email!,
             Address = userdb.Address,
             PhoneNumber = userdb.PhoneNumber,
-            AdditionalContactInfo = userdb.AdditionalContactInfo
+            AdditionalContactInfo = userdb.AdditionalContactInfo.ConvertToDictionary()
         };
     }
 }

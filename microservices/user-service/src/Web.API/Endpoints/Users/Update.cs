@@ -9,10 +9,10 @@ namespace Web.Api.Endpoints.Users;
 
 internal sealed class Update : IEndpoint
 {
-    public sealed record Request(string FullName, string Address, string PhoneNumber, string AdditionalContactInfo);
+    public sealed record Request(string FullName, string Address, string PhoneNumber, Dictionary<string,string> AdditionalContactInfo);
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("api/users/{id}", async (
+        app.MapPut(EndpointsBase.BasePath + "/{id}", async (
             string id,
             Request request,
             ICommandHandler<UpdatePersonalInfoCommand> handler,

@@ -32,7 +32,7 @@ internal sealed class GetUserByIdQueryHandler(IUserRepository userRepository, IU
             Email = user.Email,
             Address = user.Address ?? string.Empty,
             PhoneNumber = user.PhoneNumber ?? string.Empty,
-            AdditionalContactInfo = user.AdditionalContactInfo ?? string.Empty
+            AdditionalContactInfo = user.AdditionalContactInfo
         };
 
         return userResponse;

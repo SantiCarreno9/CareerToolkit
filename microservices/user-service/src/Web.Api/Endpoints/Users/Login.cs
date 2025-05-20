@@ -16,7 +16,7 @@ internal sealed class Login : IEndpoint
     public sealed record Request(string Email, string Password);
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/users/login", async(
+        app.MapPost(EndpointsBase.BasePath + "/login", async(
             [FromQuery]bool? useCookies,
             [FromQuery] bool? useSessionCookies,
             [FromBody] Request login,

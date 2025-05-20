@@ -1,0 +1,12 @@
+services:
+  users-api:
+    image: ${DOCKER_REGISTRY-}usersapi
+    container_name: users.api
+    build:
+      context: ./src/Web.Api
+      dockerfile: Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+  
+    

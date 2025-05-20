@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Data;
+﻿using System.Reflection.Emit;
+using Application.Abstractions.Data;
 using Domain.Entities;
 using Infrastructure.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<UserDb>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         builder.HasDefaultSchema("Identity");
     }
 }

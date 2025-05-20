@@ -31,7 +31,7 @@ internal sealed class GetUserByEmailQueryHandler(IUserRepository userRepository,
             Email = user.Email,
             Address = user.Address ?? string.Empty,
             PhoneNumber = user.PhoneNumber ?? string.Empty,
-            AdditionalContactInfo = user.AdditionalContactInfo ?? string.Empty
+            AdditionalContactInfo = user.AdditionalContactInfo
         };
 
         return userResponse;

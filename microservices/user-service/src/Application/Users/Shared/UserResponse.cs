@@ -7,5 +7,5 @@ public sealed record UserResponse
     public string FullName { get; init; }
     public string Address { get; init; }
     public string PhoneNumber { get; init; }
-    public string AdditionalContactInfo { get; init; }
+    public Dictionary<string, string> AdditionalContactInfo { get; init; } = [];
 }

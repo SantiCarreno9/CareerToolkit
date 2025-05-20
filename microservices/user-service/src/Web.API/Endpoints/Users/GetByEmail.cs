@@ -1,12 +1,9 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Users.GetById;
-using Web.Api.Endpoints.Users;
-using Web.Api.Endpoints;
 using Application.Users.GetByEmail;
-using SharedKernel;
-using Web.Api.Infrastructure;
-using Web.Api.Extensions;
 using Application.Users.Shared;
+using SharedKernel;
+using Web.Api.Extensions;
+using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Users;
 
@@ -14,7 +11,7 @@ internal sealed class GetByEmail : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/users", async (
+        app.MapGet(EndpointsBase.BasePath, async (
             string email,
             IQueryHandler<GetUserByEmailQuery, UserResponse> handler,
             CancellationToken cancellationToken) =>
