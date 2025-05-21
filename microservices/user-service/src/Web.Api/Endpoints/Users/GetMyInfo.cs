@@ -1,13 +1,10 @@
-﻿using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Messaging;
 using Application.Users.GetById;
-using Web.Api.Endpoints.Users;
-using Web.Api.Endpoints;
-using Application.Users.GetByEmail;
-using SharedKernel;
-using Web.Api.Infrastructure;
-using Web.Api.Extensions;
 using Application.Users.Shared;
-using Application.Users.GetMyInfo;
+using SharedKernel;
+using Web.Api.Extensions;
+using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Users;
 
@@ -16,10 +13,11 @@ internal sealed class GetMyInfo : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet($"{EndpointsBase.BasePath}/me", async (            
-            IQueryHandler<GetMyInfoQuery, UserResponse> handler,
+            IQueryHandler<GetUserByIdQuery, UserResponse> handler,
+            IUserContext userContext,
             CancellationToken cancellationToken) =>
         {
-            var query = new GetMyInfoQuery();
+            var query = new GetUserByIdQuery(userContext.UserId);
 
             Result<UserResponse> result = await handler.Handle(query, cancellationToken);
 

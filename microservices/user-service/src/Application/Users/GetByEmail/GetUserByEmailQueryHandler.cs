@@ -9,31 +9,34 @@ using SharedKernel;
 
 namespace Application.Users.GetByEmail;
 
-internal sealed class GetUserByEmailQueryHandler(IUserRepository userRepository, IUserContext userContext)
+internal sealed class GetUserByEmailQueryHandler(IApplicationDbContext context, IUserContext userContext)
     : IQueryHandler<GetUserByEmailQuery, UserResponse>
 {
     public async Task<Result<UserResponse>> Handle(GetUserByEmailQuery query, CancellationToken cancellationToken)
     {
-        User? user = await userRepository.GetUserByEmail(query.Email, cancellationToken);
+        UserResponse? user = await context.Users
+            .Where(u => u.Email == query.Email)
+            .Select(u => new UserResponse
+            {
+                Id = u.Id,
+                FullName = u.FullName,
+                Address = u.Address??string.Empty,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber ?? string.Empty,
+                AdditionalContactInfo = u.AdditionalContactInfo ?? new Dictionary<string, string>()
+            })
+            .SingleOrDefaultAsync(cancellationToken);
+
         if (user is null)
         {
             return Result.Failure<UserResponse>(UserErrors.NotFoundByEmail);
         }
+
         if (user.Id != userContext.UserId)
         {
             return Result.Failure<UserResponse>(UserErrors.Unauthorized());
         }
 
-        var userResponse = new UserResponse
-        {
-            Id = user.Id,
-            FullName = user.FullName,
-            Email = user.Email,
-            Address = user.Address ?? string.Empty,
-            PhoneNumber = user.PhoneNumber ?? string.Empty,
-            AdditionalContactInfo = user.AdditionalContactInfo
-        };
-
-        return userResponse;
+        return user;
     }
 }

@@ -1,49 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Abstractions.Authentication;
+﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Entities;
 using Domain.Errors;
 using Domain.Events;
-using Domain.Extensions;
+using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
 namespace Application.Users.UpdatePersonalInfo;
-internal sealed class UpdatePersonalInfoCommandHandler(IUserRepository userRepository, IUserContext userContext) :
+internal sealed class UpdatePersonalInfoCommandHandler(IApplicationDbContext context, IUserContext userContext) :
     ICommandHandler<UpdatePersonalInfoCommand>
 {
     public async Task<Result> Handle(UpdatePersonalInfoCommand command, CancellationToken cancellationToken)
     {
-        User? user = await userRepository.GetUserById(command.Id,cancellationToken);
-        if (user is null)
-        {
-            return Result.Failure(UserErrors.NotFound(command.Id));
-        }
-
-        if(command.Id != userContext.UserId)
+        if (command.Id != userContext.UserId)
         {
             return Result.Failure(UserErrors.Unauthorized());
         }
 
-        User? updatedUser = await userRepository.UpdateUserInfo(new User
+        User? user = await context.Users
+            .Where(u=>u.Id==command.Id)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (user is null)
         {
-            Id = user.Id,
-            Email = user.Email,
-            FullName = command.FullName,
-            Address = command.Address,
-            PhoneNumber = command.PhoneNumber,
-            AdditionalContactInfo = command.AdditionalContactInfo
-        },cancellationToken);
+            return Result.Failure(UserErrors.NotFound(command.Id));
+        }        
 
-        if(updatedUser is null)
-        {
-            return Result.Failure(Error.Failure("500","Unexpected Error"));
-        }
-        user.Raise(new UserInfoUpdatedDomainEvent(updatedUser.Id));
+        user.Address = command.Address;
+        user.FullName = command.FullName;
+        user.PhoneNumber = command.PhoneNumber;
+        user.AdditionalContactInfo = command.AdditionalContactInfo;
+
+        await context.SaveChangesAsync(cancellationToken);
+        
+        user.Raise(new UserInfoUpdatedDomainEvent(user.Id));
         
         return Result.Success();
     }

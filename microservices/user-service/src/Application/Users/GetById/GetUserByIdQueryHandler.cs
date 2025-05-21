@@ -9,7 +9,7 @@ using SharedKernel;
 
 namespace Application.Users.GetById;
 
-internal sealed class GetUserByIdQueryHandler(IUserRepository userRepository, IUserContext userContext)
+internal sealed class GetUserByIdQueryHandler(IApplicationDbContext context, IUserContext userContext)
     : IQueryHandler<GetUserByIdQuery, UserResponse>
 {
     public async Task<Result<UserResponse>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
@@ -19,22 +19,24 @@ internal sealed class GetUserByIdQueryHandler(IUserRepository userRepository, IU
             return Result.Failure<UserResponse>(UserErrors.Unauthorized());
         }
 
-        User? user = await userRepository.GetUserById(query.UserId, cancellationToken);
+        UserResponse? user = await context.Users
+            .Where(u => u.Id == query.UserId)
+            .Select(u => new UserResponse
+            {
+                Id = u.Id,
+                FullName = u.FullName,
+                Address = u.Address ?? string.Empty,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber ?? string.Empty,
+                AdditionalContactInfo = u.AdditionalContactInfo ?? new Dictionary<string, string>()
+            })
+            .SingleOrDefaultAsync(cancellationToken);
+
         if (user is null)
         {
             return Result.Failure<UserResponse>(UserErrors.NotFound(query.UserId));
         }
 
-        var userResponse = new UserResponse
-        {
-            Id = user.Id,
-            FullName = user.FullName,
-            Email = user.Email,
-            Address = user.Address ?? string.Empty,
-            PhoneNumber = user.PhoneNumber ?? string.Empty,
-            AdditionalContactInfo = user.AdditionalContactInfo
-        };
-
-        return userResponse;
+        return user;
     }
 }

@@ -9,12 +9,12 @@ using SharedKernel;
 
 namespace Application.Users.Register;
 
-internal sealed class RegisterUserCommandHandler(IUserRepository userRepository)
+internal sealed class RegisterUserCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher)
     : ICommandHandler<RegisterUserCommand>
 {
     public async Task<Result> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        if (await userRepository.IsEmailRegistered(command.Email, cancellationToken))
+        if (await context.Users.AnyAsync(u => u.Email == command.Email, cancellationToken))
         {
             return Result.Failure(UserErrors.EmailNotUnique);
         }
@@ -23,12 +23,15 @@ internal sealed class RegisterUserCommandHandler(IUserRepository userRepository)
         {
             Id = Guid.NewGuid().ToString(),
             Email = command.Email,
-            FullName = command.FullName
+            FullName = command.FullName,
+            PasswordHash = passwordHasher.Hash(command.Password),
         };
 
         user.Raise(new UserRegisteredDomainEvent(user.Id));
 
-        await userRepository.RegisterUserAsync(user, command.Password, cancellationToken);
+        context.Users.Add(user);
+
+        await context.SaveChangesAsync(cancellationToken);        
 
         return Result.Success();
     }

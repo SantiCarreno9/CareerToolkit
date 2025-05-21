@@ -1,22 +1,26 @@
-﻿using System.Reflection.Emit;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Domain.Entities;
-using Infrastructure.Users;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace UserService.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<UserDb>
+public sealed class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options)
+    : DbContext(options), IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public DbSet<User> Users { get; set; }    
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.HasDefaultSchema("Identity");
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        builder.HasDefaultSchema("Identity");
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {        
+        int result = await base.SaveChangesAsync(cancellationToken);       
+
+        return result;
     }
 }

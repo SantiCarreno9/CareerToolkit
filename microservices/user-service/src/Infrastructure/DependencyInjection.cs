@@ -1,14 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Infrastructure.DomainEvents;
 using Infrastructure.Time;
-using Infrastructure.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +24,7 @@ public static class DependencyInjection
             .AddServices()
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
-            .AddAuthenticationInternal()
+            .AddAuthenticationInternal(configuration)
             .AddAuthorizationInternal();
 
     private static IServiceCollection AddServices(this IServiceCollection services)
@@ -35,9 +32,7 @@ public static class DependencyInjection
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         services.AddTransient<DomainEventsDispatcher>();
-
-        services.AddIdentityApiEndpoints<UserDb>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+        
         return services;
     }
 
@@ -51,7 +46,7 @@ public static class DependencyInjection
                     npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default))
                 .UseSnakeCaseNamingConvention());
 
-        services.AddScoped<IUserRepository,UserRepository>();
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         return services;
     }
@@ -66,23 +61,26 @@ public static class DependencyInjection
     }
 
     private static IServiceCollection AddAuthenticationInternal(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddJwtBearer(o =>
-        //    {
-        //        o.RequireHttpsMetadata = false;
-        //        o.TokenValidationParameters = new TokenValidationParameters
-        //        {
-        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
-        //            ValidIssuer = configuration["Jwt:Issuer"],
-        //            ValidAudience = configuration["Jwt:Audience"],
-        //            ClockSkew = TimeSpan.Zero
-        //        };
-        //    });
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<ITokenProvider, TokenProvider>();
 
         return services;
     }
