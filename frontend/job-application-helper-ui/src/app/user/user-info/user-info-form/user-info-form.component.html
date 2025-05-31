@@ -1,0 +1,69 @@
+<div class="d-flex flex-column justify-content-center">
+  <h2 style="text-align: center">My Info</h2>
+  <form [formGroup]="userInfoForm" (submit)="submit()" class="p-3">
+    <div class="form-floating mb-3">
+      <input
+        id="fullName"
+        type="text"
+        class="form-control"
+        formControlName="fullName"
+      />
+      <label for="fullName">Full Name</label>
+      @if (fullName?.invalid && (fullName?.touched || fullName?.dirty)) {
+      <div class="alert alert-danger p-2">
+        @if (fullName?.hasError('required')) {
+        <div>Full Name is required.</div>
+        }
+      </div>
+      }
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        id="email"
+        type="email"
+        class="form-control disabled"
+        formControlName="email"
+      />
+      <label for="email">Email address</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        id="phoneNumber"
+        type="number"
+        class="form-control"
+        formControlName="phoneNumber"
+      />
+      <label for="phoneNumber">Phone Number</label>
+      @if (phoneNumber?.invalid && (phoneNumber?.touched || phoneNumber?.dirty))
+      {
+      <div class="alert alert-danger p-2">
+        @if (phoneNumber?.hasError('required')) {
+        <div>Phone Number is required.</div>
+        }
+      </div>
+      }
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        id="address"
+        type="text"
+        class="form-control"
+        formControlName="address"
+      />
+      <label for="address">Address</label>
+      @if (address?.invalid && (address?.touched || address?.dirty)) {
+      <div class="alert alert-danger p-2">
+        @if (address?.hasError('required')) {
+        <div>Address is required.</div>
+        }
+      </div>
+      }
+    </div>
+    <div class="justify-content-end d-flex">
+      <button type="submit" class="btn btn-success mx-2">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

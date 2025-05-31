@@ -1,6 +1,6 @@
 import { KeyValue } from "@angular/common";
 
-export interface Userinfo
+export interface UserInfo
 {
     id: string;
     fullName: string;

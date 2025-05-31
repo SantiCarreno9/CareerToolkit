@@ -1,33 +1,25 @@
 import { Injectable } from '@angular/core';
-import { RegisterModel } from '../register/registermodel';
-import { LoginModel } from '../login/loginmodel';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserInfo } from './userinfo';
+import { UpdateUserInfoModel } from './updateuserinfomodel';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService
+{
+  private readonly baseUrl = 'http://localhost:5100/api/users';
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  async register(data: RegisterModel): Promise<void>
-  {    
-    // Simulate a registration process
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('User registered:', { fullName: data.fullName, email: data.email, password: data.password });
-        resolve();
-      }, 1000);
-    });
+  getUserInfo(): Observable<UserInfo>
+  {
+    return this.http.get<UserInfo>(`${this.baseUrl}/myinfo`, { withCredentials: true });
   }
 
-  async login(data: LoginModel): Promise<string>
-  {    
-    // Simulate a registration process
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('Login Successful:', { email: data.email, password: data.password });
-        resolve("token");
-      }, 1000);
-    });
+  updateUserInfo(id: string, data: UpdateUserInfoModel): Observable<HttpResponse<any>>
+  {
+    return this.http.put(`${this.baseUrl}/${id}`, data, { withCredentials: true, observe: 'response' });
   }
 }

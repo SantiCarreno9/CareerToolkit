@@ -6,7 +6,7 @@ services:
       context: ./src/Web.Api
       dockerfile: Dockerfile
     ports:
-      - 5000:8080
-      - 5001:8081
+      - 5100:8080
+      - 5101:8081
   
     

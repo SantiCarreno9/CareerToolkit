@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../shared/user.service';
+import { AuthService } from '../shared/auth.service';
 import { RegisterModel } from './registermodel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,8 @@ import { RegisterModel } from './registermodel';
 })
 export class RegisterComponent
 {
-  userService: UserService = inject(UserService);
+  router = inject(Router);
+  authService: AuthService = inject(AuthService);
 
   registerForm = new FormGroup({
     fullName: new FormControl('', Validators.required),
@@ -26,20 +28,23 @@ export class RegisterComponent
     ])
   });
 
-  get fullName() {
+  get fullName()
+  {
     return this.registerForm.get('fullName');
   }
-  get email() {
+  get email()
+  {
     return this.registerForm.get('email');
   }
-  get password() {
+  get password()
+  {
     return this.registerForm.get('password');
   }
 
   register()
   {
     if (this.registerForm.invalid)
-    {      
+    {
       // alert('Please fill in all fields');
       return;
     }
@@ -48,6 +53,22 @@ export class RegisterComponent
       email: this.registerForm.get('email')?.value ?? '',
       password: this.registerForm.get('password')?.value ?? ''
     }
-    this.userService.register(registerData);
+    
+    this.authService.register(registerData).subscribe(res =>
+    {
+      if (res.status == 204)
+      {
+        alert('Registration successful');
+        this.registerForm.reset();
+        this.router.navigate(['/login']);
+        return;
+      }
+      else
+      {
+        alert(res.statusText);
+        return;
+      }
+    });
+
   }
 }

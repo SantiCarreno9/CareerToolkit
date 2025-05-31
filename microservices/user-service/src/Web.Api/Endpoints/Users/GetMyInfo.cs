@@ -12,7 +12,7 @@ internal sealed class GetMyInfo : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet($"{EndpointsBase.BasePath}/me", async (            
+        app.MapGet($"{EndpointsBase.BasePath}/myinfo", async (            
             IQueryHandler<GetUserByIdQuery, UserResponse> handler,
             IUserContext userContext,
             CancellationToken cancellationToken) =>

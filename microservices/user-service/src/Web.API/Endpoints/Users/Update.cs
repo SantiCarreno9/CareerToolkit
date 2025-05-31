@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Users.UpdatePersonalInfo;
+using Microsoft.AspNetCore.Mvc;
 using SharedKernel;
 using Web.Api.Endpoints;
 using Web.Api.Extensions;
@@ -14,7 +15,7 @@ internal sealed class Update : IEndpoint
     {
         app.MapPut(EndpointsBase.BasePath + "/{id}", async (
             string id,
-            Request request,
+            [FromBody]Request request,
             ICommandHandler<UpdatePersonalInfoCommand> handler,
             CancellationToken cancellationToken) =>
         {

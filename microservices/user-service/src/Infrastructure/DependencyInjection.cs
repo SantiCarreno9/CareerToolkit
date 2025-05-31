@@ -75,6 +75,19 @@ public static class DependencyInjection
                     ValidAudience = configuration["Jwt:Audience"],
                     ClockSkew = TimeSpan.Zero
                 };
+
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if(context.Request.Cookies.TryGetValue("accessToken", out string? accessToken))
+                        {
+                            context.Token = accessToken;
+                        }                        
+
+                        return Task.CompletedTask;
+                    },
+                };
             });
 
         services.AddHttpContextAccessor();

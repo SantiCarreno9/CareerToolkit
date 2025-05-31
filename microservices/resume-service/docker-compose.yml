@@ -1,12 +1,12 @@
 services:
-  users-api:
-    image: ${DOCKER_REGISTRY-}usersapi
-    container_name: users.api
+  resumes-api:
+    image: ${DOCKER_REGISTRY-}resumesapi
+    container_name: resumes.api
     build:
       context: ./src/Web.Api
       dockerfile: Dockerfile
     ports:
-      - 5000:8080
-      - 5001:8081
+      - 5200:8080
+      - 5201:8081
   
     

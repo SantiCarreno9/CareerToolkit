@@ -21,6 +21,15 @@ builder.Services
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+        policy => policy
+                .AllowCredentials()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithOrigins(builder.Configuration["FrontendUrl"]!)
+                )
+);
+
 WebApplication app = builder.Build();
 
 app.MapEndpoints();
@@ -30,7 +39,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerWithUI();
 
-    app.ApplyMigrations();    
+    app.ApplyMigrations();
 }
 
 app.MapHealthChecks("health", new HealthCheckOptions
@@ -42,6 +51,8 @@ app.UseRequestContextLogging();
 app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 
