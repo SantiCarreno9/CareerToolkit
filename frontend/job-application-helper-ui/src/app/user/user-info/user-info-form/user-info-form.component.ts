@@ -11,12 +11,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
   styleUrl: './user-info-form.component.scss'
 })
 export class UserInfoFormComponent
-{
-
-  private dialogRef = inject(DialogRef, { optional: true });
-
-  userService: UserService = inject(UserService);
-  // userInfo: UserInfo = inject(DIALOG_DATA);
+{    
   userInfo: UserInfo = {
     id: '',
     fullName: '',
@@ -82,12 +77,7 @@ export class UserInfoFormComponent
   // get additionalContactInfo()
   // {
   //   return this.i.additionalContactInfo;
-  // }
-
-  closeDialog(userInfo?: UserInfo)
-  {
-    this.dialogRef?.close(userInfo);
-  }
+  // }  
 
   submit()
   {

@@ -45,11 +45,14 @@ export class ProfileComponent
       disableClose: true
     });
     dialogRef.componentInstance?.onSubmit.subscribe((result: UserInfo) =>
-    {      
-      this.updateUserInfo(result).subscribe(success=>{
-        if (success) {
+    {
+      this.updateUserInfo(result).subscribe(success =>
+      {
+        if (success)
+        {
           dialogRef.close(result);
-        } else {
+        } else
+        {
           console.error('Failed to update user info');
         }
       });
@@ -57,7 +60,7 @@ export class ProfileComponent
     dialogRef.componentInstance?.onCancel.subscribe(() =>
     {
       dialogRef.close();
-    });    
+    });
   }
 
   private updateUserInfo(newUserInfo: UserInfo): Observable<boolean>
@@ -72,25 +75,26 @@ export class ProfileComponent
     return this.userService.updateUserInfo(newUserInfo.id, updateData).pipe(
       map(response =>
       {
-        if (response.status === 204)
+        if (response.success)
         {
           console.log('User info updated successfully', newUserInfo);
           this.userInfo = newUserInfo;
           return true;
         } else
         {
-          console.error('Failed to update user info', response);
+          console.error('Failed to update user info', response.error);
           return false;
         }
       }
-      ));    
+      ));
   }
 
   private requestUserInfo()
   {
-    this.userService.getUserInfo().subscribe(userInfo =>
+    this.userService.getUserInfo().subscribe(response =>
     {
-      this.userInfo = userInfo;
+      if (response.success && response.value)
+        this.userInfo = response.value;
     });
-  }  
+  }
 }

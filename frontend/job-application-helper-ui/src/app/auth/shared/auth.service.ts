@@ -4,6 +4,7 @@ import { LoginModel } from '../login/loginmodel';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { map, Observable, Subject, tap } from 'rxjs';
 import { UserBasicInfo } from './user-basic-info';
+import { RequestResponse as CustomResponse } from '../../core/models/requestresponse';
 
 @Injectable({
   providedIn: 'root'
@@ -20,16 +21,19 @@ export class AuthService
     id: ''
   };
 
-  constructor(private http: HttpClient) {
-    this.isAuthenticated().subscribe();
-   }
-
-  register(data: RegisterModel): Observable<HttpResponse<any>>
+  constructor(private http: HttpClient)
   {
-    return this.http.post(`${this.baseUrl}/register`, data, { observe: 'response' });
+    this.isAuthenticated().subscribe();
   }
 
-  loginWithCookies(data: LoginModel): Observable<HttpResponse<any>>
+  register(data: RegisterModel): Observable<CustomResponse<any>>
+  {
+    return this.http.post(`${this.baseUrl}/register`, data, { observe: 'response' }).pipe(
+      map(res => new CustomResponse<void>(res.status === 204, null, res.statusText))
+    );
+  }
+
+  loginWithCookies(data: LoginModel): Observable<CustomResponse<any>>
   {
     return this.http.post(`${this.baseUrl}/login?useCookies=true`, data, { withCredentials: true, observe: 'response' }).pipe(
       tap(res =>
@@ -43,18 +47,20 @@ export class AuthService
           this.isLoggedIn = false;
           this.onLoggedInStatusChange.next(this.isLoggedIn);
         }
-      })
+      }),
+      map(res => new CustomResponse<void>(res.status === 200, null, res.statusText))
     );
   }
 
-  logout(): Observable<HttpResponse<any>>
+  logout(): Observable<CustomResponse<any>>
   {
     return this.http.post(`${this.baseUrl}/logout`, {}, { withCredentials: true, observe: 'response' }).pipe(
       tap(res =>
       {
         this.isLoggedIn = !(res.status === 204);
         this.onLoggedInStatusChange.next(this.isLoggedIn);
-      }));
+      }),
+      map(res => new CustomResponse<void>(res.status === 204, null, res.statusText)));
   }
 
   isAuthenticated(): Observable<boolean>
@@ -64,36 +70,16 @@ export class AuthService
     );
   }
 
-  // tryToRetrieveUserBasicInfo()
-  // {
-  //   this.getCurrentUser().subscribe(res =>
-  //   {
-  //     if (res !== null)
-  //     {
-  //       this.userBasicInfo = res;
-  //       this.isLoggedIn = true;
-  //     } else
-  //     {
-  //       this.userBasicInfo = {
-  //         fullName: '',
-  //         email: '',
-  //         id: ''
-  //       };
-  //       this.isLoggedIn = false;
-  //     }
-  //     this.onLoggedInStatusChange.next(this.isLoggedIn);
-  //   });
-  // }
-
-  getCurrentUser(): Observable<UserBasicInfo>
+  getCurrentUser(): Observable<CustomResponse<UserBasicInfo>>
   {
-    return this.http.get<UserBasicInfo>(`${this.baseUrl}/me`, { withCredentials: true }).pipe((
+    return this.http.get(`${this.baseUrl}/me`, { withCredentials: true, observe: 'response' }).pipe(
+      map(res => new CustomResponse<UserBasicInfo>(res.status === 200, res.body as UserBasicInfo, res.statusText)),
       tap({
         next: (res) =>
         {
-          if (res != null)
+          if (res.success && res.value)
           {
-            this.userBasicInfo = res;
+            this.userBasicInfo = res.value;
             this.isLoggedIn = true;
           } else
           {
@@ -107,6 +93,6 @@ export class AuthService
           this.onLoggedInStatusChange.next(this.isLoggedIn);
         }
       })
-    ));
+    );
   }
 }

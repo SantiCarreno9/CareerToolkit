@@ -47,13 +47,14 @@ export class LoginComponent
     }
     this.authService.loginWithCookies(loginData).subscribe(res =>
     {
-      if (res.ok)
+      if (res.success)
       {        
         this.loginForm.reset();
         this.route.navigate(['/']);
       }
       else
       {
+        console.error('Login failed:', res.error);
         alert('Invalid email or password');
       }
     });

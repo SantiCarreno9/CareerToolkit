@@ -53,10 +53,10 @@ export class RegisterComponent
       email: this.registerForm.get('email')?.value ?? '',
       password: this.registerForm.get('password')?.value ?? ''
     }
-    
+
     this.authService.register(registerData).subscribe(res =>
     {
-      if (res.status == 204)
+      if (res.success)
       {
         alert('Registration successful');
         this.registerForm.reset();
@@ -65,7 +65,7 @@ export class RegisterComponent
       }
       else
       {
-        alert(res.statusText);
+        alert(res.error);
         return;
       }
     });

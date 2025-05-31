@@ -30,7 +30,7 @@ export class NavbarComponent
   {
     this.authService.logout().subscribe(res =>
     {
-      if (res.status == 204)
+      if (res.success)
       {
         this.route.navigate(['/login']);
       }
