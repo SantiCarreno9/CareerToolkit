@@ -5,7 +5,6 @@ import { UserService } from '../user/shared/user.service';
 import { UserInfoViewComponent } from "../user/user-info/user-info-view/user-info-view.component";
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { UpdateUserInfoModel } from '../user/shared/updateuserinfomodel';
-import { KeyValue } from "@angular/common";
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -25,7 +24,7 @@ export class ProfileComponent
     email: '',
     phoneNumber: '',
     address: '',
-    additionalContactInfo: []
+    additionalContactInfo: {}
   };
 
   constructor()
@@ -39,7 +38,10 @@ export class ProfileComponent
     const dialogRef = this.dialog.open(UserInfoFormComponent, {
       width: '500px',
       data: {
-        userInfo: this.userInfo,
+        userInfo: {
+          ...this.userInfo,
+          additionalContactInfo: { ...this.userInfo.additionalContactInfo }
+        }
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true
@@ -64,13 +66,12 @@ export class ProfileComponent
   }
 
   private updateUserInfo(newUserInfo: UserInfo): Observable<boolean>
-  {
-    const contactInfo: KeyValue<string, string> = { "key": "email", "value": newUserInfo.email };
+  {    
     const updateData: UpdateUserInfoModel = {
       fullName: newUserInfo.fullName,
       phoneNumber: newUserInfo.phoneNumber.toString(),
       address: newUserInfo.address,
-      additionalContactInfo: contactInfo
+      additionalContactInfo: newUserInfo.additionalContactInfo || {}
     }
     return this.userService.updateUserInfo(newUserInfo.id, updateData).pipe(
       map(response =>

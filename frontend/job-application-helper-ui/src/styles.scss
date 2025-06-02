@@ -1,11 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-.custom-dialog-container{
-    display: block;    
-    border-radius: 3%;
-    background: white;    
-    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    // border-width: 2px;
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.custom-dialog-container {
+  display: block;
+  border-radius: 3%;
+  background: white;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  // border-width: 2px;
+}
+
+.btn-icon {
+  :hover {
+    opacity: 0.8;
+  }
+  :active {
+    opacity: 0.6;
+  }
 }

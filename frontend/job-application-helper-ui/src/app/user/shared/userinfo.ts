@@ -1,4 +1,3 @@
-import { KeyValue } from "@angular/common";
 
 export interface UserInfo
 {
@@ -7,5 +6,5 @@ export interface UserInfo
     email: string;
     phoneNumber: string;
     address: string;
-    additionalContactInfo: KeyValue<string, string>[];
+    additionalContactInfo: { [key: string]: string };
 }

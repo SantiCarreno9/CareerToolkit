@@ -1,5 +1,7 @@
-<div class="container d-flex flex-row">
-<p>My Profile</p>
-<button class="btn btn-primary" (click)="openUserInfoFormDialog()">Edit User Info</button>
+<div class="container d-flex flex-row" style="align-items: baseline;">
+  <h4>My Profile</h4>
+  <button class="btn btn-icon" style="font-size: 1.5rem;" (click)="openUserInfoFormDialog()">
+    <i class="bi bi-pencil-square"></i>
+  </button>
 </div>
 <app-user-info-view [userInfo]="userInfo"></app-user-info-view>

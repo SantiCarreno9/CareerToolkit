@@ -1,9 +1,10 @@
 import { Component, Inject, inject, Input } from '@angular/core';
 import { UserInfo } from '../../shared/userinfo';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-user-info-view',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './user-info-view.component.html',
   styleUrl: './user-info-view.component.scss'
 })
@@ -15,6 +16,6 @@ export class UserInfoViewComponent
     email: '',
     phoneNumber: '',
     address: '',
-    additionalContactInfo: []
+    additionalContactInfo: {}
   }  
 }

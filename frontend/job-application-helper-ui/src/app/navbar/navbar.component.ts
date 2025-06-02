@@ -35,22 +35,5 @@ export class NavbarComponent
         this.route.navigate(['/login']);
       }
     });
-    // this.authService.logout().subscribe(res =>
-    // {
-    //   if (res.status == 204)
-    //   {
-    //     this.isLoggedIn = false;
-    //     this.userBasicInfo = {
-    //       fullName: '',
-    //       email: '',
-    //       id: ''
-    //     };
-    //     this.route.navigate(['/login']);
-    //   }
-    //   else
-    //   {
-    //     alert('Logout failed');
-    //   }
-    // });
   }
 }

@@ -1,5 +1,57 @@
-
-<p><strong>Name:</strong>{{ this.userInfo.fullName }}</p>
-<p><strong>Email:</strong>{{ this.userInfo.email }}</p>
-<p><strong>Phone Number:</strong>{{ this.userInfo.phoneNumber }}</p>
-<p><strong>Address:</strong>{{ this.userInfo.address }}</p>
+<div class="container">
+  <div class="mb-3">
+    <label for="name" class="form-label data-label">Full Name</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="name"
+      [value]="this.userInfo.fullName"
+      readonly
+    />
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label data-label">Email</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="email"
+      [value]="this.userInfo.email"
+      readonly
+    />
+  </div>
+  <div class="mb-3">
+    <label for="phoneNumber" class="form-label data-label">Phone Number</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="phoneNumber"
+      pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+      [value]="this.userInfo.phoneNumber"
+      readonly
+    />
+  </div>
+  <div class="mb-3">
+    <label for="address" class="form-label data-label">Address</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="address"
+      [value]="this.userInfo.address"
+      readonly
+    />
+  </div>
+  <div
+    class="mb-3"
+    *ngFor="let item of this.userInfo.additionalContactInfo | keyvalue"
+  >
+    <label for="{{ item.key }}" class="form-label data-label">{{
+      item.key
+    }}</label>
+    <a
+      id="{{ item.key }}"
+      class="form-control-plaintext"
+      href="{{ item.value }}"
+      >{{ item.value }}</a
+    >
+  </div>
+</div>
