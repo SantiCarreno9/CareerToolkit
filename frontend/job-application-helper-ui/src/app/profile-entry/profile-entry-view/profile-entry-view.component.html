@@ -1,0 +1,58 @@
+<div>
+  <div class="mb-3">
+    <label for="title" class="form-label data-label">Title</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="title"
+      [value]="this.profileEntry.title"
+      readonly
+    />
+  </div>
+  @if(this.profileEntry.organization) {
+  <div class="mb-3">
+    <label for="organization" class="form-label data-label">Organization</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="organization"
+      [value]="this.profileEntry.organization"
+      readonly
+    />
+  </div>
+  } @if(this.profileEntry.location) {
+  <div class="mb-3">
+    <label for="location" class="form-label data-label">Location</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="location"
+      [value]="this.profileEntry.location"
+      readonly
+    />
+  </div>
+  }
+  <div class="mb-3">
+    <label for="startDate" class="form-label data-label">Time Frame</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="startDate"      
+      [value]="this.profileEntry.startDate.toDateString() + ' - ' + (this.profileEntry.endDate?.toDateString())"
+      readonly
+    />
+  </div>
+  @if(this.profileEntry.description) {
+    <div class="mb-3">
+    <label for="description" class="form-label data-label">Description</label>
+    <input
+      type="text"
+      class="form-control-plaintext"
+      id="description"
+      [value]="this.profileEntry.description"
+      readonly
+    />
+  </div>
+  }
+  
+</div>

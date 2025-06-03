@@ -1,0 +1,86 @@
+<div class="d-flex flex-column justify-content-center">
+  <h2 style="text-align: center">Profile Entry</h2>
+  <form [formGroup]="profileEntryFormGroup" (submit)="submit()" class="p-3">
+    <div class="mb-3">
+      <div class="form-floating mb-3">
+        <input
+          id="title"
+          type="text"
+          class="form-control"
+          formControlName="title"
+        />
+        <label for="title">Title</label>
+        @if (title?.invalid && (title?.touched || title?.dirty)) {
+        <div class="alert alert-danger p-2">
+          @if (title?.hasError('required')) {
+          <div>Title is required.</div>
+          }
+        </div>
+        }
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          id="organization"
+          type="text"
+          class="form-control disabled"
+          formControlName="organization"
+        />
+        <label for="organization">Organization</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          id="location"
+          type="text"
+          class="form-control"
+          formControlName="location"
+        />
+        <label for="location">Location</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          id="startDate"
+          type="date"
+          class="form-control"
+          formControlName="startDate"
+        />
+        <label for="startDate">Start Date</label>
+        <!-- @if (address?.invalid && (address?.touched || address?.dirty)) {
+        <div class="alert alert-danger p-2">
+          @if (address?.hasError('required')) {
+          <div>Address is required.</div>
+          }
+        </div>
+        } -->
+      </div>
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          formControlName="isCurrent"
+        />
+        <label class="form-check-label" for="checkDefault"> Is Current </label>
+      </div>
+      @if(!profileEntryFormGroup.get('isCurrent')?.value) {
+      <div class="form-floating mb-3">
+        <input
+          id="endDate"
+          type="date"
+          class="form-control"
+          formControlName="endDate"
+        />
+        <label for="endDate">End Date</label>
+      </div>
+      }
+        <div class="mb-3">
+            <label class="form-label">Description</label>             
+            <quill-editor [modules]="descriptionQuillModules" formControlName="description"></quill-editor>                   
+        </div>
+    </div>    
+    <div class="justify-content-end d-flex">
+      <button type="submit" class="btn btn-success mx-2">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

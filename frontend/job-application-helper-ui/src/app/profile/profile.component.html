@@ -1,7 +1,33 @@
-<div class="container d-flex flex-row" style="align-items: baseline;">
-  <h4>My Profile</h4>
-  <button class="btn btn-icon" style="font-size: 1.5rem;" (click)="openUserInfoFormDialog()">
-    <i class="bi bi-pencil-square"></i>
-  </button>
+<div class="container">
+  <div class="d-flex flex-row" style="align-items: baseline">
+    <h4>My Profile</h4>
+    <button
+      class="btn btn-icon"
+      style="font-size: 1.5rem"
+      (click)="openUserInfoFormDialog()"
+    >
+      <i class="bi bi-pencil-square"></i>
+    </button>
+  </div>
+  <app-user-info-view [userInfo]="userInfo"></app-user-info-view>
+  <div class="d-flex flex-row" style="align-items: baseline">
+    <h4>Education</h4>
+    <button
+      class="btn btn-icon"
+      style="font-size: 1.5rem"
+      (click)="openUserInfoFormDialog()"
+    >
+      <i class="bi bi-plus-circle"></i>
+    </button>
+  </div>
+  <div class="d-flex flex-row w-100 mb-3 align-items-start" *ngFor="let entry of profileEntries">    
+    <app-profile-entry-view [profileEntry]="entry" style="flex:1"></app-profile-entry-view>    
+    <button
+      class="btn btn-icon"
+      style="font-size: 1.5rem; flex-shrink: 1;"
+      (click)="openProfileEntryDialog(entry)"
+    >
+      <i class="bi bi-pencil-square"></i>
+    </button>
+  </div>
 </div>
-<app-user-info-view [userInfo]="userInfo"></app-user-info-view>
