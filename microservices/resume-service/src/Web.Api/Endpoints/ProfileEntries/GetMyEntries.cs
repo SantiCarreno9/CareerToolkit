@@ -11,7 +11,7 @@ internal sealed class GetMyEntries : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(EndpointsBase.ProfileEntriesPath + "/me", async (
+        app.MapGet(EndpointsBase.ProfileEntriesPath + "/myentries", async (
             IQueryHandler<GetProfileEntriesQuery, List<ProfileEntryResponse>> handler,
             CancellationToken cancellationToken) =>
         {
@@ -22,8 +22,7 @@ internal sealed class GetMyEntries : IEndpoint
             return result.Match(Results.Ok, CustomResults.Problem);
         })
             .Produces<List<ProfileEntryResponse>>(StatusCodes.Status200OK)
-            .RequireAuthorization()
-        //.HasPermission(Permissions.UsersAccess)
+            .RequireAuthorization()       
             .WithTags(Tags.ProfileEntries);
     }
 }

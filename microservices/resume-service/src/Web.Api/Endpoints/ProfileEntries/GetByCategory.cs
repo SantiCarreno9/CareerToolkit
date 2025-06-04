@@ -12,7 +12,7 @@ internal sealed class GetByCategory : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(EndpointsBase.ProfileEntriesPath, async (
+        app.MapGet(EndpointsBase.ProfileEntriesPath+"/category/{category}", async (
             ProfileEntryCategory category,
             IQueryHandler<GetEntriesByCategoryQuery, List<ProfileEntryResponse>> handler,
             CancellationToken cancellationToken) =>
@@ -24,8 +24,7 @@ internal sealed class GetByCategory : IEndpoint
             return result.Match(Results.Ok, CustomResults.Problem);
         })
             .Produces<List<ProfileEntryResponse>>(StatusCodes.Status200OK)
-            .RequireAuthorization()
-        //.HasPermission(Permissions.UsersAccess)
+            .RequireAuthorization()        
             .WithTags(Tags.ProfileEntries);
     }
 }

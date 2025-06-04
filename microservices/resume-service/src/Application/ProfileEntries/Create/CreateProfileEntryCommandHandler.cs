@@ -1,18 +1,25 @@
-﻿using Application.Abstractions.Data;
+﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Entities;
+using Domain.Errors;
 using SharedKernel;
 
 namespace Application.ProfileEntries.Create;
 internal sealed class CreateProfileEntryCommandHandler(
-    IApplicationDbContext context)
+    IApplicationDbContext context,
+    IUserContext userContext)
     : ICommandHandler<CreateProfileEntryCommand, string>
 {
     public async Task<Result<string>> Handle(CreateProfileEntryCommand command, CancellationToken cancellationToken)
     {
+        if(userContext.UserId is null)
+        {
+            return Result.Failure<string>(ProfileEntryErrors.Unauthorized());
+        }
         var profileEntry = new ProfileEntry
         {
-            UserId = command.UserEmail,
+            UserId = userContext.UserId,
             Title = command.Title,
             Organization = command.Organization,
             Location = command.Location,

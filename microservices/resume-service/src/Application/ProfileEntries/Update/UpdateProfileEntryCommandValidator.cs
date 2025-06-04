@@ -4,10 +4,7 @@ namespace Application.ProfileEntries.Update;
 internal sealed class UpdateProfileEntryCommandValidator : AbstractValidator<UpdateProfileEntryCommand>
 {
     public UpdateProfileEntryCommandValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Id is required.");
+    {        
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage("Title is required.");

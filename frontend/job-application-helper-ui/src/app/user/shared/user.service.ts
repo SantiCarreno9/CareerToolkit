@@ -4,13 +4,14 @@ import { map, Observable } from 'rxjs';
 import { UserInfo } from './userinfo';
 import { UpdateUserInfoModel } from './updateuserinfomodel';
 import { RequestResponse } from '../../core/models/requestresponse';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService
 {
-  private readonly baseUrl = 'http://localhost:5100/api/users';
+  private readonly baseUrl = environment.apiUrl + 'users';
 
   constructor(private http: HttpClient) { }
 

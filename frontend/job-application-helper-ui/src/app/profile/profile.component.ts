@@ -33,10 +33,22 @@ export class ProfileComponent
     address: '',
     additionalContactInfo: {}
   };
-  profileEntries:ProfileEntry[] = [];
+  profileEntries: ProfileEntry[] = [];
+  ProfileEntryCategory = ProfileEntryCategory;
+  readonly profileEntryCategoryOptions: {
+    key: string;
+    value: ProfileEntryCategory;
+  }[] = [];
+  // readonly profileEntryCategories = Object.values(ProfileEntryCategory,);
 
   constructor()
   {
+    this.profileEntryCategoryOptions = Object.keys(ProfileEntryCategory)
+      .filter(k => isNaN(Number(k))) // filter out numeric keys
+      .map(key => ({
+        key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
+        value: ProfileEntryCategory[key as keyof typeof ProfileEntryCategory]
+      }));
     // Initialization logic if needed
     this.requestUserInfo();
     this.requestProfileEntries();
@@ -114,7 +126,49 @@ export class ProfileComponent
 
   //#region Profile Entry
 
-  openProfileEntryDialog(profileEntry?: ProfileEntry)
+  openCreateProfileEntryDialog(category: ProfileEntryCategory)
+  {
+    const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
+      width: '500px',
+      data: {
+        profileEntry: {
+          id: '',
+          title: '',
+          organization: '',
+          startDate: new Date(),
+          endDate: new Date(),
+          isCurrent: false,
+          location: '',
+          description: '',
+          category: category
+        }
+      },
+      panelClass: ['custom-dialog-container', 'p-3'],
+      disableClose: true
+    });
+    dialogRef.componentInstance?.onSubmit.subscribe((result: ProfileEntry) =>
+    {
+      this.profileEntryService.createProfileEntry(result).subscribe(response =>
+      {
+        if (response.success && response.value)
+        {
+          result.id = response.value;
+          console.log('Profile Entry created successfully', result);
+          this.profileEntries.push(result);
+          dialogRef.close(result);
+        } else
+        {
+          console.error('Failed to create profile entry', response.error);
+        }
+      });
+    })
+    dialogRef.componentInstance?.onCancel.subscribe(() =>
+    {
+      dialogRef.close();
+    });
+  }
+
+  openEditProfileEntryDialog(profileEntry?: ProfileEntry)
   {
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
@@ -128,24 +182,27 @@ export class ProfileComponent
           isCurrent: false,
           location: '',
           description: '',
-          category: ProfileEntryCategory.Education}
+          category: ProfileEntryCategory.WorkExperience
+        }
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true
     });
-    dialogRef.componentInstance?.onSubmit.subscribe((result: UserInfo) =>
+    dialogRef.componentInstance?.onSubmit.subscribe((result: ProfileEntry) =>
     {
-      console.log('Profile Entry submitted:', result);
-      // this.updateUserInfo(result).subscribe(success =>
-      // {
-      //   if (success)
-      //   {
-      //     dialogRef.close(result);
-      //   } else
-      //   {
-      //     console.error('Failed to update user info');
-      //   }
-      // });
+      this.profileEntryService.updateProfileEntry(result.id, result).subscribe(response =>
+      {
+        if (response.success)
+        {
+          console.log('Profile Entry created successfully', result);
+          const index = this.profileEntries.findIndex(pe => pe.id === result.id);
+          this.profileEntries[index] = { ...result };
+          dialogRef.close(result);
+        } else
+        {
+          console.error('Failed to create profile entry', response.error);
+        }
+      });
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
     {
@@ -153,47 +210,33 @@ export class ProfileComponent
     });
   }
 
-  private updateProfileEntry(newUserInfo: UserInfo): Observable<boolean>
+  deleteProfileEntry(id: string)
   {
-    const updateData: UpdateUserInfoModel = {
-      fullName: newUserInfo.fullName,
-      phoneNumber: newUserInfo.phoneNumber.toString(),
-      address: newUserInfo.address,
-      additionalContactInfo: newUserInfo.additionalContactInfo || {}
-    }
-    return this.userService.updateUserInfo(newUserInfo.id, updateData).pipe(
-      map(response =>
+    this.profileEntryService.deleteProfileEntry(id).subscribe(response =>
+    {
+      if (response.success)
       {
-        if (response.success)
+        const index = this.profileEntries.findIndex(pe => pe.id == id);
+        if (index > -1)
         {
-          console.log('User info updated successfully', newUserInfo);
-          this.userInfo = newUserInfo;
-          return true;
-        } else
-        {
-          console.error('Failed to update user info', response.error);
-          return false;
+          this.profileEntries.splice(index, 1);
         }
       }
-      ));
+    });
   }
 
   private requestProfileEntries()
   {
-    this.profileEntries = [...this.profileEntryService.profileEntries];
-    // this.userService.getUserInfo().subscribe(response =>
-    // {
-    //   if (response.success && response.value)
-    //     this.userInfo = response.value;
-    // });
-  }
-
-  private requestProfileEntry()
-  {
-    this.userService.getUserInfo().subscribe(response =>
+    // this.profileEntries = [...this.profileEntryService.profileEntries];
+    this.profileEntryService.getProfileEntries().subscribe(response =>
     {
       if (response.success && response.value)
-        this.userInfo = response.value;
+      {
+        this.profileEntries = response.value;
+      } else
+      {
+        console.error('Failed to load profile entries', response.error);
+      }
     });
   }
 

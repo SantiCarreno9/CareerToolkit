@@ -167,8 +167,8 @@ export class UserInfoFormComponent
     //Creates a new UserInfo object with the updated values
     const updatedUserInfo: UserInfo = {
       id: this.userInfo.id,
-      fullName: this.userInfoFormGroup.value.fullName || '',
-      email: this.userInfo.email || '',
+      email: this.userInfo.email,      
+      fullName: this.userInfoFormGroup.value.fullName || '',      
       phoneNumber: this.userInfoFormGroup.value.phoneNumber || '',
       address: this.userInfoFormGroup.value.address || '',
       additionalContactInfo: this.userInfo.additionalContactInfo || {}
