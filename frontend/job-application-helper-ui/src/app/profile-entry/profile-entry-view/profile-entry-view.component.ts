@@ -12,13 +12,31 @@ export class ProfileEntryViewComponent
 {
   @Input() profileEntry: ProfileEntry = {
     id: '',
-    title: '',    
+    title: '',
     category: ProfileEntryCategory.Education,
     organization: '',
     location: '',
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: undefined,
     isCurrent: false,
     description: ''
   }
+
+  get timeFrame()
+  {
+    const startDate = new Date(this.profileEntry.startDate);
+    const endDate = this.profileEntry.endDate ? new Date(this.profileEntry.endDate) : new Date();
+    const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    };
+    const timeFrame = startDate.toLocaleDateString(undefined, dateTimeFormatOptions) +
+      (this.profileEntry.isCurrent
+        ? " - Present"
+        : " - " +
+        endDate.toLocaleDateString(undefined, dateTimeFormatOptions));
+    return timeFrame;
+  }
+
 }

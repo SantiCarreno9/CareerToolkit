@@ -23,8 +23,7 @@ internal sealed class GetById : IEndpoint
             return result.Match(Results.Ok, CustomResults.Problem);
         })
             .Produces<ProfileEntryResponse>(StatusCodes.Status200OK)            
-            .RequireAuthorization()
-        //.HasPermission(Permissions.UsersAccess)
+            .RequireAuthorization()        
             .WithTags(Tags.ProfileEntries);
     }
 }

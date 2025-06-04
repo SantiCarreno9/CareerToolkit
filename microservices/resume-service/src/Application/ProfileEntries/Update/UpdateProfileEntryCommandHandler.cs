@@ -14,6 +14,10 @@ internal sealed class UpdateProfileEntryCommandHandler(
 {
     public async Task<Result> Handle(UpdateProfileEntryCommand command, CancellationToken cancellationToken)
     {
+        if(userContext.UserId is null)
+        {
+            return Result.Failure(ProfileEntryErrors.Unauthorized());
+        }
         ProfileEntry? profileEntry = await context.ProfileEntries
             .SingleOrDefaultAsync(pe => pe.Id == command.Id && pe.UserId == userContext.UserId, cancellationToken);
 

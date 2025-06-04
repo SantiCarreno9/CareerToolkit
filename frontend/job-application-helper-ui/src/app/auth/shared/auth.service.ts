@@ -5,13 +5,14 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { map, Observable, Subject, tap } from 'rxjs';
 import { UserBasicInfo } from './user-basic-info';
 import { RequestResponse as CustomResponse } from '../../core/models/requestresponse';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService
 {
-  private readonly baseUrl = 'http://localhost:5100/api/users';
+  private readonly baseUrl = environment.apiUrl + 'users';
   onLoggedInStatusChange = new Subject<boolean>();
 
   isLoggedIn: boolean = false;

@@ -17,7 +17,7 @@ export class ProfileEntryFormComponent
 {
 
   readonly profileEntryFormGroup: FormGroup;
-
+  ProfileEntryCategory = ProfileEntryCategory;
   profileEntry: ProfileEntry = {
     id: '',
     title: '',
@@ -25,7 +25,7 @@ export class ProfileEntryFormComponent
     organization: '',
     location: '',
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: undefined,
     isCurrent: false,
     description: ''
   };
@@ -34,7 +34,7 @@ export class ProfileEntryFormComponent
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
       [{ 'header': [1, 2, false] }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
       ['link', 'image'],
       ['clean']                                         // remove formatting button
     ]
@@ -46,14 +46,7 @@ export class ProfileEntryFormComponent
   @ViewChild('editor') editorContainer: ElementRef | undefined;
 
   constructor(@Inject(DIALOG_DATA) public data: { profileEntry: ProfileEntry })
-  {    
-    // const quill = new Quill(editorContainer?.getHTML()!, {
-    //   theme: 'snow',
-    // });
-    // quill.on('text-change', () => {
-    //   const description = quill.root.innerHTML;
-    //   this.profileEntryFormGroup.patchValue({ description });
-    // });
+  {
     if (data && data.profileEntry)
     {
       this.profileEntry = data.profileEntry;
@@ -72,7 +65,7 @@ export class ProfileEntryFormComponent
       startDate: new FormControl(this.profileEntry.startDate, [
         Validators.required
       ]),
-      endDate: new FormControl(this.profileEntry.endDate),
+      endDate: new FormControl(this.profileEntry.endDate || ''),
       isCurrent: new FormControl(this.profileEntry.isCurrent),
       description: new FormControl(this.profileEntry.description)
     });
@@ -114,9 +107,6 @@ export class ProfileEntryFormComponent
     return this.profileEntryFormGroup.get('description');
   }
 
-  descriptionDataChanged(event: ContentChange){
-      console.log(event.html);
-  }
   submit()
   {
     if (this.profileEntryFormGroup.invalid)
@@ -125,9 +115,11 @@ export class ProfileEntryFormComponent
       console.error('Form is invalid');
       return;
     }
+    const endDate = this.profileEntryFormGroup.value.isCurrent ? null : this.profileEntryFormGroup.value.endDate;
     const updatedEntry: ProfileEntry = {
       ...this.profileEntry,
-      ...this.profileEntryFormGroup.value
+      ...this.profileEntryFormGroup.value,
+      endDate: endDate
     };
     this.onSubmit.emit(updatedEntry);
   }

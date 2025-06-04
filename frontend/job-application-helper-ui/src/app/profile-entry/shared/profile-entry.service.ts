@@ -4,13 +4,14 @@ import { map, Observable } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
 import { ProfileEntry } from './profile-entry';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileEntryService
 {
-  private readonly baseUrl = 'http://localhost:5100/api/profile-entries';
+  private readonly baseUrl = environment.apiUrl + 'profile-entries';
 
   constructor(private http: HttpClient) { }
 
@@ -49,6 +50,48 @@ export class ProfileEntryService
       description: 'Working on full stack development projects, focusing on both front-end and back-end technologies.'
     }
   ];
+
+  getProfileEntries(): Observable<RequestResponse<ProfileEntry[]>>
+  {
+    return this.http.get<ProfileEntry[]>(`${this.baseUrl}/myentries`, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, res.body as ProfileEntry[], res.statusText))
+    );
+  }
+
+  getProfileEntryById(id: string): Observable<RequestResponse<ProfileEntry>>
+  {
+    return this.http.get<ProfileEntry>(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<ProfileEntry>(res.status === 200, res.body as ProfileEntry, res.statusText))
+    );
+  }
+
+  getProfileEntriesByCategory(category: ProfileEntryCategory): Observable<RequestResponse<ProfileEntry[]>>
+  {
+    return this.http.get<ProfileEntry[]>(`${this.baseUrl}/category/${category}`, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, res.body as ProfileEntry[], res.statusText))
+    );
+  }
+
+  createProfileEntry(data: ProfileEntry): Observable<RequestResponse<string>>
+  {
+    return this.http.post<string>(`${this.baseUrl}`, data, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<string>(res.status === 201, res.body, res.statusText))
+    );
+  }
+
+  updateProfileEntry(id: string, data: ProfileEntry): Observable<RequestResponse<any>>
+  {
+    return this.http.put(`${this.baseUrl}/${id}`, data, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
+    );
+  }
+
+  deleteProfileEntry(id: string): Observable<RequestResponse<any>>
+  {
+    return this.http.delete(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
+    );
+  }
   // getUserInfo(): Observable<RequestResponse<UserInfo>>
   // {
   //   return this.http.get(`${this.baseUrl}/myinfo`, { withCredentials: true, observe: 'response' }).pipe(

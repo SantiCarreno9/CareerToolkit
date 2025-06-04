@@ -6,38 +6,46 @@ services:
       context: .
       dockerfile: gateway/src/Gateway.API/Dockerfile
     ports:
-        - "5000:8080"
-        - "5001:8081"
+        - "5000:5000"
+        - "5001:5001"
     depends_on:
       - user-service-api
       # - resume-service-api
     networks:
           - proxy-backend
 
+  postgre-database:
+    image: postgres:17        
+
+  pgadmin:
+    image: dpage/pgadmin4    
+    depends_on:
+      - postgre-database  
+    
   user-service-api:
     image: ${DOCKER_REGISTRY-}usersapi    
     build:
       context: .
       dockerfile: user-service/src/Web.Api/Dockerfile
-    ports:
-        - "5100:8080"
-        - "5101:8081"
-        # - "5100"
-        # - "5101"
+    ports:        
+        - "5100"
+        - "5101"
+    depends_on:
+      - postgre-database
     networks:
         - proxy-backend
   
-  # resume-service-api:
-  #   image: ${DOCKER_REGISTRY-}resumesapi
-  #   container_name: resumes.api
-  #   build:
-  #       context: .
-  #       dockerfile: resume-service/src/Web.Api/Dockerfile
-  #   ports:
-  #       - "5200:8080"
-  #       - "5201:8081"
-  #   networks:
-  #       - proxy-backend 
+  resume-service-api:
+    image: ${DOCKER_REGISTRY-}resumesapi
+    container_name: resumes.api
+    build:
+        context: .
+        dockerfile: resume-service/src/Web.Api/Dockerfile
+    ports:
+        - "5200"
+        - "5201"
+    networks:
+        - proxy-backend 
 
 networks:
   proxy-backend:

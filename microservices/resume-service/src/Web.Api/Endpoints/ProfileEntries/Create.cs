@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.ProfileEntries.Create;
 using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -13,7 +14,7 @@ internal sealed class Create : IEndpoint
         string Title,
         string? Organization,
         string? Location,
-        DateOnly StartData,
+        DateOnly StartDate,
         DateOnly? EndDate,
         bool IsCurrent,
         string? Description,
@@ -21,7 +22,7 @@ internal sealed class Create : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(EndpointsBase.ProfileEntriesPath, async (
-            Request request,
+            [FromBody]Request request,
             ICommandHandler<CreateProfileEntryCommand, string> handler,
             CancellationToken cancellationToken) =>
         {
@@ -30,7 +31,7 @@ internal sealed class Create : IEndpoint
                 Title = request.Title,
                 Organization = request.Organization,
                 Location = request.Location,
-                StartDate = request.StartData,
+                StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 IsCurrent = request.IsCurrent,
                 Description = request.Description,
@@ -38,12 +39,14 @@ internal sealed class Create : IEndpoint
             };
 
             Result<string> result = await handler.Handle(query, cancellationToken);
-
-            return result.Match(Results.Created, CustomResults.Problem);
+            if (result.IsFailure)
+            {
+                return CustomResults.Problem(result);
+            }
+            return Results.Created(EndpointsBase.ProfileEntriesPath, result.Value);            
         })
             .Produces<string>(StatusCodes.Status201Created)
-            .RequireAuthorization()
-        //.HasPermission(Permissions.UsersAccess)
+            .RequireAuthorization()        
             .WithTags(Tags.ProfileEntries);
     }
 }
