@@ -5,7 +5,7 @@ internal sealed class CreateProfileEntryCommandValidator : AbstractValidator<Cre
 {
     public CreateProfileEntryCommandValidator()
     {
-        RuleFor(x => x.UserName)
+        RuleFor(x => x.UserEmail)
             .NotEmpty()
             .WithMessage("UserName is required.");
         RuleFor(x => x.Title)

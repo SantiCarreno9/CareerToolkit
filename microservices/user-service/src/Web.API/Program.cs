@@ -1,8 +1,12 @@
 using System.Reflection;
+using System.Security.Claims;
 using Application;
 using HealthChecks.UI.Client;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Web.Api;
@@ -21,15 +25,6 @@ builder.Services
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
-builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
-        policy => policy
-                .AllowCredentials()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithOrigins(builder.Configuration["FrontendUrl"]!)
-                )
-);
-
 WebApplication app = builder.Build();
 
 app.MapEndpoints();
@@ -46,16 +41,13 @@ app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
 app.UseRequestContextLogging();
 
 app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-app.UseCors("CorsPolicy");
-
-app.UseAuthentication();
-
-app.UseAuthorization();
+app.UseAuthenticationMiddleware();
 
 await app.RunAsync();

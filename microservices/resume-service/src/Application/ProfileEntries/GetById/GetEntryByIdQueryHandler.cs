@@ -16,7 +16,7 @@ internal sealed class GetEntryByIdQueryHandler(
     public async Task<Result<ProfileEntryResponse>> Handle(GetEntryByIdQuery query, CancellationToken cancellationToken)
     {
         ProfileEntryResponse? profileEntry = await context.ProfileEntries
-            .Where(pe => pe.Id == query.entryId && pe.UserName == userContext.UserName)
+            .Where(pe => pe.Id == query.entryId && pe.UserId == userContext.UserId)
             .Select(pe => new ProfileEntryResponse
             {
                 Id = pe.Id,                

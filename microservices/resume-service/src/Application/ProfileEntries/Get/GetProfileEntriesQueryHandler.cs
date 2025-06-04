@@ -15,13 +15,13 @@ internal sealed class GetProfileEntriesQueryHandler(
 {
     public async Task<Result<List<ProfileEntryResponse>>> Handle(GetProfileEntriesQuery query, CancellationToken cancellationToken)
     {
-        if (userContext.UserName is null)
+        if (userContext.UserId is null)
         {
             return Result.Failure<List<ProfileEntryResponse>>(ProfileEntryErrors.Unauthorized());
         }
 
         List<ProfileEntryResponse>? profileEntry = await context.ProfileEntries
-            .Where(pe => pe.UserName == userContext.UserName)
+            .Where(pe => pe.UserId == userContext.UserId)
             .Select(pe => new ProfileEntryResponse
             {
                 Id = pe.Id,                

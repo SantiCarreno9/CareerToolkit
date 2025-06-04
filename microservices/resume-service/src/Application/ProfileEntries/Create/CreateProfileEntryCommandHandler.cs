@@ -12,7 +12,7 @@ internal sealed class CreateProfileEntryCommandHandler(
     {
         var profileEntry = new ProfileEntry
         {
-            UserName = command.UserName,
+            UserId = command.UserEmail,
             Title = command.Title,
             Organization = command.Organization,
             Location = command.Location,

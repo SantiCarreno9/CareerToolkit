@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /microservices/user-service/src/Web.API/appsettings.Development.json
 /microservices/user-service/src/Web.API/appsettings.Development.json
 *override.yml
+/microservices/gateway/src/Gateway.API/appsettings.Development.json

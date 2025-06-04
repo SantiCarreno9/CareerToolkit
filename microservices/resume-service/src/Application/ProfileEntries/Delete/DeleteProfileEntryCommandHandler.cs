@@ -15,7 +15,7 @@ internal sealed class DeleteProfileEntryCommandHandler(
     public async Task<Result> Handle(DeleteProfileEntryCommand command, CancellationToken cancellationToken)
     {
         ProfileEntry? profileEntry = await context.ProfileEntries
-            .SingleOrDefaultAsync(pe => pe.Id == command.EntryId && pe.UserName == userContext.UserName, cancellationToken);
+            .SingleOrDefaultAsync(pe => pe.Id == command.EntryId && pe.UserId == userContext.UserId, cancellationToken);
 
         if (profileEntry is null)
         {

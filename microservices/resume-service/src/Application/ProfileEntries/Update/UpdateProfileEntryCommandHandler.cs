@@ -15,7 +15,7 @@ internal sealed class UpdateProfileEntryCommandHandler(
     public async Task<Result> Handle(UpdateProfileEntryCommand command, CancellationToken cancellationToken)
     {
         ProfileEntry? profileEntry = await context.ProfileEntries
-            .SingleOrDefaultAsync(pe => pe.Id == command.Id && pe.UserName == userContext.UserName, cancellationToken);
+            .SingleOrDefaultAsync(pe => pe.Id == command.Id && pe.UserId == userContext.UserId, cancellationToken);
 
         if (profileEntry is null)
         {

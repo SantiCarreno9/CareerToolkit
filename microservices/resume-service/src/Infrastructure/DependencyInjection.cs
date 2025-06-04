@@ -4,6 +4,7 @@ using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Infrastructure.DomainEvents;
 using Infrastructure.Time;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -58,7 +59,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAuthenticationInternal(
         this IServiceCollection services)
-    {        
+    {
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);            
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
 

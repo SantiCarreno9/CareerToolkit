@@ -1,40 +1,43 @@
 services:
 
   gateway-api:
-    image: ${DOCKER_REGISTRY-}gatewayapi
-    container_name: gateway.api
+    image: ${DOCKER_REGISTRY-}gatewayapi    
     build:
       context: .
       dockerfile: gateway/src/Gateway.API/Dockerfile
     ports:
-        - "5000:5000"
-        - "5001:5001"
+        - "5000:8080"
+        - "5001:8081"
+    depends_on:
+      - user-service-api
+      # - resume-service-api
     networks:
           - proxy-backend
 
   user-service-api:
-    image: ${DOCKER_REGISTRY-}usersapi
-    container_name: users.api
+    image: ${DOCKER_REGISTRY-}usersapi    
     build:
       context: .
       dockerfile: user-service/src/Web.Api/Dockerfile
     ports:
         - "5100:8080"
         - "5101:8081"
+        # - "5100"
+        # - "5101"
     networks:
         - proxy-backend
   
-  resume-service-api:
-    image: ${DOCKER_REGISTRY-}resumesapi
-    container_name: resumes.api
-    build:
-        context: .
-        dockerfile: resume-service/src/Web.Api/Dockerfile
-    ports:
-        - "5200:8080"
-        - "5201:8081"
-    networks:
-        - proxy-backend 
+  # resume-service-api:
+  #   image: ${DOCKER_REGISTRY-}resumesapi
+  #   container_name: resumes.api
+  #   build:
+  #       context: .
+  #       dockerfile: resume-service/src/Web.Api/Dockerfile
+  #   ports:
+  #       - "5200:8080"
+  #       - "5201:8081"
+  #   networks:
+  #       - proxy-backend 
 
 networks:
   proxy-backend:

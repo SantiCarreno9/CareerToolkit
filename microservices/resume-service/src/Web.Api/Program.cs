@@ -44,6 +44,6 @@ app.UseExceptionHandler();
 
 app.UseAuthentication();
 
-app.UseAuthorization();
+app.UseAuthenticationMiddleware();
 
 await app.RunAsync();

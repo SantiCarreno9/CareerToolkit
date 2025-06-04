@@ -15,7 +15,7 @@ internal sealed class GetEntriesByCategoryQueryHandler(
     public async Task<Result<List<ProfileEntryResponse>>> Handle(GetEntriesByCategoryQuery query, CancellationToken cancellationToken)
     {
         List<ProfileEntryResponse>? profileEntries = await context.ProfileEntries
-            .Where(pe => pe.Category == query.Category && pe.UserName == userContext.UserName)
+            .Where(pe => pe.Category == query.Category && pe.UserId == userContext.UserId)
             .Select(pe => new ProfileEntryResponse
             {
                 Id = pe.Id,                
