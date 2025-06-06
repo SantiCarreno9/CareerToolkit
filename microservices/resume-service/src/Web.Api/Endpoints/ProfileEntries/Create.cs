@@ -26,7 +26,7 @@ internal sealed class Create : IEndpoint
             ICommandHandler<CreateProfileEntryCommand, string> handler,
             CancellationToken cancellationToken) =>
         {
-            var query = new CreateProfileEntryCommand
+            var command = new CreateProfileEntryCommand
             {
                 Title = request.Title,
                 Organization = request.Organization,
@@ -38,7 +38,7 @@ internal sealed class Create : IEndpoint
                 Category = request.Category
             };
 
-            Result<string> result = await handler.Handle(query, cancellationToken);
+            Result<string> result = await handler.Handle(command, cancellationToken);
             if (result.IsFailure)
             {
                 return CustomResults.Problem(result);

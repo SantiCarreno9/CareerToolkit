@@ -10,6 +10,7 @@ namespace Application.Abstractions.Data;
 public interface IApplicationDbContext
 {
     DbSet<ProfileEntry> ProfileEntries { get; }    
+    DbSet<Resume> Resumes { get; }    
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

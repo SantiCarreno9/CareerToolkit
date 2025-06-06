@@ -1,0 +1,20 @@
+﻿using SharedKernel;
+
+namespace Domain.Entities;
+public class Resume : Entity
+{
+    public string Id { get; set; }
+    public string UserId { get; set; }
+    public string Name { get; set; }
+    public UserInfo UserInfo { get; set; }
+    public List<ProfileEntry> ProfileEntries { get; set; } = new List<ProfileEntry>();
+    public string ResumeInfo { get; set; }
+    public List<string> Keywords { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
+
+    public Resume()
+    {
+        Id = Guid.NewGuid().ToString();
+    }
+}

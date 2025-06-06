@@ -9,6 +9,7 @@ public class ApplicationDbContext(
     : DbContext(options), IApplicationDbContext
 {
     public DbSet<ProfileEntry> ProfileEntries { get; set; }
+    public DbSet<Resume> Resumes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
