@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Resumes.Get;
 using Application.Resumes.Shared;
+using Microsoft.AspNetCore.Mvc;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -9,13 +10,18 @@ namespace Web.Api.Endpoints.Resumes;
 
 internal sealed class Get : IEndpoint
 {
+    public sealed record Request(
+    int Page,
+    int PageSize);
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(EndpointsBase.ResumesPath, async (
+            [FromQuery] Request request,
             IQueryHandler<GetResumesQuery, List<ResumeResponse>> handler,
             CancellationToken cancellationToken) =>
         {
-            var query = new GetResumesQuery();
+            var query = new GetResumesQuery(request.Page, request.PageSize);
 
             Result<List<ResumeResponse>> result = await handler.Handle(query, cancellationToken);
 

@@ -1,0 +1,37 @@
+<div class="resume">
+  <div class="name">
+    <p>{{ this.resume.userInfo.fullName }}</p>
+  </div>
+  <div class="contact-info-container">
+    <p>{{ this.resume.getPhoneNumber() }}</p>
+    @if(this.resume.userInfo.address!==''){
+    <p>{{ this.resume.userInfo.address }}</p>
+    }
+    <p>{{ this.resume.userInfo.email }}</p>
+    <a
+      *ngFor="let item of this.resume.getAdditionalContactInfo() | keyvalue"
+      href="{{ item.key }}"
+      target="_blank"
+      rel="noopener"
+    >
+      {{ item.value }}
+    </a>
+  </div>
+  @if(this.resume.resumeInfo.sections){
+  <div *ngFor="let section of this.resume.resumeInfo.sections">
+    @if(isSectionText(section)){
+    <app-section-text [info]="section"></app-section-text>
+    }@else if(isSectionProfileEntry(section)){
+    <app-section-profile-entry
+      [entries]="this.resume.profileEntries"
+      [info]="section"
+    ></app-section-profile-entry>
+    }    
+  </div>
+  }
+  <!-- end of sections -->
+  <!-- <div class="section">
+    <div class="title">Summary of Skills & Experience</div>
+    <div [innerHTML]=""></div>
+  </div> -->
+</div>

@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Authentication;
+﻿using Application.Abstractions;
+using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Resumes.Shared;
@@ -10,15 +11,15 @@ namespace Application.Resumes.Get;
 internal sealed class GetResumesQueryHandler(
     IApplicationDbContext context,
     IUserContext userContext)
-    : IQueryHandler<GetResumesQuery, List<ResumeResponse>>
+    : IQueryHandler<GetResumesQuery, PagedList<ResumeResponse>>
 {
-    public async Task<Result<List<ResumeResponse>>> Handle(GetResumesQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedList<ResumeResponse>>> Handle(GetResumesQuery query, CancellationToken cancellationToken)
     {
-        if(userContext.UserId is null)
+        if (userContext.UserId is null)
         {
-            return Result.Failure<List<ResumeResponse>>(ResumeErrors.Unauthorized());
+            return Result.Failure<PagedList<ResumeResponse>>(ResumeErrors.Unauthorized());
         }
-        List<ResumeResponse>? resumes = await context.Resumes
+        IQueryable<ResumeResponse> resumes = context.Resumes
             .Where(r => r.UserId == userContext.UserId)
             .Select(r => new ResumeResponse
             (
@@ -31,8 +32,8 @@ internal sealed class GetResumesQueryHandler(
                 r.CreatedAt,
                 r.ModifiedAt
             ))
-            .ToListAsync(cancellationToken);
+            .OrderByDescending(pe => pe.CreatedAt);
 
-        return resumes;
+        return await PagedList<ResumeResponse>.CreateAsync(resumes, query.Page, query.PageSize);
     }
 }

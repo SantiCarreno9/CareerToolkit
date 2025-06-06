@@ -5,6 +5,8 @@ import { ResumeListComponent } from './resume/resume-list/resume-list.component'
 import { AuthGuardService } from './auth/shared/auth-guard.service';
 import { HomeComponent } from './core/components/home/home.component';
 import { ProfileComponent } from './profile/profile.component';
+import { Template1Component } from './resume/templates/template1/template1.component';
+import { DisplayResumeComponent } from './resume/displayresume/displayresume.component';
 
 export const routes: Routes = [
     {
@@ -26,12 +28,17 @@ export const routes: Routes = [
         path: 'resume',
         component: ResumeListComponent,
         title: 'Resume List',
-        canMatch: [AuthGuardService]
+        // canMatch: [AuthGuardService]
     },
     {
         path: 'profile',
         component: ProfileComponent,
         title: 'Profile',
         canMatch: [AuthGuardService]
+    },
+    {
+        path: 'resume/template1',
+        component: DisplayResumeComponent,
+        title: 'Template 1'
     }
 ];
