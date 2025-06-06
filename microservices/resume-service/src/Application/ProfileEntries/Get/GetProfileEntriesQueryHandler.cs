@@ -34,6 +34,7 @@ internal sealed class GetProfileEntriesQueryHandler(
                 Description = pe.Description,
                 Category = pe.Category
             })
+            .OrderByDescending(pe => pe.StartDate)
             .ToListAsync(cancellationToken);
 
         return profileEntry;

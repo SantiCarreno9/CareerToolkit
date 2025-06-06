@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { UserInfoFormComponent } from '../user/user-info/user-info-form/user-info-form.component';
+import { UserInfoFormComponent } from '../user/user-info-form/user-info-form.component';
 import { UserInfo } from '../user/shared/userinfo';
 import { UserService } from '../user/shared/user.service';
-import { UserInfoViewComponent } from "../user/user-info/user-info-view/user-info-view.component";
+import { UserInfoViewComponent } from "../user/user-info-view/user-info-view.component";
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { UpdateUserInfoModel } from '../user/shared/updateuserinfomodel';
 import { map, Observable } from 'rxjs';

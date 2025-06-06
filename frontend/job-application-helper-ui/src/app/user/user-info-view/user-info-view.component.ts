@@ -1,5 +1,5 @@
 import { Component, Inject, inject, Input } from '@angular/core';
-import { UserInfo } from '../../shared/userinfo';
+import { UserInfo } from '../shared/userinfo';
 import {CommonModule} from '@angular/common';
 
 @Component({

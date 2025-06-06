@@ -1,0 +1,12 @@
+<div class="entry-container">
+  <div class="title-container">
+    <p class="title">{{ entry.title }}</p>
+    <p class="time-frame">{{ timeFrame }}</p>
+  </div>
+  @if(entry.organization || entry.location){
+  <p class="organization-info">
+    {{ `${entry.organization}, ${entry.location}` }}
+  </p>
+  }
+  <p class="description" [innerHTML]="this.entry.description"></p>
+</div>

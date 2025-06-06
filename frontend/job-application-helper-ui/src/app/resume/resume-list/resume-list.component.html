@@ -1,1 +1,23 @@
-<p>resume-list works!</p>
+<div class="container p-4">
+  <button class="btn btn-success" (click)="openResumeCreatorDialog()">
+    Create New Resume +
+  </button>
+  <div class="mt-4">
+    <table class="table">
+      <thead>
+        <tr>          
+          <th scope="col">Name</th>
+          <th scope="col">Modified At</th>
+          <th scope="col">Keywords</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <tr *ngFor="let resume of mockResumes">
+          <th scope="row">{{resume.name}}</th>
+          <td>{{resume.modifiedAt}}</td>
+          <td>{{resume.keywords}}</td>          
+        </tr>        
+      </tbody>
+    </table>
+  </div>
+</div>
