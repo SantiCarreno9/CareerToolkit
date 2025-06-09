@@ -1,11 +1,12 @@
-﻿using Domain.Entities;
+﻿using Application.ProfileEntries.Shared;
+using Domain.Entities;
 
 namespace Application.Resumes.Shared;
 public sealed record ResumeResponse(
     string Id,
     string Name,
     UserInfo UserInfo,
-    List<ProfileEntry> ProfileEntries,
+    List<ProfileEntryResponse> ProfileEntries,
     string ResumeInfo,
     List<string> Keywords,
     DateTime CreatedAt,

@@ -2,6 +2,7 @@ services:
 
   gateway-api:
     image: ${DOCKER_REGISTRY-}gatewayapi    
+    container_name: gateway-api
     build:
       context: .
       dockerfile: gateway/src/Gateway.API/Dockerfile
@@ -10,7 +11,7 @@ services:
         - "5001:5001"
     depends_on:
       - user-service-api
-      # - resume-service-api
+      - resume-service-api
     networks:
           - proxy-backend
 
@@ -23,7 +24,8 @@ services:
       - postgre-database  
     
   user-service-api:
-    image: ${DOCKER_REGISTRY-}usersapi    
+    image: ${DOCKER_REGISTRY-}usersapi   
+    container_name: user-service-api
     build:
       context: .
       dockerfile: user-service/src/Web.Api/Dockerfile
@@ -37,13 +39,15 @@ services:
   
   resume-service-api:
     image: ${DOCKER_REGISTRY-}resumesapi
-    container_name: resumes.api
+    container_name: resume-service-api
     build:
         context: .
         dockerfile: resume-service/src/Web.Api/Dockerfile
     ports:
         - "5200"
         - "5201"
+    depends_on:
+      - postgre-database
     networks:
         - proxy-backend 
 

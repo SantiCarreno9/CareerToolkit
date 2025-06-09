@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 export class UserInfoFormComponent
 {
   readonly fullContactOptions: KeyValue<string, string>[];
-  availableContactOptions: KeyValue<string, string>[] = [];  
+  availableContactOptions: KeyValue<string, string>[] = [];
 
   readonly userInfoFormGroup: FormGroup;
   userInfo: UserInfo = {
@@ -26,19 +26,21 @@ export class UserInfoFormComponent
     address: '',
     additionalContactInfo: {}
   };
+  allowEmailEditing: boolean = false;
 
   @Output() onSubmit = new EventEmitter<UserInfo>();
   @Output() onCancel = new EventEmitter<void>();
 
-  constructor(@Inject(DIALOG_DATA) public data: { userInfo: UserInfo }, private formBuilder: FormBuilder)
+  constructor(@Inject(DIALOG_DATA) public data: { userInfo: UserInfo, allowEmailEditing: boolean }, private formBuilder: FormBuilder)
   {
     this.userInfo = data.userInfo;
+    this.allowEmailEditing = data.allowEmailEditing;
 
     this.userInfoFormGroup = this.formBuilder.group({
       fullName: new FormControl(this.userInfo.fullName, [
         Validators.required,
       ]),
-      email: new FormControl({ value: this.userInfo.email, disabled: true }, [
+      email: new FormControl({ value: this.userInfo.email, disabled: !this.allowEmailEditing }, [
         Validators.required,
         Validators.email
       ]),
@@ -76,7 +78,7 @@ export class UserInfoFormComponent
     return this.userInfoFormGroup.get('address');
   }
 
-  private updateAvailableContactOptions()
+  private updateAvailableContactOptions(): void
   {
     // additionalContactInfo is an object/dictionary, get its keys
     const selectedKeys = this.userInfo.additionalContactInfo
@@ -89,17 +91,17 @@ export class UserInfoFormComponent
   }
 
   // Adds a new form control for additional contact info if it doesn't already exist
-  private addAdditionalContactInfoControl(key: string, value: string = '')
+  private addAdditionalContactInfoControl(key: string, value: string = ''): void
   {
     if (!this.userInfoFormGroup.contains('contact-' + key))
-    {      
+    {
       this.userInfoFormGroup.addControl('contact-' + key, new FormControl(value, [Validators.required]));
       this.updateAvailableContactOptions();
-    }    
+    }
   }
 
   // Removes the form control for additional contact info if it exists
-  private removeAdditionalContactInfoControl(key: string)
+  private removeAdditionalContactInfoControl(key: string): void
   {
     if (this.userInfoFormGroup.contains('contact-' + key))
     {
@@ -109,7 +111,7 @@ export class UserInfoFormComponent
   }
 
   // Adds a new contact info field to the userInfo object and the form control
-  addAdditionalContactInfo(event: Event)
+  addAdditionalContactInfo(event: Event): void
   {
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue = selectElement.value;
@@ -132,7 +134,7 @@ export class UserInfoFormComponent
   }
 
   // Removes the contact info from the userInfo object and the form control
-  removeContactInfo(key: string)
+  removeContactInfo(key: string): void
   {
     if (!(key in this.userInfo.additionalContactInfo))
     {
@@ -143,7 +145,7 @@ export class UserInfoFormComponent
     this.removeAdditionalContactInfoControl(key);
   }
 
-  submit()
+  submit(): void
   {
     if (this.userInfoFormGroup.invalid)
     {
@@ -161,22 +163,22 @@ export class UserInfoFormComponent
       if (control && control.value)
       {
         const contactKey = key.replace('contact-', '');
-        this.userInfo.additionalContactInfo[contactKey] = control.value;        
+        this.userInfo.additionalContactInfo[contactKey] = control.value;
       }
     }
     //Creates a new UserInfo object with the updated values
     const updatedUserInfo: UserInfo = {
       id: this.userInfo.id,
-      email: this.userInfo.email,      
-      fullName: this.userInfoFormGroup.value.fullName || '',      
+      email: this.allowEmailEditing? this.userInfoFormGroup.value.email : this.userInfo.email,
+      fullName: this.userInfoFormGroup.value.fullName || '',
       phoneNumber: this.userInfoFormGroup.value.phoneNumber || '',
       address: this.userInfoFormGroup.value.address || '',
       additionalContactInfo: this.userInfo.additionalContactInfo || {}
-    }    
+    }
     this.onSubmit.emit(updatedUserInfo);
   }
 
-  cancel()
+  cancel(): void
   {
     this.onCancel.emit();
   }

@@ -41,7 +41,7 @@ export class RegisterComponent
     return this.registerForm.get('password');
   }
 
-  register()
+  register(): void
   {
     if (this.registerForm.invalid)
     {

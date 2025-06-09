@@ -61,6 +61,7 @@ export class DisplayResumeComponent
       description: 'Working on full stack development projects, focusing on both front-end and back-end technologies.'
     }];
     this.resume.resumeInfo = {
+      templateId:'1',
       sections: [
         new SectionInfoText(
           '1',

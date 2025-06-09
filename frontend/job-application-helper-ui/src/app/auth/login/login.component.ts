@@ -34,7 +34,7 @@ export class LoginComponent
     return this.loginForm.get('password');
   }
 
-  login()
+  login():void
   {
     if (this.loginForm.invalid)
     {

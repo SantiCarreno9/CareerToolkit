@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Messaging;
+﻿using Application.Abstractions;
+using Application.Abstractions.Messaging;
 using Application.Resumes.Get;
 using Application.Resumes.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -9,25 +10,22 @@ using Web.Api.Infrastructure;
 namespace Web.Api.Endpoints.Resumes;
 
 internal sealed class Get : IEndpoint
-{
-    public sealed record Request(
-    int Page,
-    int PageSize);
-
+{    
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(EndpointsBase.ResumesPath, async (
-            [FromQuery] Request request,
-            IQueryHandler<GetResumesQuery, List<ResumeResponse>> handler,
+        app.MapGet(EndpointsBase.ResumesPath, async(
+            int Page,
+            int PageSize,     
+            IQueryHandler<GetResumesQuery, PagedList<ResumeResponse>> handler,
             CancellationToken cancellationToken) =>
         {
-            var query = new GetResumesQuery(request.Page, request.PageSize);
+            var query = new GetResumesQuery(Page, PageSize);
 
-            Result<List<ResumeResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<PagedList<ResumeResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-            .Produces<List<ResumeResponse>>(StatusCodes.Status200OK)
+            .Produces<PagedList<ResumeResponse>>(StatusCodes.Status200OK)
             .RequireAuthorization()
             .WithTags(Tags.ProfileEntries);
     }

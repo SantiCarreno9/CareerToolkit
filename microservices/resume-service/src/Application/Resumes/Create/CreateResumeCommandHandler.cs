@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Extensions;
 using Application.Resumes.Shared;
 using Domain.Entities;
 using Domain.Errors;
@@ -9,7 +10,8 @@ using SharedKernel;
 namespace Application.Resumes.Create;
 internal sealed class CreateResumeCommandHandler(
     IApplicationDbContext context,
-    IUserContext userContext)
+    IUserContext userContext,
+    IDateTimeProvider dateTimeProvider)
     : ICommandHandler<CreateResumeCommand, ResumeResponse>
 {
     public async Task<Result<ResumeResponse>> Handle(CreateResumeCommand command, CancellationToken cancellationToken)
@@ -26,8 +28,8 @@ internal sealed class CreateResumeCommandHandler(
             ProfileEntries = command.ProfileEntries,
             ResumeInfo = command.ResumeInfo,
             Keywords = command.Keywords,
-            CreatedAt = DateTime.UtcNow,
-            ModifiedAt = DateTime.UtcNow
+            CreatedAt = dateTimeProvider.UtcNow,
+            ModifiedAt = dateTimeProvider.UtcNow
         };
 
         context.Resumes.Add(resume);
@@ -38,7 +40,7 @@ internal sealed class CreateResumeCommandHandler(
             resume.Id,
             resume.Name,
             resume.UserInfo,
-            resume.ProfileEntries,
+            resume.ProfileEntries.ToResponse(),
             resume.ResumeInfo,
             resume.Keywords,
             resume.CreatedAt,
