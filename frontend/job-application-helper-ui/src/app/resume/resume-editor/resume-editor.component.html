@@ -1,0 +1,87 @@
+<div>
+  <div class="title">
+    {{ resume.name }}
+  </div>
+  <cdk-accordion class="example-accordion">
+    <cdk-accordion-item
+      #accordionItem="cdkAccordionItem"
+      class="example-accordion-item"
+    >
+      <button
+        class="example-accordion-item-header"
+        (click)="accordionItem.toggle()"
+        tabindex="0"
+        [attr.id]="'accordion-header-personal-info'"
+        [attr.aria-expanded]="accordionItem.expanded"
+        [attr.aria-controls]="'accordion-body-personal-info'"
+      >
+        Personal Info
+        <span class="example-accordion-item-description">
+          <!-- Click to {{ accordionItem.expanded ? 'close' : 'open' }} -->
+        </span>
+      </button>
+      @if(accordionItem.expanded) {
+      <div
+        class="example-accordion-item-body"
+        role="region"
+        [style.display]="accordionItem.expanded ? '' : 'none'"
+        [attr.id]="'accordion-body-personal-info'"
+        [attr.aria-labelledby]="'accordion-header-personal-info'"
+      >
+        <div class="d-flex flex-row" style="align-items: baseline">
+          <h4>My Profile</h4>
+          <button
+            class="btn btn-icon"
+            style="font-size: 1.5rem"
+            (click)="openUserInfoFormDialog()"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+        </div>
+        <app-user-info-view
+          [userInfo]="convertToUserInfo(this.resume.userInfo)"
+        ></app-user-info-view>
+      </div>
+      }
+    </cdk-accordion-item>
+    @for (item of items; track item; let index = $index) {
+    <cdk-accordion-item
+      #accordionItem="cdkAccordionItem"
+      class="example-accordion-item"
+    >
+      <button
+        class="example-accordion-item-header"
+        (click)="accordionItem.toggle()"
+        tabindex="0"
+        [attr.id]="'accordion-header-' + index"
+        [attr.aria-expanded]="accordionItem.expanded"
+        [attr.aria-controls]="'accordion-body-' + index"
+      >
+        {{ item }}
+        <span class="example-accordion-item-description">
+          Click to {{ accordionItem.expanded ? "close" : "open" }}
+        </span>
+      </button>
+      @if(accordionItem.expanded) {
+      <div
+        class="example-accordion-item-body"
+        role="region"
+        [style.display]="accordionItem.expanded ? '' : 'none'"
+        [attr.id]="'accordion-body-' + index"
+        [attr.aria-labelledby]="'accordion-header-' + index"
+      >
+        Lorem ipsum dolor, sit amet, consectetur adipisicing elit. Perferendis
+        excepturi incidunt ipsum deleniti labore, tempore non nam doloribus
+        blanditiis veritatis illo autem iure aliquid ullam rem tenetur deserunt
+        velit culpa?
+      </div>
+      }
+    </cdk-accordion-item>
+    }
+  </cdk-accordion>
+  @if(this.template!==undefined){
+  <ng-container
+    *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
+  ></ng-container>
+  }
+</div>

@@ -1,4 +1,5 @@
 import { ProfileEntry } from "../../profile-entry/shared/profile-entry";
+import { ResumeInfo } from "./resume-info";
 import { UserPersonalInfo } from "./userpersonalinfo";
 
 export class Resume
@@ -7,8 +8,8 @@ export class Resume
     name: string;
     userInfo: UserPersonalInfo;
     profileEntries: ProfileEntry[];
-    resumeInfo:any;
-    keywords:string[];
+    resumeInfo: ResumeInfo;
+    keywords: string[];
     createdAt: Date;
     modifiedAt: Date;
 
@@ -17,19 +18,23 @@ export class Resume
         this.id = '';
         this.name = '';
         this.userInfo = {
-            fullName:'',
-            phoneNumber:'',
-            address:'',
-            email:'',
-            additionalContactInfo:{}
+            fullName: '',
+            phoneNumber: '',
+            address: '',
+            email: '',
+            additionalContactInfo: {}
         };
         this.createdAt = new Date();
         this.modifiedAt = new Date();
-        this.profileEntries = [];    
-        this.keywords = [];    
+        this.profileEntries = [];
+        this.keywords = [];
+        this.resumeInfo = {
+            templateId: '',
+            sections: []
+        };
     }
 
-    getPhoneNumber():string|null
+    getPhoneNumber(): string | null
     {
         let cleaned = ('' + this.userInfo.phoneNumber).replace(/\D/g, '');
 
@@ -42,7 +47,7 @@ export class Resume
         return null
     }
 
-    getAdditionalContactInfo():{ [key: string]: string }
+    getAdditionalContactInfo(): { [key: string]: string }
     {
         const contactInfo: { [key: string]: string } = {};
 

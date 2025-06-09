@@ -6,20 +6,21 @@ import { ProfileEntryComponent } from '../profile-entry/profile-entry.component'
 
 @Component({
     selector: 'app-section-profile-entry',
-    imports: [CommonModule,ProfileEntryComponent],
+    imports: [CommonModule, ProfileEntryComponent],
     templateUrl: './section-profile-entry.component.html',
-    styleUrl:'./section-profile-entry.component.scss'
+    styleUrl: './section-profile-entry.component.scss'
 })
 export class SectionProfileEntryComponent
 {
-    @Input() entries:ProfileEntry[]=[];
+    @Input() entries: ProfileEntry[] = [];
     @Input() info: SectionInfoProfileEntry = {
         id: '',
         title: '',
-        entriesId:[]
+        entriesId: []
     };
 
-    shouldRender(id:string):boolean{
+    shouldRender(id: string): boolean
+    {
         return this.info.entriesId.includes(id);
     }
 }

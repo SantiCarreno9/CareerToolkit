@@ -17,18 +17,17 @@ internal sealed class GetEntryByIdQueryHandler(
     {
         ProfileEntryResponse? profileEntry = await context.ProfileEntries
             .Where(pe => pe.Id == query.entryId && pe.UserId == userContext.UserId)
-            .Select(pe => new ProfileEntryResponse
-            {
-                Id = pe.Id,                
-                Title = pe.Title,
-                Organization = pe.Organization,
-                Location = pe.Location,
-                StartDate = pe.StartDate,
-                EndDate = pe.EndDate,
-                IsCurrent = pe.IsCurrent,
-                Description = pe.Description,
-                Category = pe.Category
-            })
+            .Select(pe => new ProfileEntryResponse(
+                pe.Id,
+                pe.Category,
+                pe.Title,
+                pe.Organization,
+                pe.Location,
+                pe.StartDate,
+                pe.EndDate,
+                pe.IsCurrent,
+                pe.Description
+            ))
             .SingleOrDefaultAsync(cancellationToken);
 
         if (profileEntry is null)

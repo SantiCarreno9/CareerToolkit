@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 export class AuthGuardService implements CanMatch
 {
   constructor(public auth: AuthService, public router: Router) { }
+  
   canMatch(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult>
   {
     if (!this.auth.isAuthenticated())

@@ -31,7 +31,6 @@ internal sealed class Create : IEndpoint
                 request.ResumeInfo,
                 request.Keywords
                 );
-
             Result<ResumeResponse> result = await handler.Handle(command, cancellationToken);
 
             if (result.IsFailure)

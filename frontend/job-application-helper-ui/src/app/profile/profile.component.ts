@@ -39,7 +39,6 @@ export class ProfileComponent
     key: string;
     value: ProfileEntryCategory;
   }[] = [];
-  // readonly profileEntryCategories = Object.values(ProfileEntryCategory,);
 
   constructor()
   {
@@ -56,7 +55,7 @@ export class ProfileComponent
 
   //#region User Info
 
-  openUserInfoFormDialog()
+  openUserInfoFormDialog(): void
   {
     const dialogRef = this.dialog.open(UserInfoFormComponent, {
       width: '500px',
@@ -113,7 +112,7 @@ export class ProfileComponent
       ));
   }
 
-  private requestUserInfo()
+  private requestUserInfo(): void
   {
     this.userService.getUserInfo().subscribe(response =>
     {
@@ -126,7 +125,7 @@ export class ProfileComponent
 
   //#region Profile Entry
 
-  openCreateProfileEntryDialog(category: ProfileEntryCategory)
+  openCreateProfileEntryDialog(category: ProfileEntryCategory): void
   {
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
@@ -168,7 +167,7 @@ export class ProfileComponent
     });
   }
 
-  openEditProfileEntryDialog(profileEntry?: ProfileEntry)
+  openEditProfileEntryDialog(profileEntry?: ProfileEntry): void
   {
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
@@ -210,7 +209,7 @@ export class ProfileComponent
     });
   }
 
-  deleteProfileEntry(id: string)
+  deleteProfileEntry(id: string): void
   {
     this.profileEntryService.deleteProfileEntry(id).subscribe(response =>
     {
@@ -225,7 +224,7 @@ export class ProfileComponent
     });
   }
 
-  private requestProfileEntries()
+  private requestProfileEntries(): void
   {
     // this.profileEntries = [...this.profileEntryService.profileEntries];
     this.profileEntryService.getProfileEntries().subscribe(response =>

@@ -92,16 +92,4 @@ export class ProfileEntryService
       map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
     );
   }
-  // getUserInfo(): Observable<RequestResponse<UserInfo>>
-  // {
-  //   return this.http.get(`${this.baseUrl}/myinfo`, { withCredentials: true, observe: 'response' }).pipe(
-  //     map((res) => new RequestResponse<UserInfo>(res.status === 200, res.body as UserInfo, res.statusText)));
-  // }
-
-  // updateUserInfo(id: string, data: UpdateUserInfoModel): Observable<RequestResponse<any>>
-  // {
-  //   return this.http.put(`${this.baseUrl}/${id}`, data, { withCredentials: true, observe: 'response' }).pipe(
-  //     map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
-  //   );
-  // }
 }

@@ -107,7 +107,7 @@ export class ProfileEntryFormComponent
     return this.profileEntryFormGroup.get('description');
   }
 
-  submit()
+  submit():void
   {
     if (this.profileEntryFormGroup.invalid)
     {
@@ -124,7 +124,7 @@ export class ProfileEntryFormComponent
     this.onSubmit.emit(updatedEntry);
   }
 
-  cancel()
+  cancel():void
   {
     this.onCancel.emit();
   }

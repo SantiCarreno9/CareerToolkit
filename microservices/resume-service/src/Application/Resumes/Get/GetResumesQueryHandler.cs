@@ -2,6 +2,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Extensions;
 using Application.Resumes.Shared;
 using Domain.Errors;
 using Microsoft.EntityFrameworkCore;
@@ -19,20 +20,25 @@ internal sealed class GetResumesQueryHandler(
         {
             return Result.Failure<PagedList<ResumeResponse>>(ResumeErrors.Unauthorized());
         }
-        IQueryable<ResumeResponse> resumes = context.Resumes
+        IQueryable<ResumeResponse?> resumes = context.Resumes
             .Where(r => r.UserId == userContext.UserId)
+            .OrderByDescending(pe => pe.CreatedAt)
             .Select(r => new ResumeResponse
             (
                 r.Id,
                 r.Name,
                 r.UserInfo,
-                r.ProfileEntries,
+                r.ProfileEntries.ToResponse(),
                 r.ResumeInfo,
                 r.Keywords,
                 r.CreatedAt,
                 r.ModifiedAt
-            ))
-            .OrderByDescending(pe => pe.CreatedAt);
+            ));
+
+        if(!await resumes.AnyAsync(cancellationToken))
+        {
+            return new PagedList<ResumeResponse>(new List<ResumeResponse>(), 0, query.Page, query.PageSize);
+        }
 
         return await PagedList<ResumeResponse>.CreateAsync(resumes, query.Page, query.PageSize);
     }

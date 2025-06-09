@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent
 {
   authService: AuthService = inject(AuthService);
-  route: Router = inject(Router);  
+  route: Router = inject(Router);
   isLoggedIn: boolean = false;
 
   constructor()
@@ -20,13 +20,13 @@ export class NavbarComponent
     this.authService.onLoggedInStatusChange.subscribe({
       next: (isLoggedIn) =>
       {
-        console.log('NavbarComponent: isLoggedIn status changed:', isLoggedIn);        
+        console.log('NavbarComponent: isLoggedIn status changed:', isLoggedIn);
         this.isLoggedIn = isLoggedIn;
       }
     });
   }
 
-  logout()
+  logout(): void
   {
     this.authService.logout().subscribe(res =>
     {

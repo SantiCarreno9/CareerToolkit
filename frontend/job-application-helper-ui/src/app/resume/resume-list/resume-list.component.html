@@ -1,22 +1,49 @@
 <div class="container p-4">
-  <button class="btn btn-success" (click)="openResumeCreatorDialog()">
-    Create New Resume +
-  </button>
+  <div class="btn-group">
+    <button type="button" class="btn btn-success">Create New Resume</button>
+    <button
+      type="button"
+      class="btn btn-success dropdown-toggle dropdown-toggle-split"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <span class="visually-hidden">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <button class="dropdown-item" (click)="openResumeCreatorDialog(true)">
+          Quick Resume
+        </button>
+      </li>
+      <li>
+        <button class="dropdown-item" (click)="openResumeCreatorDialog(false)">
+          Custom Resume
+        </button>
+      </li>
+    </ul>
+  </div>
   <div class="mt-4">
     <table class="table">
       <thead>
-        <tr>          
+        <tr>
           <th scope="col">Name</th>
           <th scope="col">Modified At</th>
           <th scope="col">Keywords</th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr *ngFor="let resume of mockResumes">
-          <th scope="row">{{resume.name}}</th>
-          <td>{{resume.modifiedAt}}</td>
-          <td>{{resume.keywords}}</td>          
-        </tr>        
+        <tr *ngFor="let resume of resumes">
+          <th scope="row">{{ resume.name }}</th>
+          <td>{{ resume.modifiedAt.toLocaleString('en-US') }}</td>
+          <td>{{ resume.keywords }}</td>
+          <td>
+            <button class="btn btn-icon"><i class="bi bi-eye"></i></button>
+            <button class="btn btn-icon" (click)="goToResumeEditor(resume.id)">              
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn btn-icon"><i class="bi bi-trash"></i></button>            
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

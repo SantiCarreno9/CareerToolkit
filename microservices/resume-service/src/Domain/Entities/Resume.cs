@@ -7,11 +7,11 @@ public class Resume : Entity
     public string UserId { get; set; }
     public string Name { get; set; }
     public UserInfo UserInfo { get; set; }
-    public List<ProfileEntry> ProfileEntries { get; set; } = new List<ProfileEntry>();
+    public List<ProfileEntry> ProfileEntries { get; set; }
     public string ResumeInfo { get; set; }
     public List<string> Keywords { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; }
+    public DateTime ModifiedAt { get; set; }
 
     public Resume()
     {

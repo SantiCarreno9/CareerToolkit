@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Extensions;
 using Application.Resumes.GetById;
 using Application.Resumes.Shared;
 using Domain.Errors;
@@ -27,7 +28,7 @@ internal sealed class GetResumeByIdQueryHandler(
                 r.Id,
                 r.Name,
                 r.UserInfo,
-                r.ProfileEntries,
+                r.ProfileEntries.ToResponse(),
                 r.ResumeInfo,
                 r.Keywords,
                 r.CreatedAt,
