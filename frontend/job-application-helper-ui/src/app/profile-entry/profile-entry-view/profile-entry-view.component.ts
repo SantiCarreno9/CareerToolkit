@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ProfileEntry } from '../shared/profile-entry';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
+import { ProfileEntry } from '../shared/models/profile-entry';
 
 @Component({
   selector: 'app-profile-entry-view',
@@ -17,7 +17,7 @@ export class ProfileEntryViewComponent
     organization: '',
     location: '',
     startDate: new Date(),
-    endDate: undefined,
+    endDate: null,
     isCurrent: false,
     description: ''
   }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { UserInfo } from './userinfo';
-import { UpdateUserInfoModel } from './updateuserinfomodel';
+import { UserInfo } from './models/userinfo';
+import { UpdateUserInfoModel } from './models/updateuserinfomodel';
 import { RequestResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
 

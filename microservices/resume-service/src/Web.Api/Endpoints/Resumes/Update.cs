@@ -20,7 +20,7 @@ internal sealed class Update : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(EndpointsBase.ResumesPath + "/{id}", async (
-            [FromQuery] string id,
+            string id,
             [FromBody] Request request,
             ICommandHandler<UpdateResumeCommand, ResumeResponse> handler,
             CancellationToken cancellationToken) =>

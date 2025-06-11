@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../auth/shared/auth.service';
-import { UserBasicInfo } from '../auth/shared/user-basic-info';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/shared/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,10 +9,12 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent
-{
+{  
   authService: AuthService = inject(AuthService);
   route: Router = inject(Router);
-  isLoggedIn: boolean = false;
+
+  protected userName: string = '';
+  protected isLoggedIn: boolean = false;
 
   constructor()
   {
@@ -22,11 +23,12 @@ export class NavbarComponent
       {
         console.log('NavbarComponent: isLoggedIn status changed:', isLoggedIn);
         this.isLoggedIn = isLoggedIn;
+        this.userName = this.authService.userBasicInfo.fullName.split(" ")[0]
       }
     });
   }
 
-  logout(): void
+  protected logout(): void
   {
     this.authService.logout().subscribe(res =>
     {

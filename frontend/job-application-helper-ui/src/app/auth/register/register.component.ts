@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
-import { RegisterModel } from './registermodel';
+import { RegisterModel } from '../shared/models/registermodel';
 import { Router } from '@angular/router';
 
 @Component({

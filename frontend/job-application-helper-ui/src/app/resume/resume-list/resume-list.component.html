@@ -32,19 +32,39 @@
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr *ngFor="let resume of resumes">
+        @if(!isLoading){
+        <tr *ngFor="let resume of resumes; let index = index">
           <th scope="row">{{ resume.name }}</th>
-          <td>{{ resume.modifiedAt.toLocaleString('en-US') }}</td>
+          <td>{{ resume.modifiedAt.toLocaleString() }}</td>
           <td>{{ resume.keywords }}</td>
           <td>
-            <button class="btn btn-icon"><i class="bi bi-eye"></i></button>
-            <button class="btn btn-icon" (click)="goToResumeEditor(resume.id)">              
+            <button class="btn btn-icon" (click)="goToResumeViewer(resume.id)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="btn btn-icon" (click)="goToResumeEditor(resume.id)">
               <i class="bi bi-pencil-square"></i>
             </button>
-            <button class="btn btn-icon"><i class="bi bi-trash"></i></button>            
+            <button
+              class="btn btn-icon"
+              (click)="deleteResume(resume.id, index)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
           </td>
         </tr>
+        }
       </tbody>
     </table>
+    @if(isLoading){
+    <div class="w-100 text-center">
+      <div
+        class="spinner-border"
+        style="width: 3rem; height: 3rem"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    }
   </div>
 </div>

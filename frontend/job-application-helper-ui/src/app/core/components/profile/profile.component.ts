@@ -1,17 +1,18 @@
 import { Component, inject } from '@angular/core';
-import { UserInfoFormComponent } from '../user/user-info-form/user-info-form.component';
-import { UserInfo } from '../user/shared/userinfo';
-import { UserService } from '../user/shared/user.service';
-import { UserInfoViewComponent } from "../user/user-info-view/user-info-view.component";
+import { UserInfoFormComponent } from '../../../user/user-info-form/user-info-form.component';
+import { UserInfo } from '../../../user/shared/models/userinfo';
+import { UserService } from '../../../user/shared/user.service';
+import { UserInfoViewComponent } from "../../../user/user-info-view/user-info-view.component";
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { UpdateUserInfoModel } from '../user/shared/updateuserinfomodel';
+import { UpdateUserInfoModel } from '../../../user/shared/models/updateuserinfomodel';
 import { map, Observable } from 'rxjs';
-import { ProfileEntryService } from '../profile-entry/shared/profile-entry.service';
-import { ProfileEntryViewComponent } from '../profile-entry/profile-entry-view/profile-entry-view.component';
-import { ProfileEntry } from '../profile-entry/shared/profile-entry';
-import { ProfileEntryFormComponent } from '../profile-entry/profile-entry-form/profile-entry-form.component';
-import { ProfileEntryCategory } from '../core/enums/profile-entry-category';
+import { ProfileEntryService } from '../../../profile-entry/shared/profile-entry.service';
+import { ProfileEntryViewComponent } from '../../../profile-entry/profile-entry-view/profile-entry-view.component';
+import { ProfileEntryFormComponent } from '../../../profile-entry/profile-entry-form/profile-entry-form.component';
+import { ProfileEntryCategory } from '../../../core/enums/profile-entry-category';
 import { CommonModule } from '@angular/common';
+import { ProfileEntry } from '../../../profile-entry/shared/models/profile-entry';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +26,7 @@ export class ProfileComponent
   userService: UserService = inject(UserService);
   profileEntryService: ProfileEntryService = inject(ProfileEntryService);
 
-  userInfo: UserInfo = {
+  protected userInfo: UserInfo = {
     id: '',
     fullName: '',
     email: '',
@@ -33,9 +34,9 @@ export class ProfileComponent
     address: '',
     additionalContactInfo: {}
   };
-  profileEntries: ProfileEntry[] = [];
-  ProfileEntryCategory = ProfileEntryCategory;
-  readonly profileEntryCategoryOptions: {
+  protected profileEntries: ProfileEntry[] = [];
+  protected ProfileEntryCategory = ProfileEntryCategory;
+  protected readonly profileEntryCategoryOptions: {
     key: string;
     value: ProfileEntryCategory;
   }[] = [];
@@ -55,7 +56,7 @@ export class ProfileComponent
 
   //#region User Info
 
-  openUserInfoFormDialog(): void
+  protected openUserInfoFormDialog(): void
   {
     const dialogRef = this.dialog.open(UserInfoFormComponent, {
       width: '500px',
@@ -125,7 +126,7 @@ export class ProfileComponent
 
   //#region Profile Entry
 
-  openCreateProfileEntryDialog(category: ProfileEntryCategory): void
+  protected openCreateProfileEntryDialog(category: ProfileEntryCategory): void
   {
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
@@ -167,7 +168,7 @@ export class ProfileComponent
     });
   }
 
-  openEditProfileEntryDialog(profileEntry?: ProfileEntry): void
+  protected openEditProfileEntryDialog(profileEntry?: ProfileEntry): void
   {
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
@@ -209,19 +210,22 @@ export class ProfileComponent
     });
   }
 
-  deleteProfileEntry(id: string): void
+  protected deleteProfileEntry(id: string): void
   {
-    this.profileEntryService.deleteProfileEntry(id).subscribe(response =>
+    ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Entry', `Do you want to delete this entry?`, () =>
     {
-      if (response.success)
+      this.profileEntryService.deleteProfileEntry(id).subscribe(response =>
       {
-        const index = this.profileEntries.findIndex(pe => pe.id == id);
-        if (index > -1)
+        if (response.success)
         {
-          this.profileEntries.splice(index, 1);
+          const index = this.profileEntries.findIndex(pe => pe.id == id);
+          if (index > -1)
+          {
+            this.profileEntries.splice(index, 1);
+          }
         }
-      }
-    });
+      });
+    })
   }
 
   private requestProfileEntries(): void

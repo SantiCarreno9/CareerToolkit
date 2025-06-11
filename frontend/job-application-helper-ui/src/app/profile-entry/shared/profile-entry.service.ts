@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
-import { ProfileEntry } from './profile-entry';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { environment } from '../../../environments/environment';
+import { ProfileEntry } from './models/profile-entry';
 
 @Injectable({
   providedIn: 'root'
@@ -53,22 +53,22 @@ export class ProfileEntryService
 
   getProfileEntries(): Observable<RequestResponse<ProfileEntry[]>>
   {
-    return this.http.get<ProfileEntry[]>(`${this.baseUrl}/myentries`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, res.body as ProfileEntry[], res.statusText))
+    return this.http.get<ProfileEntry[]>(`${this.baseUrl}`, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, this.convertResponseToProfileEntries(res.body), res.statusText))
     );
   }
 
   getProfileEntryById(id: string): Observable<RequestResponse<ProfileEntry>>
   {
     return this.http.get<ProfileEntry>(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<ProfileEntry>(res.status === 200, res.body as ProfileEntry, res.statusText))
+      map((res) => new RequestResponse<ProfileEntry>(res.status === 200, this.convertResponseToProfileEntry(res.body), res.statusText))
     );
   }
 
   getProfileEntriesByCategory(category: ProfileEntryCategory): Observable<RequestResponse<ProfileEntry[]>>
   {
     return this.http.get<ProfileEntry[]>(`${this.baseUrl}/category/${category}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, res.body as ProfileEntry[], res.statusText))
+      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, this.convertResponseToProfileEntries(res.body), res.statusText))
     );
   }
 
@@ -91,5 +91,35 @@ export class ProfileEntryService
     return this.http.delete(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
     );
+  }
+
+  private convertResponseToProfileEntry(response: any | null): ProfileEntry | null
+  {
+    if(response===null)
+      return response;
+
+    if (response as ProfileEntry === undefined)
+      return response;
+
+    return {
+      id: response.id,
+      category: response.category,
+      title: response.title,
+      organization: response.organization,
+      location: response.location,
+      startDate: new Date(response.startDate),
+      endDate: new Date(response.endDate),
+      isCurrent: response.isCurrent,
+      description: response.description
+    };
+  }
+
+  private convertResponseToProfileEntries(response:any[]|null):ProfileEntry[] | null{
+    if(response===null)
+      return response;
+
+    return response
+      .map((res) => this.convertResponseToProfileEntry(res))
+      .filter((entry): entry is ProfileEntry => entry !== null);
   }
 }

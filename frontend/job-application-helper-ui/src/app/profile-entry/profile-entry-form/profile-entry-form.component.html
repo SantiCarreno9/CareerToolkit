@@ -15,6 +15,9 @@
           @if (title?.hasError('required')) {
           <div>Title is required.</div>
           }
+          @if(title?.hasError('minlength')){
+            <div>Minimun 2 characters</div>
+          }
         </div>
         }
       </div>

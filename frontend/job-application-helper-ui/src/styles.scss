@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'quill/dist/quill.snow.css';
+@import "quill/dist/quill.snow.css";
 
 html,
 body {
@@ -17,17 +17,41 @@ body {
   // border-width: 2px;
 }
 
-.btn-icon {
+.btn-icon {  
   :hover {
-    opacity: 0.8;
+    opacity: 0.5;
   }
   :active {
-    opacity: 0.6;
+    opacity: 0.4;
   }
 }
 
-.data-label{
-    font-weight: 500;
-    border-bottom: 2px solid gray;
-    width: 100%;
+.data-label {
+  font-weight: 500;
+  border-bottom: 2px solid gray;
+  width: 100%;
+}
+
+@media print {
+
+  .navbar{
+    display: none;
+  }
+
+  // @page{
+  //   size:A4;
+  // }
+  // div:not(#resume-container){
+  //   visibility: hidden;
+  // }
+// *:not(html,body,.resume-container) {
+//   visibility:hidden;
+// }
+  // body *{
+  //   visibility: collapse;
+  // }
+
+  #resume-container {
+    margin: 1in;
+  }
 }

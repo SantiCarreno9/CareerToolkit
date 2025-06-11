@@ -1,11 +1,10 @@
 import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
-import { ProfileEntry } from '../shared/profile-entry';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { CommonModule } from '@angular/common';
-import Quill from 'quill';
-import { ContentChange, QuillModule } from 'ngx-quill'
+import { QuillModule } from 'ngx-quill';
+import { ProfileEntry } from '../shared/models/profile-entry';
 
 @Component({
   selector: 'app-profile-entry-form',
@@ -25,7 +24,7 @@ export class ProfileEntryFormComponent
     organization: '',
     location: '',
     startDate: new Date(),
-    endDate: undefined,
+    endDate: null,
     isCurrent: false,
     description: ''
   };
@@ -115,10 +114,12 @@ export class ProfileEntryFormComponent
       console.error('Form is invalid');
       return;
     }
-    const endDate = this.profileEntryFormGroup.value.isCurrent ? null : this.profileEntryFormGroup.value.endDate;
+    const startDate = new Date(this.profileEntryFormGroup.value.startDate);
+    const endDate = this.profileEntryFormGroup.value.isCurrent ? null : new Date(this.profileEntryFormGroup.value.endDate);
     const updatedEntry: ProfileEntry = {
       ...this.profileEntry,
       ...this.profileEntryFormGroup.value,
+      startDate:startDate,
       endDate: endDate
     };
     this.onSubmit.emit(updatedEntry);

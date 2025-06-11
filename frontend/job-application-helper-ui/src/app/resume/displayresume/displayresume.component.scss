@@ -1,0 +1,42 @@
+.top-bar {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+// .resume-container {
+//   //   display: flex;
+//   width: 100%;
+//   justify-items: center;
+
+// //   :first-child{
+// //     max-width: 21cm;
+// //     height: 29.7cm;
+// //   }
+// }
+
+@media print {
+  .top-bar {
+    display: none;
+  }
+}
+// @media print {
+//   body * {
+//     visibility: hidden;
+//   }
+
+// //   .resume-container, .resume-container * {
+// //     visibility: visible;
+// //   }
+
+//   .resume-to-print {
+//     // position: absolute;
+//     // left: 0;
+//     // top: 0;
+//     // width: 210mm;
+//     // height: 297mm;
+//     // margin: 0 auto;
+//     // padding: 20mm;
+//     // background: white;
+//   }
+// }

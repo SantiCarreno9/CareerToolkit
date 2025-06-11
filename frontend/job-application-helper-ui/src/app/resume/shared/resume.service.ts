@@ -3,11 +3,10 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
-import { Resume } from './resume';
-import { ResumeTemplateInfo } from './resume-template';
-import { Template1Component } from '../templates/template1/template1.component';
+import { Resume } from './models/resume';
 import { PagedList } from '../../core/models/pagedlist';
-import { CreateResumeRequest } from './create-resume-request';
+import { CreateResumeCommandRequest, UpdateResumeCommandRequest } from './models/resume-command-request';
+import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
 
 @Injectable({
   providedIn: 'root'
@@ -16,48 +15,14 @@ export class ResumeService
 {
   private readonly baseUrl = environment.apiUrl + 'resumes';
 
-  private templatesInfo: ResumeTemplateInfo[] = [];
-
   constructor(private http: HttpClient)
   {
-    this.populateTemplates();
-  }
-
-  getTemplateInfoById(id: string): ResumeTemplateInfo | null
-  {
-    var info = this.templatesInfo.find(ti => ti.id === id);
-    if (info === undefined)
-      return null;
-    return info;
-  }
-
-  getTemplatesInfo(): ResumeTemplateInfo[]
-  {
-    return this.templatesInfo;
-  }
-
-  private populateTemplates(): void
-  {
-    this.templatesInfo = [
-      {
-        id: '1',
-        name: 'Template 1',
-        imageUrl: './resume-templates-thumbnail/Template1-Snapshot.png',
-        component: Template1Component
-      },
-      {
-        id: '2',
-        name: 'Template 2',
-        imageUrl: './resume-templates-thumbnail/Template1-Snapshot.png',
-        component: Template1Component
-      }
-    ];
   }
 
   getResumes(page: number, pageSize: number): Observable<RequestResponse<PagedList<Resume>>>
   {
     return this.http.get(`${this.baseUrl}?page=${page}&pageSize=${pageSize}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<PagedList<Resume>>(res.status === 200, res.body as PagedList<Resume>, res.statusText)))
+      map((res) => new RequestResponse<PagedList<Resume>>(res.status === 200, this.convertResponseToPagedList(res.body), res.statusText)))
   }
 
   getResumeById(id: string): Observable<RequestResponse<Resume>>
@@ -68,20 +33,36 @@ export class ResumeService
 
   createResume(data: Resume): Observable<RequestResponse<Resume>>
   {
-    const request: CreateResumeRequest = {
+    const request: CreateResumeCommandRequest = {
       name: data.name,
       userInfo: data.userInfo,
-      profileEntries: data.profileEntries,
+      profileEntries: data.profileEntries.map((entry: ProfileEntry) => ({
+        ...entry,
+        startDate: entry.startDate.toISOString().slice(0, 10),
+        endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
+      })),
       resumeInfo: JSON.stringify(data.resumeInfo),
       keywords: data.keywords
-    }
+    };
     return this.http.post(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
   }
 
   updateResume(id: string, data: Resume): Observable<RequestResponse<Resume>>
   {
-    return this.http.put(`${this.baseUrl}/${id}`, data, { withCredentials: true, observe: 'response' }).pipe(
+    const request: UpdateResumeCommandRequest = {
+      id: data.id,
+      name: data.name,
+      userInfo: data.userInfo,
+      profileEntries: data.profileEntries.map((entry: ProfileEntry) => ({
+        ...entry,
+        startDate: entry.startDate.toISOString().slice(0, 10),
+        endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
+      })),      
+      resumeInfo: JSON.stringify(data.resumeInfo),
+      keywords: data.keywords
+    };            
+    return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
   }
 
@@ -100,10 +81,25 @@ export class ResumeService
     resume.id = response.id;
     resume.name = response.name;
     resume.userInfo = response.userInfo;
-    resume.profileEntries = response.profileEntries;
+    resume.profileEntries = response.profileEntries.map((entry: ProfileEntry) => ({
+      ...entry,
+      startDate: new Date(entry.startDate),
+      endDate: entry.endDate !== null ? new Date(entry.endDate) : null
+    }));
     resume.resumeInfo = response.resumeInfo !== undefined ? JSON.parse(response.resumeInfo) : { templateId: '1', sections: [] };
-    resume.createdAt = response.createdAt;
-    resume.modifiedAt = response.modifiedAt;
+    resume.createdAt = new Date(response.createdAt);
+    resume.modifiedAt = new Date(response.modifiedAt);    
     return resume;
+  }
+
+  private convertResponseToPagedList(response: any): PagedList<Resume>
+  {
+    const pagedList = new PagedList([], response.page, response.pageSize);
+    console.log(pagedList);
+    if (response.items as Resume[] === undefined)
+      return pagedList;
+
+    pagedList.items = response.items.map((re: Resume) => this.convertToResume(re));
+    return pagedList;
   }
 }

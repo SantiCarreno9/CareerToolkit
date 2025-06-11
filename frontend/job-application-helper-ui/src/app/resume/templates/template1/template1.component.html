@@ -17,10 +17,10 @@
       {{ item.value }}
     </a>
   </div>  
-  <div *ngFor="let section of this.resumeInfo.sections">
-    @if(isSectionText(section)){
+  <div *ngFor="let section of this.resumeInfo.sections;">
+    @if(this.templateService.isSectionText(section)){
     <app-section-text [info]="section"></app-section-text>
-    }@else if(isSectionProfileEntry(section)){
+    }@else if(this.templateService.isSectionProfileEntry(section)){
     <app-section-profile-entry
       [entries]="this.resume.profileEntries"
       [info]="section"

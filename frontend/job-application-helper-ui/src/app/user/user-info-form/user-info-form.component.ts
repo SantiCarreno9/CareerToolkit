@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { UserInfo } from '../shared/userinfo';
+import { UserInfo } from '../shared/models/userinfo';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { ContactOptions } from '../../core/enums/contactoptions';

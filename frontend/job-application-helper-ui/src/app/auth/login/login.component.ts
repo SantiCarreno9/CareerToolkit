@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginModel } from './loginmodel';
+import { LoginModel } from '../shared/models/loginmodel';
 import { Router } from '@angular/router';
 
 @Component({
