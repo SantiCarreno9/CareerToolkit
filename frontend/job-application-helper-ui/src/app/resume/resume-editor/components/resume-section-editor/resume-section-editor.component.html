@@ -1,0 +1,46 @@
+<div class="d-flex flex-column justify-content-center">
+  <h2 style="text-align: center">Section</h2>
+  <form [formGroup]="sectionEditorForm" (submit)="submit()" class="p-3">
+    <div class="mb-3">
+      <div class="form-floating mb-3">
+        <input
+          id="title"
+          type="text"
+          class="form-control"
+          formControlName="title"
+        />
+        <label for="title">Title</label>
+        @if (title?.invalid && (title?.touched || title?.dirty)) {
+        <div class="alert alert-danger p-2">
+          @if (title?.hasError('required')) {
+          <div>Title is required.</div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+    <div cdkDropList class="drag-drop-list" (cdkDropListDropped)="drop($event)">
+      @for (section of sections; track section;let index=$index) {
+      <div class="draggable-box" cdkDrag>
+        <div class="drag-icon">
+          <i class="bi bi-three-dots-vertical"></i>
+          <i class="bi bi-three-dots-vertical"></i>
+        </div>
+        <div class="p-2">
+          @if(index===this.sectionIndex){
+          {{ this.sectionEditorForm.value.title }}
+          }@else {
+          {{ section.title }}
+          }
+        </div>
+      </div>
+      }
+    </div>
+    <div class="justify-content-end d-flex mt-3">
+      <button type="submit" class="btn btn-success mx-2">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

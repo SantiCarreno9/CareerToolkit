@@ -1,0 +1,36 @@
+<div class="d-flex flex-column justify-content-center">
+  <h2 style="text-align: center">Section</h2>
+  <form [formGroup]="sectionInfoForm" (submit)="submit()" class="p-3">
+    <div class="mb-3">
+      <div class="form-floating mb-3">
+        <input
+          id="title"
+          type="text"
+          class="form-control"
+          formControlName="title"
+        />
+        <label for="title">Title</label>
+        @if (title?.invalid && (title?.touched || title?.dirty)) {
+        <div class="alert alert-danger p-2">
+          @if (title?.hasError('required')) {
+          <div>Title is required.</div>
+          }
+        </div>
+        }
+      </div>      
+      <div class="mb-3">
+        <label class="form-label">Content</label>
+        <quill-editor
+          [modules]="quillModules"
+          formControlName="content"
+        ></quill-editor>
+      </div>
+    </div>
+    <div class="justify-content-end d-flex">
+      <button type="submit" class="btn btn-success mx-2">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

@@ -7,11 +7,11 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.ProfileEntries;
 
-internal sealed class GetMyEntries : IEndpoint
+internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(EndpointsBase.ProfileEntriesPath + "/myentries", async (
+        app.MapGet(EndpointsBase.ProfileEntriesPath, async (
             IQueryHandler<GetProfileEntriesQuery, List<ProfileEntryResponse>> handler,
             CancellationToken cancellationToken) =>
         {

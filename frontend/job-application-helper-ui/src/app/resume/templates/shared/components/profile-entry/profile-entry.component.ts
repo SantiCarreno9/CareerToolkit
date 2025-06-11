@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
-import { ProfileEntry } from '../../../../../profile-entry/shared/profile-entry';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ProfileEntryCategory } from '../../../../../core/enums/profile-entry-category';
+import { ProfileEntry } from '../../../../../profile-entry/shared/models/profile-entry';
 
 @Component({
     selector: 'app-profile-entry-component',
@@ -33,7 +33,7 @@ export class ProfileEntryComponent
                 month: "short"                
             }
         }
-    }
+    }    
 
     get timeFrame()
     {

@@ -1,10 +1,13 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, inject, Input, OnInit } from "@angular/core";
 import { ProfileEntryCategory } from "../../core/enums/profile-entry-category";
-import { Resume } from "../shared/resume";
-import { ResumeInfo } from "../shared/resume-info";
-import { SectionInfoProfileEntry, SectionInfoText } from "./shared/sectioninfo";
+import { Resume } from "../shared/models/resume";
+import { ResumeInfo } from "../shared/models/resume-info";
+import { SectionInfoProfileEntry, SectionInfoText } from "./shared/models/sectioninfo";
 import { CommonModule } from "@angular/common";
-import { BasicResumeSections } from "./shared/basic-resume-sections";
+import { BasicResumeSections } from "../shared/models/basic-resume-sections";
+import { ResumeService } from "../shared/resume.service";
+import { ResumeTemplateService } from "./shared/resume-template.service";
+import { ResumeTemplateInfo } from "../shared/models/resume-template";
 
 @Component({
     selector: 'app-resume-template-1',
@@ -13,26 +16,28 @@ import { BasicResumeSections } from "./shared/basic-resume-sections";
 })
 export abstract class TemplateBase implements OnInit
 {
-    protected resumeInfo: ResumeInfo;
+    resumeInfo: ResumeInfo;
+    protected resumeService = inject(ResumeService);
+    protected templateService = inject(ResumeTemplateService);
     @Input() resume: Resume = new Resume();
 
     constructor()
     {
         this.resumeInfo = {
-            templateId: '0',
+            templateId: '1',
             sections: []
-        };
-        this.defineBasicLayout();
+        }
     }
 
     ngOnInit(): void
     {
-        if (this.resume.resumeInfo.sections.length > 0)
+        if (this.resume.resumeInfo.sections.length === 0)
         {
-            this.resumeInfo = { ...this.resume.resumeInfo };
+            this.defineBasicLayout();
+            this.setUpDefaultLayout();
             return;
         }
-        this.setUpDefaultLayout();
+        this.resumeInfo = {...this.resume.resumeInfo};
     }
 
     protected getProfileEntriesIds(category: ProfileEntryCategory): string[]
@@ -44,12 +49,20 @@ export abstract class TemplateBase implements OnInit
     {
         const educationIndex = this.resumeInfo.sections.findIndex(s => s.title === BasicResumeSections.Education);
         if (educationIndex !== -1)
-            this.resumeInfo.sections[educationIndex] = this.getProfileEntriesIds(ProfileEntryCategory.Education);
+            this.resumeInfo.sections[educationIndex].entriesId = this.getProfileEntriesIds(ProfileEntryCategory.Education);
 
         const experienceIndex = this.resumeInfo.sections.findIndex(s => s.title === BasicResumeSections.WorkExperience);
         if (experienceIndex !== -1)
-            this.resumeInfo.sections[experienceIndex] = this.getProfileEntriesIds(ProfileEntryCategory.WorkExperience);
+            this.resumeInfo.sections[experienceIndex].entriesId = this.getProfileEntriesIds(ProfileEntryCategory.WorkExperience);
     }
 
-    abstract defineBasicLayout(): void;
+    defineBasicLayout(): void
+    {
+        const templateInfo: ResumeTemplateInfo | null = this.templateService.getTemplateInfoById(this.resumeInfo.templateId);
+        if (templateInfo !== null)
+        {
+            this.resumeInfo.sections = [...templateInfo.defaultSections];
+            // this.resume.resumeInfo.sections = [...templateInfo.defaultSections];
+        }
+    }
 }

@@ -4,12 +4,12 @@ import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { ResumeService } from '../shared/resume.service';
 import { UserService } from '../../user/shared/user.service';
 import { ProfileEntryService } from '../../profile-entry/shared/profile-entry.service';
-import { UserPersonalInfo } from '../shared/userpersonalinfo';
-import { UserInfo } from '../../user/shared/userinfo';
-import { ProfileEntry } from '../../profile-entry/shared/profile-entry';
-import { Resume } from '../shared/resume';
+import { UserPersonalInfo } from '../shared/models/userpersonalinfo';
+import { UserInfo } from '../../user/shared/models/userinfo';
+import { Resume } from '../shared/models/resume';
 import { Router } from '@angular/router';
-import { ResumeTemplateInfo } from '../shared/resume-template';
+import { ResumeTemplateInfo } from '../shared/models/resume-template';
+import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
 
 
 @Component({

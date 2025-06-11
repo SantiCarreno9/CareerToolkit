@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { RegisterModel } from '../register/registermodel';
-import { LoginModel } from '../login/loginmodel';
+import { RegisterModel } from './models/registermodel';
+import { LoginModel } from './models/loginmodel';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { map, Observable, Subject, tap } from 'rxjs';
-import { UserBasicInfo } from './user-basic-info';
+import { UserBasicInfo } from './models/user-basic-info';
 import { RequestResponse as CustomResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
 

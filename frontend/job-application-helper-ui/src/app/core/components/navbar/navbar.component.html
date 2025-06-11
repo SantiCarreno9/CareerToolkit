@@ -30,7 +30,7 @@
       @if(isLoggedIn){
       <div class="nav-item dropdown">
         <button class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-          Hello, {{ this.authService.userBasicInfo.fullName.split(" ")[0] }}
+          Hello, {{ this.userName }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="/profile">Profile</a></li>

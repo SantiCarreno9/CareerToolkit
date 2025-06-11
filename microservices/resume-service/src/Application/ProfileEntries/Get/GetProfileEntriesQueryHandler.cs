@@ -22,6 +22,7 @@ internal sealed class GetProfileEntriesQueryHandler(
 
         List<ProfileEntryResponse>? profileEntry = await context.ProfileEntries
             .Where(pe => pe.UserId == userContext.UserId)
+            .OrderByDescending(pe => pe.StartDate)
             .Select(pe => new ProfileEntryResponse(
                 pe.Id,
                 pe.Category,
@@ -32,8 +33,7 @@ internal sealed class GetProfileEntriesQueryHandler(
                 pe.EndDate,
                 pe.IsCurrent,
                 pe.Description
-            ))
-            .OrderByDescending(pe => pe.StartDate)
+            ))            
             .ToListAsync(cancellationToken);
 
         return profileEntry;

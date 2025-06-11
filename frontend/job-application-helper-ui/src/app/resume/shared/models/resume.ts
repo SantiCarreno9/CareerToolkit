@@ -1,4 +1,4 @@
-import { ProfileEntry } from "../../profile-entry/shared/profile-entry";
+import { ProfileEntry } from "../../../profile-entry/shared/models/profile-entry";
 import { ResumeInfo } from "./resume-info";
 import { UserPersonalInfo } from "./userpersonalinfo";
 

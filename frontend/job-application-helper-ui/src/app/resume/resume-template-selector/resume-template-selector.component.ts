@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ResumeService } from '../shared/resume.service';
-import { ResumeTemplateInfo } from '../shared/resume-template';
+import { ResumeTemplateInfo } from '../shared/models/resume-template';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { MatRadioChange, MatRadioGroup, MatRadioModule } from '@angular/material/radio';
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
+import { ResumeTemplateService } from '../templates/shared/resume-template.service';
 
 @Component({
   selector: 'app-resume-template-selector',
@@ -12,7 +12,7 @@ import { MatRadioChange, MatRadioGroup, MatRadioModule } from '@angular/material
 })
 export class ResumeTemplateSelectorComponent
 {
-  resumeService = inject(ResumeService);
+  templateService = inject(ResumeTemplateService);
   templates: ResumeTemplateInfo[] = [];
   @Input() acceptButtonText: string = "Select"
 
@@ -22,7 +22,7 @@ export class ResumeTemplateSelectorComponent
 
   constructor()
   {
-    this.templates = [...this.resumeService.getTemplatesInfo()]
+    this.templates = [...this.templateService.getTemplatesInfo()]
   }
 
   templateSelectionChanged(selection: MatRadioChange<ResumeTemplateInfo>): void

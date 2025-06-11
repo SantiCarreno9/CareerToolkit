@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
-import { Resume } from '../shared/resume';
+import { Resume } from '../shared/models/resume';
 import { ResumeCreatorComponent } from '../resume-creator/resume-creator.component';
 import { ResumeService } from '../shared/resume.service';
-import { PagedList } from '../../core/models/pagedlist';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-resume-list',
@@ -15,45 +15,36 @@ import { Router } from '@angular/router';
 })
 export class ResumeListComponent
 {
-  resumeService = inject(ResumeService);
-  dialog = inject(Dialog);
-  router = inject(Router);
+  protected resumeService = inject(ResumeService);
+  protected dialog = inject(Dialog);
+  protected router = inject(Router);
 
-  page: number = 1;
-  pageSize: number = 15;
+  protected page: number = 1;
+  protected pageSize: number = 15;
 
-  resumes: Resume[] = [];
+  protected resumes: Resume[] = [];
+
+  protected isLoading: boolean = false;
 
   constructor()
   {
     this.requestResumes();
-    // const resume1 = new Resume();
-    // resume1.id = '1';
-    // resume1.name = 'Resume 1';
-    // resume1.modifiedAt = new Date(2025, 4, 5, 9, 59);
-
-    // const resume2 = new Resume();
-    // resume2.id = '2';
-    // resume2.name = 'Resume 2';
-    // resume2.modifiedAt = new Date(2024, 4, 5, 9, 59);
-    // this.mockResumes = [
-    //   resume1,
-    //   resume2
-    // ];
   }
 
   private requestResumes(): void
   {
+    this.isLoading = true;
     this.resumeService.getResumes(this.page, this.pageSize).subscribe(res =>
     {
       if (res.success && res.value)
       {
         this.resumes = res.value.items;
       }
+      this.isLoading = false;
     })
   }
 
-  openResumeCreatorDialog(quickResume: boolean): void
+  protected openResumeCreatorDialog(quickResume: boolean): void
   {
     const dialogRef = this.dialog.open(ResumeCreatorComponent, {
       width: '500px',
@@ -70,8 +61,25 @@ export class ResumeListComponent
     })
   }
 
-  goToResumeEditor(id: string): void
+  protected deleteResume(id: string, index: number): void
+  {
+    ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Resume', 'Do you want to delete this resume?', () =>
+    {
+      this.resumeService.deleteResume(id).subscribe(res =>
+      {
+        if (res.success)
+          this.resumes.splice(index, 1);
+      })
+    });
+  }
+
+  protected goToResumeViewer(id: string): void
   {
     this.router.navigate([`/resume/${id}`]);
+  }
+
+  protected goToResumeEditor(id: string): void
+  {
+    this.router.navigate([`/edit-resume/${id}`]);
   }
 }
