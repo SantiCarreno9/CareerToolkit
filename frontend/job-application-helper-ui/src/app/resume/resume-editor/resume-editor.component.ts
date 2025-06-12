@@ -22,8 +22,7 @@ import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
 import { ResumeSectionCreatorComponent } from './components/resume-section-creator/resume-section-creator.component';
 import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog.component';
 import { ResumeSectionEditorComponent } from './components/resume-section-editor/resume-section-editor.component';
-// import * as html2pdf from 'html2pdf.js';
-declare let html2pdf: any; //declare moment
+import { ResumeBasicInfoFormComponent } from './components/resume-basic-info-form/resume-basic-info-form.component';
 
 @Component({
   selector: 'app-resume-editor',
@@ -33,15 +32,14 @@ declare let html2pdf: any; //declare moment
 })
 export class ResumeEditorComponent
 {
-  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
-  expandedIndex = 0;
+  protected expandedIndex = 0;
 
   @ViewChild(NgComponentOutlet, { static: false }) ngComponentOutlet?: NgComponentOutlet;
 
   private readonly resumeId: string | null;
-  resume: Resume = new Resume();
-
-  template: any;
+  protected resume: Resume = new Resume();
+  protected template: any;
+  protected isSaving: boolean = false;
 
   private dialog = inject(Dialog);
   private activatedRoute = inject(ActivatedRoute);
@@ -97,6 +95,7 @@ export class ResumeEditorComponent
       }
 
       this.resume = res.value;
+      console.log(this.resume);
       this.updateTemplate();
     })
   }
@@ -124,10 +123,12 @@ export class ResumeEditorComponent
   {
     if (this.resumeId === null)
       return;
+    this.isSaving = true;
     this.resumeService.updateResume(this.resumeId, this.resume).subscribe(res =>
     {
       if (res.success && res.value)
         this.resume.modifiedAt = res.value.modifiedAt;
+      this.isSaving = false;
     });
   }
 
@@ -175,6 +176,29 @@ export class ResumeEditorComponent
   //#endregion 
 
   //#region Dialog
+
+  protected openEditBasicInfoFormDialog(): void
+  {
+    const dialogRef = this.dialog.open(ResumeBasicInfoFormComponent, {
+      width: '500px',
+      data: {
+        name: this.resume.name,
+        keywords: this.resume.keywords
+      },
+      panelClass: ['custom-dialog-container', 'p-3'],
+      disableClose: true
+    });
+    dialogRef.componentInstance?.onSave.subscribe((result: any) =>
+    {
+      this.resume.name = result.name;
+      this.resume.keywords = result.keywords;
+      dialogRef.close();
+    })
+    dialogRef.componentInstance?.onCancel.subscribe(() =>
+    {
+      dialogRef.close();
+    });
+  }
 
   protected openUserInfoFormDialog(): void
   {

@@ -3,10 +3,28 @@
     <button class="btn btn-outline-secondary" (click)="goBack()">
       <i class="bi bi-arrow-left"></i>
     </button>
-    <div class="title mx-2">{{ resume.name }}</div>
-    {{ this.modifiedAtTime }}
+    <div>
+      <div class="title mx-2">
+        {{ resume.name
+        }}<i
+          class="m-2 btn-icon bi bi-pencil"
+          (click)="openEditBasicInfoFormDialog()"
+        ></i>
+      </div>
+      <div><strong>Keywords:</strong> {{ this.resume.keywords }}</div>
+      {{ this.modifiedAtTime }}
+    </div>
+
     <div class="title-buttons">
-      <button class="btn btn-success" (click)="save()">Save</button>
+      <button class="btn btn-success" [disabled]="isSaving" (click)="save()">
+        @if(!isSaving){ Save }@else {
+        <span
+          class="spinner-border spinner-border-sm"
+          aria-hidden="true"
+        ></span>
+        <span role="status">Saving...</span>
+        }
+      </button>
       <button class="btn btn-secondary" (click)="reset()">Reset</button>
       <button class="btn btn-primary" (click)="exportPDF()">Donwload</button>
     </div>
@@ -61,22 +79,22 @@
           #accordionItem="cdkAccordionItem"
           class="accordion-item"
         >
-        <div class="d-flex flex-row align-items-center">
-          <button
-            class="accordion-item-header"
-            (click)="accordionItem.toggle()"
-            tabindex="0"
-            [attr.id]="'accordion-header-' + sectionIndex"
-            [attr.aria-expanded]="accordionItem.expanded"
-            [attr.aria-controls]="'accordion-body-' + sectionIndex"
-          >
-            {{ section.title }}            
-          </button>
-          <i
+          <div class="d-flex flex-row align-items-center">
+            <button
+              class="accordion-item-header"
+              (click)="accordionItem.toggle()"
+              tabindex="0"
+              [attr.id]="'accordion-header-' + sectionIndex"
+              [attr.aria-expanded]="accordionItem.expanded"
+              [attr.aria-controls]="'accordion-body-' + sectionIndex"
+            >
+              {{ section.title }}
+            </button>
+            <i
               class="btn btn-icon bi bi-pencil"
               (click)="openEditSectionFormDialog(sectionIndex)"
             ></i>
-          <i
+            <i
               class="btn btn-icon bi bi-x-lg"
               (click)="deleteSectionByIndex(sectionIndex)"
             ></i>
@@ -102,12 +120,12 @@
               <app-text-section-view [info]="section"></app-text-section-view>
               } @else if(this.templateService.isSectionProfileEntry(section)){
 
-              <div class="d-flex flex-row mb-3" style="align-items: baseline">                
+              <div class="d-flex flex-row mb-3" style="align-items: baseline">
                 <button
-                  class="btn btn-success"                  
+                  class="btn btn-success"
                   (click)="openCreateProfileEntryDialog(sectionIndex)"
                 >
-                Add New Entry
+                  Add New Entry
                   <i class="bi bi-plus-lg"></i>
                 </button>
               </div>
@@ -151,9 +169,7 @@
             (click)="openCreateSectionFormDialog()"
           >
             Add New Section
-            <i              
-              class="btn-icon bi bi-plus-lg"                            
-            ></i>
+            <i class="btn-icon bi bi-plus-lg"></i>
           </button>
         </div>
       </ng-container>
