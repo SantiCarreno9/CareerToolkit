@@ -88,7 +88,8 @@ export class ResumeService
     }));
     resume.resumeInfo = response.resumeInfo !== undefined ? JSON.parse(response.resumeInfo) : { templateId: '1', sections: [] };
     resume.createdAt = new Date(response.createdAt);
-    resume.modifiedAt = new Date(response.modifiedAt);    
+    resume.modifiedAt = new Date(response.modifiedAt);   
+    resume.keywords = response.keywords; 
     return resume;
   }
 

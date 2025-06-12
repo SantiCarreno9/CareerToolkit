@@ -48,7 +48,7 @@ export class ResumeSectionEditorComponent
     moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
   }
 
-  submit(): void
+  protected submit(): void
   {
     if (this.sectionEditorForm.invalid)
     {
@@ -60,7 +60,7 @@ export class ResumeSectionEditorComponent
     this.onSubmit.emit(this.sections);
   }
 
-  cancel(): void
+  protected cancel(): void
   {
     this.onCancel.emit();
   }

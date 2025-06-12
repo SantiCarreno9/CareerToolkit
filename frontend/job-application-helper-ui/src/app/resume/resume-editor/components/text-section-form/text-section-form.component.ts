@@ -39,20 +39,11 @@ export class TextSectionFormComponent
       this.sectionInfo = data.sectionInfo;
     }
 
-    this.sectionInfoForm = new FormGroup({
-      title: new FormControl(this.sectionInfo.title, [
-        Validators.required,
-        Validators.minLength(2)
-      ]),
+    this.sectionInfoForm = new FormGroup({      
       content: new FormControl(this.sectionInfo.content, [
         Validators.required
       ])
     });
-  }
-
-  get title()
-  {
-    return this.sectionInfoForm.get('title');
   }
 
   get content()
@@ -68,11 +59,12 @@ export class TextSectionFormComponent
       console.error('Form is invalid');
       return;
     }
-    const newInfo: SectionInfoText = new SectionInfoText(
-      this.sectionInfo.id,
-      this.sectionInfoForm.value.title,
-      this.sectionInfoForm.value.content);
-    this.onSubmit.emit(newInfo);
+    this.sectionInfo.content = this.sectionInfoForm.value.content;
+    // const newInfo: SectionInfoText = new SectionInfoText(
+    //   this.sectionInfo.id,
+    //   this.sectionInfoForm.value.title,
+    //   this.sectionInfoForm.value.content);
+    this.onSubmit.emit(this.sectionInfo);
   }
 
   cancel(): void
