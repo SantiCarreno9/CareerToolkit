@@ -1,7 +1,8 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { CommonModule, KeyValue } from '@angular/common';
-import { Component, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
+import { ResumeBasicInfo } from '../../../shared/models/basic-resume-info';
 
 @Component({
   selector: 'app-resume-basic-info-form',
@@ -14,7 +15,8 @@ export class ResumeBasicInfoFormComponent
   protected readonly basicInfoForm: FormGroup;
   protected keywords: KeyValue<string, string>[] = [];
 
-  @Output() onSave = new EventEmitter<any>();
+  @Input() acceptButtonText: string = "Save"
+  @Output() onSave = new EventEmitter<ResumeBasicInfo>();
   @Output() onCancel = new EventEmitter<void>();
 
   constructor(@Inject(DIALOG_DATA) public data: { name: string, keywords: string[] }, private formBuilder: FormBuilder)
@@ -26,7 +28,8 @@ export class ResumeBasicInfoFormComponent
       ])
     });
 
-    data.keywords.forEach(v=>this.addKeyword(v));
+    if (data.keywords && data.keywords.length > 0)
+      data.keywords.forEach(v => this.addKeyword(v));
   }
 
   get name()
@@ -34,7 +37,7 @@ export class ResumeBasicInfoFormComponent
     return this.basicInfoForm.get('name');
   }
 
-  protected addKeyword(value:string=''): void
+  protected addKeyword(value: string = ''): void
   {
     const key = Math.floor(Math.random() * 1000).toString();
     if (!this.basicInfoForm.contains('keyword-' + key))
@@ -63,7 +66,7 @@ export class ResumeBasicInfoFormComponent
       return;
     }
 
-    const formKeywords = Object.keys(this.basicInfoForm.controls || {}).filter(key => key.startsWith('keyword-'));    
+    const formKeywords = Object.keys(this.basicInfoForm.controls || {}).filter(key => key.startsWith('keyword-'));
     const newKeywords: string[] = [];
     // //Stores the additional contact info in the userInfo object
     for (const key of formKeywords)
@@ -73,8 +76,8 @@ export class ResumeBasicInfoFormComponent
       {
         newKeywords.push(control.value);
       }
-    }    
-    const data = {
+    }
+    const data: ResumeBasicInfo = {
       name: this.basicInfoForm.value.name,
       keywords: newKeywords
     };

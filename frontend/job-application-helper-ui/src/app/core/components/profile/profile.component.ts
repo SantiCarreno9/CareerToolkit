@@ -13,6 +13,8 @@ import { ProfileEntryCategory } from '../../../core/enums/profile-entry-category
 import { CommonModule } from '@angular/common';
 import { ProfileEntry } from '../../../profile-entry/shared/models/profile-entry';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ProfileEntryHelperMethods } from '../../../profile-entry/shared/profile-entry-helper-methods';
+import { HelperMethods } from '../../helper-methods';
 
 @Component({
   selector: 'app-profile',
@@ -152,9 +154,9 @@ export class ProfileComponent
       {
         if (response.success && response.value)
         {
-          result.id = response.value;
-          console.log('Profile Entry created successfully', result);
+          result.id = response.value;          
           this.profileEntries.push(result);
+          ProfileEntryHelperMethods.sortEntries(this.profileEntries);
           dialogRef.close(result);
         } else
         {
@@ -193,11 +195,11 @@ export class ProfileComponent
       this.profileEntryService.updateProfileEntry(result.id, result).subscribe(response =>
       {
         if (response.success)
-        {
-          console.log('Profile Entry created successfully', result);
+        {          
           const index = this.profileEntries.findIndex(pe => pe.id === result.id);
           this.profileEntries[index] = { ...result };
-          dialogRef.close(result);
+          ProfileEntryHelperMethods.sortEntries(this.profileEntries);
+          dialogRef.close();
         } else
         {
           console.error('Failed to create profile entry', response.error);

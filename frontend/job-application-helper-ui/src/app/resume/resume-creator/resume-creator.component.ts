@@ -10,11 +10,14 @@ import { Resume } from '../shared/models/resume';
 import { Router } from '@angular/router';
 import { ResumeTemplateInfo } from '../shared/models/resume-template';
 import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
+import { ResumeBasicInfoFormComponent } from '../resume-editor/components/resume-basic-info-form/resume-basic-info-form.component';
+import { ResumeCreatorPages } from './resume-creator-pages';
+import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
 
 
 @Component({
   selector: 'app-resume-creator',
-  imports: [ResumeTemplateSelectorComponent],
+  imports: [ResumeTemplateSelectorComponent, ResumeBasicInfoFormComponent],
   templateUrl: './resume-creator.component.html',
   styleUrl: './resume-creator.component.scss'
 })
@@ -25,10 +28,13 @@ export class ResumeCreatorComponent
   profileEntryService = inject(ProfileEntryService);
   router = inject(Router);
 
+  @Output() onResumeCreated = new EventEmitter<Resume>();
   @Output() onCancel = new EventEmitter<void>();
 
-  readonly currentPage: number = 1;
+  ResumeCreatorPages = ResumeCreatorPages;
+  currentPage: number = 1;
   selectedTemplateId: string = '';
+  protected resume: Resume = new Resume();
   // private templateInfo:ResumeTemplateInfo={
   //   id:'',
 
@@ -36,16 +42,28 @@ export class ResumeCreatorComponent
 
   constructor(@Inject(DIALOG_DATA) public data: { quickResume: boolean })
   {
-    this.currentPage = data.quickResume ? 2 : 1;
+    this.currentPage = data.quickResume ? 1 : 1;
   }
 
-  selectTemplate(template: ResumeTemplateInfo): void
+  protected selectTemplate(template: ResumeTemplateInfo): void
   {
     this.selectedTemplateId = template.id;
     this.create();
   }
 
-  create(): void
+  protected saveResumeBasicInfo(info: ResumeBasicInfo)
+  {
+    this.resume.name = info.name;
+    this.resume.keywords = info.keywords;
+    this.nextPage();
+  }
+
+  protected nextPage(): void
+  {
+    this.currentPage++;
+  }
+
+  protected create(): void
   {
     this.userService.getUserInfo().subscribe(res =>
     {
@@ -65,22 +83,19 @@ export class ResumeCreatorComponent
         }
 
         const profileEntries: ProfileEntry[] = res.value ?? [];
-        const resume = new Resume();
-        resume.name = 'Resume';
-        resume.userInfo = personalInfo;
-        resume.profileEntries = profileEntries;
-        resume.resumeInfo.templateId = this.selectedTemplateId;
+        this.resume.userInfo = personalInfo;
+        this.resume.profileEntries = profileEntries;
+        this.resume.resumeInfo.templateId = this.selectedTemplateId;
 
-        this.resumeService.createResume(resume).subscribe(res =>
+        this.resumeService.createResume(this.resume).subscribe(res =>
         {
           if (res.success && res.value)
           {
-            this.router.navigate([`/resume/${res.value?.id}`]);
+            this.onResumeCreated.emit(res.value);
           }
         })
       })
-    });
-    // this.resumeService
+    });    
   }
 
   private convertUserInfoToUserPersonalInfo(userInfo?: UserInfo | null): UserPersonalInfo
@@ -104,7 +119,7 @@ export class ResumeCreatorComponent
     };
   }
 
-  cancel()
+  protected cancel()
   {
     this.onCancel.emit();
   }

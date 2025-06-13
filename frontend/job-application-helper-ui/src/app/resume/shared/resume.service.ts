@@ -7,6 +7,7 @@ import { Resume } from './models/resume';
 import { PagedList } from '../../core/models/pagedlist';
 import { CreateResumeCommandRequest, UpdateResumeCommandRequest } from './models/resume-command-request';
 import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
+import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class ResumeService
       keywords: data.keywords
     };
     return this.http.post(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
+      map((res) => new RequestResponse<Resume>(res.status === 201, this.convertToResume(res.body), res.statusText)));
   }
 
   updateResume(id: string, data: Resume): Observable<RequestResponse<Resume>>
@@ -58,10 +59,10 @@ export class ResumeService
         ...entry,
         startDate: entry.startDate.toISOString().slice(0, 10),
         endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
-      })),      
+      })),
       resumeInfo: JSON.stringify(data.resumeInfo),
       keywords: data.keywords
-    };            
+    };
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
   }
@@ -81,15 +82,16 @@ export class ResumeService
     resume.id = response.id;
     resume.name = response.name;
     resume.userInfo = response.userInfo;
-    resume.profileEntries = response.profileEntries.map((entry: ProfileEntry) => ({
-      ...entry,
-      startDate: new Date(entry.startDate),
-      endDate: entry.endDate !== null ? new Date(entry.endDate) : null
-    }));
+    resume.profileEntries = ProfileEntryHelperMethods.convertResponseToProfileEntries(response.profileEntries) ?? [];
+    // resume.profileEntries = ProfileEntryConversions.convertResponseToProfileEntries(response.profileEntries) response.profileEntries.map((entry: ProfileEntry) => ({
+    //   ...entry,
+    //   startDate: new Date(entry.startDate),
+    //   endDate: entry.endDate !== null ? new Date(entry.endDate) : null
+    // }));
     resume.resumeInfo = response.resumeInfo !== undefined ? JSON.parse(response.resumeInfo) : { templateId: '1', sections: [] };
     resume.createdAt = new Date(response.createdAt);
-    resume.modifiedAt = new Date(response.modifiedAt);   
-    resume.keywords = response.keywords; 
+    resume.modifiedAt = new Date(response.modifiedAt);
+    resume.keywords = response.keywords;
     return resume;
   }
 

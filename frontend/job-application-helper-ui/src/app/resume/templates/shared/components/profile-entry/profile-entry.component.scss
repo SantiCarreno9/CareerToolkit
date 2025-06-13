@@ -1,6 +1,6 @@
 .entry-container {
   font-size: large;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem;  
 }
 
 p {
@@ -20,6 +20,7 @@ p {
 .title-container {
   display: flex;
   width: 100%;
+  break-inside: avoid;
 
   p {
     flex: 1;

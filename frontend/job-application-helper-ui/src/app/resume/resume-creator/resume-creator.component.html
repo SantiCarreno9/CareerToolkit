@@ -1,6 +1,9 @@
 <div>
     <div class="form-container">
-        @if(currentPage==2){
+        @if(currentPage==ResumeCreatorPages.ResumeName){
+            <app-resume-basic-info-form [acceptButtonText]="'Next'" (onSave)="saveResumeBasicInfo($event)"></app-resume-basic-info-form>
+        }
+        @if(currentPage==ResumeCreatorPages.TemplateSelector){
             <app-resume-template-selector [acceptButtonText]="'Create'" (onSelectTemplate)="selectTemplate($event)" (onCancel)="cancel()"></app-resume-template-selector>
         }        
     <!-- <button class="btn btn-secondary" (click)="cancel()">Cancel</button> -->

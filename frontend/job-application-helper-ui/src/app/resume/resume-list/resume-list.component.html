@@ -1,15 +1,16 @@
 <div class="container p-4">
   <div class="btn-group">
-    <button type="button" class="btn btn-success">Create New Resume</button>
+    <!-- <button type="button" class="btn btn-success">Create New Resume</button> -->
     <button
       type="button"
-      class="btn btn-success dropdown-toggle dropdown-toggle-split"
+      class="btn btn-success dropdown-toggle"
       data-bs-toggle="dropdown"
       aria-expanded="false"
     >
       <span class="visually-hidden">Toggle Dropdown</span>
+      Create New Resume
     </button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu dropdown-menu-end">
       <li>
         <button class="dropdown-item" (click)="openResumeCreatorDialog(true)">
           Quick Resume
@@ -36,7 +37,15 @@
         <tr *ngFor="let resume of resumes; let index = index">
           <th scope="row">{{ resume.name }}</th>
           <td>{{ resume.modifiedAt.toLocaleString() }}</td>
-          <td>{{ resume.keywords }}</td>
+          <td>
+            <span
+              class="badge rounded-pill text-bg-success m-1"
+              style="font-weight: 400;"
+              *ngFor="let keyword of resume.keywords"
+              >{{ keyword }}</span
+            >
+          </td>
+
           <td>
             <button class="btn btn-icon" (click)="goToResumeViewer(resume.id)">
               <i class="bi bi-eye"></i>

@@ -55,6 +55,10 @@ export class ResumeListComponent
       disableClose: true
     });
 
+    dialogRef.componentInstance?.onResumeCreated.subscribe((resume:Resume)=>{
+      dialogRef.close();
+      this.router.navigate([`/edit-resume/${resume.id}`]);
+    });
     dialogRef.componentInstance?.onCancel.subscribe(() =>
     {
       dialogRef.close();
