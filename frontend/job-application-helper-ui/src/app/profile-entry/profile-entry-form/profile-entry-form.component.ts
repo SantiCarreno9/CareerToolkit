@@ -1,10 +1,11 @@
-import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { CommonModule } from '@angular/common';
 import { QuillModule } from 'ngx-quill';
 import { ProfileEntry } from '../shared/models/profile-entry';
+import { HelperMethods } from '../../core/helper-methods';
 
 @Component({
   selector: 'app-profile-entry-form',
@@ -61,10 +62,10 @@ export class ProfileEntryFormComponent
       ]),
       organization: new FormControl(this.profileEntry.organization),
       location: new FormControl(this.profileEntry.location),
-      startDate: new FormControl(this.profileEntry.startDate, [
+      startDate: new FormControl(HelperMethods.convertDateToDateOnlyString(this.profileEntry.startDate), [
         Validators.required
       ]),
-      endDate: new FormControl(this.profileEntry.endDate || ''),
+      endDate: new FormControl(this.profileEntry.endDate!==null ? HelperMethods.convertDateToDateOnlyString(this.profileEntry.endDate) : ''),
       isCurrent: new FormControl(this.profileEntry.isCurrent),
       description: new FormControl(this.profileEntry.description)
     });
@@ -121,7 +122,7 @@ export class ProfileEntryFormComponent
       ...this.profileEntryFormGroup.value,
       startDate:startDate,
       endDate: endDate
-    };
+    };    
     this.onSubmit.emit(updatedEntry);
   }
 

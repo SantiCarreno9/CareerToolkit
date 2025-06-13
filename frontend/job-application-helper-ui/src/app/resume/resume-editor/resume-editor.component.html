@@ -11,7 +11,12 @@
           (click)="openEditBasicInfoFormDialog()"
         ></i>
       </div>
-      <div><strong>Keywords:</strong> {{ this.resume.keywords }}</div>
+      <div class="d-flex flex-row"><strong>Keywords:</strong><span
+              class="badge rounded-pill text-bg-success m-1"
+              style="font-weight: 400;"
+              *ngFor="let keyword of this.resume.keywords"
+              >{{ keyword }}</span
+            ></div>
       {{ this.modifiedAtTime }}
     </div>
 

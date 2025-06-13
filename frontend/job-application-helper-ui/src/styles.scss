@@ -13,11 +13,14 @@ body {
   display: block;
   border-radius: 3%;
   background: white;
+  max-height: 70vh;
+  overflow-y: scroll;
   // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   // border-width: 2px;
 }
 
-.btn-icon {  
+.btn-icon {
+  cursor: pointer;
   :hover {
     opacity: 0.5;
   }
@@ -33,25 +36,27 @@ body {
 }
 
 @media print {
-
-  .navbar{
+  .navbar {
     display: none;
-  }
+  }  
 
-  // @page{
-  //   size:A4;
-  // }
+  @page{
+    padding: 1in;    
+  }  
   // div:not(#resume-container){
   //   visibility: hidden;
   // }
-// *:not(html,body,.resume-container) {
-//   visibility:hidden;
-// }
+  // *:not(html,body,.resume-container) {
+  //   visibility:hidden;
+  // }
   // body *{
   //   visibility: collapse;
   // }
 
   #resume-container {
-    margin: 1in;
+    // display: table;
+    // table-layout: fixed;
+    // padding: 1in;
+    // margin: 1in;    
   }
 }

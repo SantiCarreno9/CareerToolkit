@@ -23,6 +23,7 @@ import { ResumeSectionCreatorComponent } from './components/resume-section-creat
 import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog.component';
 import { ResumeSectionEditorComponent } from './components/resume-section-editor/resume-section-editor.component';
 import { ResumeBasicInfoFormComponent } from './components/resume-basic-info-form/resume-basic-info-form.component';
+import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
 
 @Component({
   selector: 'app-resume-editor',
@@ -408,14 +409,8 @@ export class ResumeEditorComponent
   private sortEntries(sectionIndex: number): void
   {
     const entriesInSection = this.resume.profileEntries.filter(pe => this.resume.resumeInfo.sections[sectionIndex].entriesId.includes(pe.id));
-    entriesInSection.sort((a, b) =>
-    {
-      const dateA = a.startDate instanceof Date ? a.startDate : new Date(a.startDate);
-      const dateB = b.startDate instanceof Date ? b.startDate : new Date(b.startDate);
-      return dateB.getTime() - dateA.getTime();
-    });
-    this.resume.resumeInfo.sections[sectionIndex].entriesId = [...entriesInSection.map(e => e.id)]
-    // this.resume.profileEntries
+    ProfileEntryHelperMethods.sortEntries(entriesInSection);
+    this.resume.resumeInfo.sections[sectionIndex].entriesId = [...entriesInSection.map(e => e.id)];    
   }
 
   //#endregion  

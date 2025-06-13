@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/shared/auth.service';
 
@@ -8,15 +8,15 @@ import { AuthService } from '../../../auth/shared/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent
+export class NavbarComponent implements OnInit
 {  
   authService: AuthService = inject(AuthService);
   route: Router = inject(Router);
 
   protected userName: string = '';
   protected isLoggedIn: boolean = false;
-
-  constructor()
+  
+  ngOnInit(): void
   {
     this.authService.onLoggedInStatusChange.subscribe({
       next: (isLoggedIn) =>
