@@ -24,6 +24,9 @@ import { ConfirmationDialogComponent } from '../../core/components/confirmation-
 import { ResumeSectionEditorComponent } from './components/resume-section-editor/resume-section-editor.component';
 import { ResumeBasicInfoFormComponent } from './components/resume-basic-info-form/resume-basic-info-form.component';
 import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
+import { ProfileEntriesImporterComponent } from '../shared/components/profile-entries-importer/profile-entries-importer.component';
+import { HelperMethods } from '../../core/helper-methods';
+import { ResumeSectionType } from '../shared/models/resume-section-type';
 
 @Component({
   selector: 'app-resume-editor',
@@ -99,21 +102,6 @@ export class ResumeEditorComponent
       console.log(this.resume);
       this.updateTemplate();
     })
-  }
-
-  private requestProfileEntries(): void
-  {
-    // this.profileEntries = [...this.profileEntryService.profileEntries];
-    // this.profileEntryService.getProfileEntries().subscribe(response =>
-    // {
-    //   if (response.success && response.value)
-    //   {
-    //     this.profileEntries = response.value;
-    //   } else
-    //   {
-    //     console.error('Failed to load profile entries', response.error);
-    //   }
-    // });
   }
 
   //#endregion
@@ -312,15 +300,6 @@ export class ResumeEditorComponent
       dialogRef.close();
     });
   }
-  // private requestUserInfo(): void
-  // {
-  //   this.userService.getUserInfo().subscribe(response =>
-  //   {
-  //     if (response.success && response.value)
-  //       this.userInfo = response.value;
-  //   });
-  // }
-
   //#endregion
 
   //#region Profile Entry
@@ -400,7 +379,7 @@ export class ResumeEditorComponent
     {
       this.resume.profileEntries.splice(entryIndex, 1);
 
-      const entryIdInSectionIndex = this.resume.resumeInfo.sections[sectionIndex].entriesId.findIndex(id);
+      const entryIdInSectionIndex = this.resume.resumeInfo.sections[sectionIndex].entriesId.findIndex((value: string) => value === id);
       if (entryIdInSectionIndex !== -1)
         this.resume.resumeInfo.sections[sectionIndex].entriesId.splice(entryIdInSectionIndex, 1);
     });
@@ -410,7 +389,81 @@ export class ResumeEditorComponent
   {
     const entriesInSection = this.resume.profileEntries.filter(pe => this.resume.resumeInfo.sections[sectionIndex].entriesId.includes(pe.id));
     ProfileEntryHelperMethods.sortEntries(entriesInSection);
-    this.resume.resumeInfo.sections[sectionIndex].entriesId = [...entriesInSection.map(e => e.id)];    
+    this.resume.resumeInfo.sections[sectionIndex].entriesId = [...entriesInSection.map(e => e.id)];
+  }
+
+  protected openImportProfileEntriesDialog(sectionIndex: number): void
+  {
+    this.profileEntryService.getProfileEntries().subscribe(res =>
+    {
+      if (!res.success || !res.value)
+        return;
+
+      const entriesIds = this.resume.profileEntries.map(pe => pe.id);
+      const filteredEntries = res.value.filter(entry => !entriesIds.includes(entry.id));
+      const dialogRef = this.dialog.open(ProfileEntriesImporterComponent, {
+        width: '500px',
+        data: {
+          entries: ProfileEntryHelperMethods.getGroupedProfileEntriesByCategory(filteredEntries)
+        },
+        panelClass: ['custom-dialog-container', 'p-3'],
+        disableClose: true
+      });
+      dialogRef.componentInstance?.onSubmit.subscribe((result: ProfileEntry[]) =>
+      {
+        result.forEach(entry =>
+        {
+          this.resume.profileEntries.push(entry);
+          this.resume.resumeInfo.sections[sectionIndex].entriesId.push(entry.id)
+        });
+        this.sortEntries(sectionIndex);
+        dialogRef.close();
+      })
+      dialogRef.componentInstance?.onCancel.subscribe(() =>
+      {
+        dialogRef.close();
+      });
+    });
+  }
+
+  protected openImportProfileEntriesFromOtherSectionsDialog(sectionIndex: number): void
+  {    
+    const sections = this.resume.resumeInfo.sections.filter((s, index) => index !== sectionIndex && s.sectionType === ResumeSectionType.ProfileEntry);
+    if (sections.length === 0)
+      return;
+    const groupedEntries: { [key: string]: ProfileEntry[] } = {};
+
+    for (const section of sections)
+    {
+      const entriesInSection = this.resume.profileEntries.filter(pe => section.entriesId.includes(pe.id));
+      if (!groupedEntries[section.title])
+      {
+        groupedEntries[section.title] = [];
+      }
+      groupedEntries[section.title].push(...entriesInSection);
+    }
+    const dialogRef = this.dialog.open(ProfileEntriesImporterComponent, {
+      width: '500px',
+      data: {
+        entries: groupedEntries
+      },
+      panelClass: ['custom-dialog-container', 'p-3'],
+      disableClose: true
+    });
+    dialogRef.componentInstance?.onSubmit.subscribe((result: ProfileEntry[]) =>
+    {      
+      const entriesIds = result.map(e => e.id);
+      for (const section of sections){
+        section.entriesId = section.entriesId.filter((id:string) => !entriesIds.includes(id));
+      }
+      this.resume.resumeInfo.sections[sectionIndex].entriesId.push(...entriesIds);      
+      this.sortEntries(sectionIndex);
+      dialogRef.close();
+    })
+    dialogRef.componentInstance?.onCancel.subscribe(() =>
+    {
+      dialogRef.close();
+    });
   }
 
   //#endregion  

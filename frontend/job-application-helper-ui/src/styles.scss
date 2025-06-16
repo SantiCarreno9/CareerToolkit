@@ -9,6 +9,13 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.text{  
+  word-wrap: break-word;
+  word-break: keep-all;
+  white-space: normal;
+}
+
 .custom-dialog-container {
   display: block;
   border-radius: 3%;
@@ -40,9 +47,9 @@ body {
     display: none;
   }  
 
-  @page{
-    padding: 1in;    
-  }  
+  @page {
+    padding: 1in;
+  }
   // div:not(#resume-container){
   //   visibility: hidden;
   // }
@@ -54,9 +61,13 @@ body {
   // }
 
   #resume-container {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+    // white-space: normal;
     // display: table;
     // table-layout: fixed;
     // padding: 1in;
-    // margin: 1in;    
+    // margin: 1in;
   }
 }

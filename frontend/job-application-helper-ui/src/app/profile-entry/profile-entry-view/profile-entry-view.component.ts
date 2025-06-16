@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { ProfileEntry } from '../shared/models/profile-entry';
+import { HelperMethods } from '../../core/helper-methods';
+import { ProfileEntryHelperMethods } from '../shared/profile-entry-helper-methods';
 
 @Component({
   selector: 'app-profile-entry-view',
@@ -24,19 +26,12 @@ export class ProfileEntryViewComponent
 
   get timeFrame()
   {
-    const startDate = new Date(this.profileEntry.startDate);
-    const endDate = this.profileEntry.endDate ? new Date(this.profileEntry.endDate) : new Date();
-    const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    };
-    const timeFrame = startDate.toLocaleDateString(undefined, dateTimeFormatOptions) +
-      (this.profileEntry.isCurrent
-        ? " - Present"
-        : " - " +
-        endDate.toLocaleDateString(undefined, dateTimeFormatOptions));
-    return timeFrame;
+    return ProfileEntryHelperMethods.getTimeframe(this.profileEntry.startDate, this.profileEntry.endDate);
+  }
+
+  get description(): string
+  {
+    return HelperMethods.cleanHtmlString(this.profileEntry.description ?? '');
   }
 
 }

@@ -1,5 +1,6 @@
 export enum ResumeCreatorPages
 {
     ResumeName = 1,
-    TemplateSelector = 2
+    ProfileEntriesImporter = 2,
+    TemplateSelector = 3
 };

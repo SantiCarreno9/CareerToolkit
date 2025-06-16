@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ProfileEntryCategory } from '../../../../../core/enums/profile-entry-category';
 import { ProfileEntry } from '../../../../../profile-entry/shared/models/profile-entry';
+import { HelperMethods } from '../../../../../core/helper-methods';
 
 @Component({
     selector: 'app-profile-entry-component',
@@ -34,6 +35,10 @@ export class ProfileEntryComponent
             }
         }
     }    
+
+    get description(): string{
+        return HelperMethods.cleanHtmlString(this.entry.description ?? '');
+    }
 
     get timeFrame()
     {

@@ -40,20 +40,20 @@ export abstract class TemplateBase implements OnInit
         this.resumeInfo = {...this.resume.resumeInfo};
     }
 
-    protected getProfileEntriesIds(category: ProfileEntryCategory): string[]
+    protected getProfileEntriesIds(category: ProfileEntryCategory[]): string[]
     {
-        return this.resume.profileEntries.filter(pe => pe.category === category).map(pe => pe.id);
+        return this.resume.profileEntries.filter(pe => category.includes(pe.category)).map(pe => pe.id);
     }
 
     setUpDefaultLayout(): void
     {
         const educationIndex = this.resumeInfo.sections.findIndex(s => s.title === BasicResumeSections.Education);
         if (educationIndex !== -1)
-            this.resumeInfo.sections[educationIndex].entriesId = this.getProfileEntriesIds(ProfileEntryCategory.Education);
+            this.resumeInfo.sections[educationIndex].entriesId = this.getProfileEntriesIds([ProfileEntryCategory.Education]);
 
         const experienceIndex = this.resumeInfo.sections.findIndex(s => s.title === BasicResumeSections.WorkExperience);
         if (experienceIndex !== -1)
-            this.resumeInfo.sections[experienceIndex].entriesId = this.getProfileEntriesIds(ProfileEntryCategory.WorkExperience);
+            this.resumeInfo.sections[experienceIndex].entriesId = this.getProfileEntriesIds([ProfileEntryCategory.WorkExperience,ProfileEntryCategory.Project]);
     }
 
     defineBasicLayout(): void
