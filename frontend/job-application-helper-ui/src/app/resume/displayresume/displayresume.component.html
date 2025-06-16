@@ -1,0 +1,11 @@
+<div class="top-bar">
+    <button class="btn btn-outline-secondary" (click)="goBack()"><i class="bi bi-arrow-left"></i></button>
+    <button class="btn btn-outline-success" (click)="download()"><i class="bi bi-download"></i></button>
+</div>
+@if(this.template!==undefined){
+<div id="resume-container" class="resume-container">
+  <ng-container
+    *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
+  ></ng-container>
+</div>
+}

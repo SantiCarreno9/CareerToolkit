@@ -1,0 +1,210 @@
+<div class="editor-container">
+  <div class="top-bar">
+    <button class="btn btn-outline-secondary" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div>
+      <div class="title mx-2">
+        {{ resume.name
+        }}<i
+          class="m-2 btn-icon bi bi-pencil"
+          (click)="openEditBasicInfoFormDialog()"
+        ></i>
+      </div>
+      <div class="d-flex flex-row">
+        <strong>Keywords:</strong
+        ><span
+          class="badge rounded-pill text-bg-success m-1"
+          style="font-weight: 400"
+          *ngFor="let keyword of this.resume.keywords"
+          >{{ keyword }}</span
+        >
+      </div>
+      {{ this.modifiedAtTime }}
+    </div>
+
+    <div class="title-buttons">
+      <button class="btn btn-success" [disabled]="isSaving" (click)="save()">
+        @if(!isSaving){ Save }@else {
+        <span
+          class="spinner-border spinner-border-sm"
+          aria-hidden="true"
+        ></span>
+        <span role="status">Saving...</span>
+        }
+      </button>
+      <button class="btn btn-secondary" (click)="reset()">Reset</button>
+      <button class="btn btn-primary" (click)="exportPDF()">Donwload</button>
+    </div>
+  </div>
+  <div class="d-flex flex-wrap">
+    <cdk-accordion class="accordion d-flex flex-column">
+      <cdk-accordion-item
+        #accordionItem="cdkAccordionItem"
+        class="accordion-item"
+      >
+        <button
+          class="accordion-item-header"
+          (click)="accordionItem.toggle()"
+          tabindex="0"
+          [attr.id]="'accordion-header-personal-info'"
+          [attr.aria-expanded]="accordionItem.expanded"
+          [attr.aria-controls]="'accordion-body-personal-info'"
+        >
+          Personal Info
+          <span class="accordion-item-description">
+            Click to {{ accordionItem.expanded ? "close" : "open" }}
+          </span>
+        </button>
+        @if(accordionItem.expanded) {
+        <div
+          class="accordion-item-body"
+          role="region"
+          [style.display]="accordionItem.expanded ? '' : 'none'"
+          [attr.id]="'accordion-body-personal-info'"
+          [attr.aria-labelledby]="'accordion-header-personal-info'"
+        >
+          <div class="d-flex flex-row" style="align-items: baseline">
+            <h4>My Profile</h4>
+            <button
+              class="btn btn-icon"
+              style="font-size: 1.5rem"
+              (click)="openUserInfoFormDialog()"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </button>
+          </div>
+          <app-user-info-view
+            [userInfo]="convertToUserInfo(this.resume.userInfo)"
+          ></app-user-info-view>
+        </div>
+        }
+      </cdk-accordion-item>
+      <ng-container *ngIf="this.resume.resumeInfo.sections.length > 0">
+        @for (section of this.resume.resumeInfo.sections; track section.id; let
+        sectionIndex = $index) {
+        <cdk-accordion-item
+          #accordionItem="cdkAccordionItem"
+          class="accordion-item"
+        >
+          <div class="d-flex flex-row align-items-center">
+            <button
+              class="accordion-item-header"
+              (click)="accordionItem.toggle()"
+              tabindex="0"
+              [attr.id]="'accordion-header-' + sectionIndex"
+              [attr.aria-expanded]="accordionItem.expanded"
+              [attr.aria-controls]="'accordion-body-' + sectionIndex"
+            >
+              {{ section.title }}
+            </button>
+            <i
+              class="btn btn-icon bi bi-pencil"
+              (click)="openEditSectionFormDialog(sectionIndex)"
+            ></i>
+            <i
+              class="btn btn-icon bi bi-x-lg"
+              (click)="deleteSectionByIndex(sectionIndex)"
+            ></i>
+          </div>
+          <ng-container *ngIf="accordionItem.expanded">
+            <div
+              class="accordion-item-body"
+              role="region"
+              [style.display]="accordionItem.expanded ? '' : 'none'"
+              [attr.id]="'accordion-body-' + sectionIndex"
+              [attr.aria-labelledby]="'accordion-header-' + sectionIndex"
+            >
+              @if(this.templateService.isSectionText(section)){
+              <div class="container">
+                <div class="d-flex justify-content-end w-100">
+                  <button
+                    class="btn btn-icon"
+                    style="font-size: 1.5rem"
+                    (click)="openSectionFormDialog(section, sectionIndex)"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </div>
+                <div class="mw-75">
+                <app-text-section-view [info]="section"></app-text-section-view>
+                </div>                
+              </div>
+              } @else if(this.templateService.isSectionProfileEntry(section)){
+
+              <div class="d-flex flex-row mb-3" style="align-items: baseline">
+                <button
+                  class="btn btn-success mx-2"
+                  (click)="openCreateProfileEntryDialog(sectionIndex)"
+                >
+                  Add New Entry
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+                <button
+                  class="btn btn-primary mx-2"
+                  (click)="openImportProfileEntriesFromOtherSectionsDialog(sectionIndex)"
+                >
+                  Import From Other Section
+                  <i class="bi bi-arrow-90deg-down"></i>
+                </button>
+                <button
+                  class="btn btn-info mx-2"
+                  (click)="openImportProfileEntriesDialog(sectionIndex)"
+                >
+                  Import From Profile
+                  <i class="bi bi-box-arrow-in-down"></i>
+                </button>
+              </div>
+              <ng-container *ngFor="let id of section.entriesId">
+                @let entry = getProfileEntryById(id); @if(entry!==undefined){
+                <div class="d-flex flex-row w-100 mb-3 align-items-start">
+                  <app-profile-entry-view
+                    [profileEntry]="entry"
+                    style="flex: 1"
+                  ></app-profile-entry-view>
+                  <button
+                    class="btn btn-icon"
+                    style="font-size: 1.2rem; flex-shrink: 1"
+                    (click)="openEditProfileEntryDialog(entry, sectionIndex)"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button
+                    class="btn btn-icon"
+                    style="font-size: 1.2rem; flex-shrink: 1"
+                    (click)="deleteProfileEntry(entry.id, sectionIndex)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+                }
+              </ng-container>
+              }
+            </div>
+          </ng-container>
+        </cdk-accordion-item>
+        }
+        <div class="accordion-item">
+          <button
+            class="accordion-item-header"
+            tabindex="0"
+            [attr.id]="'accordion-header-personal-info'"
+            [attr.aria-expanded]="accordionItem.expanded"
+            [attr.aria-controls]="'accordion-body-personal-info'"
+            (click)="openCreateSectionFormDialog()"
+          >
+            Add New Section
+            <i class="btn-icon bi bi-plus-lg"></i>
+          </button>
+        </div>
+      </ng-container>
+    </cdk-accordion>
+    @if(this.template!==undefined){
+    <div id="resume-container" class="resume-container">
+      <ng-container
+        *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
+      ></ng-container>
+    </div>
+    }
+  </div>
+</div>

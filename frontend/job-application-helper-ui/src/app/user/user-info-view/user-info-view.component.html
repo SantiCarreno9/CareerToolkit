@@ -1,0 +1,34 @@
+<div>
+  <div class="mb-3">
+    <label class="form-label data-label">Full Name</label>
+    <div class="form-control-plaintext">{{ this.userInfo.fullName }}</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label data-label">Email</label>
+    <div class="form-control-plaintext">{{ this.userInfo.email }}</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label data-label">Phone Number</label>
+    <div class="form-control-plaintext">{{ this.userInfo.phoneNumber }}</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label data-label">Address</label>
+    <div class="form-control-plaintext">{{ this.userInfo.address }}</div>
+  </div>
+  <div
+    class="mb-3"
+    *ngFor="let item of this.userInfo.additionalContactInfo | keyvalue"
+  >
+    <label for="{{ item.key }}" class="form-label data-label">{{
+      item.key
+    }}</label>
+    <a
+      id="{{ item.key }}"
+      class="form-control-plaintext"
+      href="{{ item.value }}"
+      target="_blank"
+      rel="noopener noreferrer"
+      >{{ item.value }}</a
+    >
+  </div>
+</div>

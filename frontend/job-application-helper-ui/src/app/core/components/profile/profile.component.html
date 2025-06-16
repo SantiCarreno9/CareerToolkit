@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="d-flex flex-row" style="align-items: baseline">
+    <h4>My Profile</h4>
+    <button
+      class="btn btn-icon"
+      style="font-size: 1.5rem"
+      (click)="openUserInfoFormDialog()"
+    >
+      <i class="bi bi-pencil-square"></i>
+    </button>
+  </div>
+  <app-user-info-view class="mb-3" [userInfo]="userInfo"></app-user-info-view>
+  <div *ngFor="let category of this.profileEntryCategoryOptions" class="mb-5">
+    <div class="d-flex flex-row mb-3" style="align-items: baseline">
+      <h4>{{ category.key }}</h4>
+      <button
+        class="btn btn-icon"
+        style="font-size: 1.5rem"
+        (click)="openCreateProfileEntryDialog(category.value)"
+      >
+        <i class="bi bi-plus-circle"></i>
+      </button>
+    </div>
+    <div class="mb-5">
+    @for (entry of profileEntries; track $index) {
+      @if(entry.category == category.value){
+      <div class="d-flex flex-row w-100">
+        <app-profile-entry-view
+          [profileEntry]="entry"
+          style="flex: 1"
+        ></app-profile-entry-view>
+        <button
+          class="btn btn-icon"
+          style="font-size: 1.2rem; flex-shrink: 1"
+          (click)="openEditProfileEntryDialog(entry)"
+        >
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button
+          class="btn btn-icon"
+          style="font-size: 1.2rem; flex-shrink: 1"
+          (click)="deleteProfileEntry(entry.id)"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+      <div class="data-label mb-5"></div>
+      }
+    }
+    </div>
+    <!-- <ng-container      
+      *ngFor="let entry of profileEntries"
+    >
+      @if(entry.category == category.value){
+      <div class="d-flex flex-row w-100 mb-3">
+        <app-profile-entry-view
+          [profileEntry]="entry"
+          style="flex: 1"
+        ></app-profile-entry-view>
+        <button
+          class="btn btn-icon"
+          style="font-size: 1.2rem; flex-shrink: 1"
+          (click)="openEditProfileEntryDialog(entry)"
+        >
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button
+          class="btn btn-icon"
+          style="font-size: 1.2rem; flex-shrink: 1"
+          (click)="deleteProfileEntry(entry.id)"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+      <div class="data-label"></div>
+      }
+    </ng-container> -->
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="container p-4">
+  <div class="btn-group">
+    <!-- <button type="button" class="btn btn-success">Create New Resume</button> -->
+    <button
+      type="button"
+      class="btn btn-success dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <span class="visually-hidden">Toggle Dropdown</span>
+      Create New Resume
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li>
+        <button class="dropdown-item" (click)="openResumeCreatorDialog(true)">
+          Quick Resume
+        </button>
+      </li>
+      <li>
+        <button class="dropdown-item" (click)="openResumeCreatorDialog(false)">
+          Custom Resume
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="mt-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Modified At</th>
+          <th scope="col">Keywords</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        @if(!isLoading){
+        <tr *ngFor="let resume of resumes; let index = index">
+          <th scope="row">{{ resume.name }}</th>
+          <td>{{ resume.modifiedAt.toLocaleString() }}</td>
+          <td>
+            <span
+              class="badge rounded-pill text-bg-success m-1"
+              style="font-weight: 400;"
+              *ngFor="let keyword of resume.keywords"
+              >{{ keyword }}</span
+            >
+          </td>
+
+          <td>
+            <button class="btn btn-icon" (click)="goToResumeViewer(resume.id)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="btn btn-icon" (click)="goToResumeEditor(resume.id)">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button
+              class="btn btn-icon"
+              (click)="deleteResume(resume.id, index)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    @if(isLoading){
+    <div class="w-100 text-center">
+      <div
+        class="spinner-border"
+        style="width: 3rem; height: 3rem"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    }
+  </div>
+</div>

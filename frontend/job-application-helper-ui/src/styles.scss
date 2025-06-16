@@ -1,0 +1,73 @@
+/* You can add global styles to this file, and also import other style files */
+@import "quill/dist/quill.snow.css";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text{  
+  word-wrap: break-word;
+  word-break: keep-all;
+  white-space: normal;
+}
+
+.custom-dialog-container {
+  display: block;
+  border-radius: 3%;
+  background: white;
+  max-height: 70vh;
+  overflow-y: scroll;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  // border-width: 2px;
+}
+
+.btn-icon {
+  cursor: pointer;
+  :hover {
+    opacity: 0.5;
+  }
+  :active {
+    opacity: 0.4;
+  }
+}
+
+.data-label {
+  font-weight: 500;
+  border-bottom: 2px solid gray;
+  width: 100%;
+}
+
+@media print {
+  .navbar {
+    display: none;
+  }  
+
+  @page {
+    padding: 1in;
+  }
+  // div:not(#resume-container){
+  //   visibility: hidden;
+  // }
+  // *:not(html,body,.resume-container) {
+  //   visibility:hidden;
+  // }
+  // body *{
+  //   visibility: collapse;
+  // }
+
+  #resume-container {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+    // white-space: normal;
+    // display: table;
+    // table-layout: fixed;
+    // padding: 1in;
+    // margin: 1in;
+  }
+}
