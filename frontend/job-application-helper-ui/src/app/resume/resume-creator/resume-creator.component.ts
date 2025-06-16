@@ -111,6 +111,16 @@ export class ResumeCreatorComponent
     if (!userInfo.success || !userInfo.value)
       return;
 
+    if(this.resume.profileEntries === undefined || this.resume.profileEntries === null || this.resume.profileEntries.length === 0)
+    {
+      const entries = await lastValueFrom(this.profileEntryService.getProfileEntries());
+      if (!entries.success || !entries.value)
+      {
+        console.log(entries.error);
+        return;
+      }
+      this.resume.profileEntries = entries.value;
+    }
     this.resume.userInfo = this.convertUserInfoToUserPersonalInfo(userInfo.value);
     this.resume.resumeInfo.templateId = this.selectedTemplateId;
     this.resumeService.createResume(this.resume).subscribe(res =>
