@@ -1,0 +1,57 @@
+services:
+
+  gateway-api:
+    image: ${DOCKER_REGISTRY-}gatewayapi    
+    container_name: gateway-api
+    build:
+      context: .
+      dockerfile: gateway/src/Gateway.API/Dockerfile
+    ports:
+        - "5000:5000"
+        - "5001:5001"
+    depends_on:
+      - user-service-api
+      - resume-service-api
+    networks:
+          - proxy-backend
+
+  postgre-database:
+    image: postgres:17        
+
+  pgadmin:
+    image: dpage/pgadmin4    
+    depends_on:
+      - postgre-database  
+    
+  user-service-api:
+    image: ${DOCKER_REGISTRY-}usersapi   
+    container_name: user-service-api
+    build:
+      context: .
+      dockerfile: user-service/src/Web.Api/Dockerfile
+    ports:        
+        - "5100"
+        - "5101"
+    depends_on:
+      - postgre-database
+    networks:
+        - proxy-backend
+  
+  resume-service-api:
+    image: ${DOCKER_REGISTRY-}resumesapi
+    container_name: resume-service-api
+    build:
+        context: .
+        dockerfile: resume-service/src/Web.Api/Dockerfile
+    ports:
+        - "5200"
+        - "5201"
+    depends_on:
+      - postgre-database
+    networks:
+        - proxy-backend 
+
+networks:
+  proxy-backend:
+    name: proxybackend
+    driver: bridge

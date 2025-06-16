@@ -1,0 +1,13 @@
+<div class="section">
+  <div class="title">{{ info.title }}</div>
+  <!-- <div *ngFor="let entry of entries">
+    @if(shouldRender(entry.id)){
+    <app-profile-entry-component [entry]="entry"></app-profile-entry-component>
+    }
+  </div> -->
+  <div *ngFor="let id of info.entriesId">
+    @let entry = getProfileEntryById(id); @if(entry!==undefined){
+    <app-profile-entry-component [entry]="entry"></app-profile-entry-component>
+    }
+  </div>
+</div>

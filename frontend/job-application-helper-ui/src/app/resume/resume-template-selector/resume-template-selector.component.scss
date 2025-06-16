@@ -1,0 +1,55 @@
+@use '@angular/material' as mat;
+
+.templates-container {
+  overflow-y: scroll;
+  overflow-wrap: anywhere;
+}
+:host {
+  @include mat.radio-overrides(
+    (
+      // checked-ripple-color: orange,
+      // disabled-label-color: red,
+      
+    )
+  )
+}
+
+.radio-card {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.3s;
+
+  &.active {
+    border-width: 0.2rem;
+    border-color: green;
+  }
+}
+
+.mdc-radio {
+  display: none;
+}
+
+.radio-card input[type="radio"] {
+  display: none;
+}
+
+// .radio-card img {
+//   width: 80px;
+//   height: 80px;
+//   object-fit: cover;
+//   margin-bottom: 10px;
+// }
+
+.radio-card input[type="radio"]:checked + .content {
+  border-color: #007bff;
+  background-color: #e9f2ff;
+}
+// .image-container {
+//   &.active {
+//     border-width: 0.2rem;
+//     border-color: green;
+//   }
+// }

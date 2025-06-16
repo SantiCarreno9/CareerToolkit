@@ -1,0 +1,53 @@
+<div class="d-flex flex-column justify-content-center">
+  <h2 style="text-align: center">Basic Information</h2>
+  <form [formGroup]="basicInfoForm" (submit)="save()" class="p-3">
+    <div class="mb-3">
+      <div class="form-floating mb-3">
+        <input
+          id="name"
+          type="text"
+          class="form-control"
+          formControlName="name"
+        />
+        <label for="name">Name</label>
+        @if (name?.invalid && (name?.touched || name?.dirty)) {
+        <div class="alert alert-danger p-2">
+          @if (name?.hasError('required')) {
+          <div>Name is required.</div>
+          }
+        </div>
+        }
+      </div>
+      <div>
+        <label class="form-label"
+          >Keywords
+          <button type="button" class="btn btn-success" style="padding:3px 4px;" (click)="addKeyword()">
+            <i class="bi bi-plus-lg"></i></button
+        ></label>
+        <div *ngFor="let keyword of keywords; index as i">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Value"
+              [formControlName]="'keyword-' + keyword.key"
+            />
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="removeKeyword(keyword.key, i)"
+            >
+              -
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="justify-content-end d-flex mt-3">
+        <button type="submit" class="btn btn-success mx-2">{{acceptButtonText}}</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

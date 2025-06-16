@@ -1,0 +1,12 @@
+<div class="d-flex flex-column justify-content-center">
+  <h3>{{ this.title }}</h3>
+  <div>{{ this.text }}</div>
+  <div class="justify-content-end d-flex mt-3">
+    <button type="submit" class="btn btn-primary mx-2" (click)="confirm()">
+      Confirm
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="cancel()">
+      Cancel
+    </button>
+  </div>
+</div>

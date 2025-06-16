@@ -1,0 +1,32 @@
+<div class="container">
+  <h3>Select a template:</h3>
+  <mat-radio-group
+    class="templates-container my-4"
+    (change)="templateSelectionChanged($event)"
+  >
+    <mat-radio-button
+      class="m-1 radio-card"
+      *ngFor="let template of templates"
+      [value]="template"
+    >
+      <!-- < type="radio" [value]="template" name="selectTemplate" /> -->
+      <img
+        style="border-color: black; border: width 5px"
+        ngSrc="{{ template.imageUrl }}"
+        height="200"
+        width="150"
+      />
+      <p>{{ template.name }}</p>
+    </mat-radio-button>
+  </mat-radio-group>
+  <div class="d-flex buttons-container justify-content-end">
+    <button
+      class="btn btn-success m-2"
+      (click)="selectTemplate()"
+      [disabled]="this.selectedTemplate === undefined"
+    >
+      {{ acceptButtonText }}
+    </button>
+    <button class="btn btn-secondary m-2" (click)="cancel()">Cancel</button>
+  </div>
+</div>
