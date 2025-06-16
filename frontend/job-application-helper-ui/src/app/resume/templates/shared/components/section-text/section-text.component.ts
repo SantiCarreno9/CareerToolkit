@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SectionInfoText } from '../../models/sectioninfo';
+import { HelperMethods } from '../../../../../core/helper-methods';
 
 @Component({
     selector: 'app-section-text',
@@ -10,4 +11,8 @@ import { SectionInfoText } from '../../models/sectioninfo';
 export class SectionTextComponent
 {
     @Input() info: SectionInfoText = new SectionInfoText('','','');
+
+    get content():string{
+        return HelperMethods.cleanHtmlString(this.info.content);
+    }
 }

@@ -39,6 +39,7 @@
   flex: 1;
   display: block;  
   margin-right: 1rem;
+  max-width: 50%;
 }
 
 .accordion-item {
@@ -109,5 +110,11 @@
     // min-width: 100%;
     margin: 0;
     // min-width: 0;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .accordion{
+    min-width: 100%;
   }
 }

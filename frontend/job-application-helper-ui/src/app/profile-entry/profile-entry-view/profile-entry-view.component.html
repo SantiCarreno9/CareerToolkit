@@ -1,21 +1,21 @@
-<div>
+<div class="container">
   <div class="mb-3">
     <label class="form-label data-label">Title</label>
-    <div class="form-control-plaintext" id="title">
+    <div class="form-control-plaintext">
       {{ this.profileEntry.title }}
     </div>
   </div>
   @if(this.profileEntry.organization) {
   <div class="mb-3">
     <label class="form-label data-label">Organization</label>
-    <div class="form-control-plaintext" id="title">
+    <div class="form-control-plaintext">
       {{ this.profileEntry.organization }}
     </div>
   </div>
   } @if(this.profileEntry.location) {
   <div class="mb-3">
     <label class="form-label data-label">Location</label>
-    <div class="form-control-plaintext" id="title">
+    <div class="form-control-plaintext">
       {{ this.profileEntry.location }}
     </div>
   </div>
@@ -29,8 +29,7 @@
   @if(this.profileEntry.description) {
   <div class="mb-3">
     <label class="form-label data-label">Description</label>
-    <div class="form-control-plaintext" [innerHTML]="this.profileEntry.description">      
-    </div>
+    <div class="text description" [innerHTML]="description"></div>    
   </div>
   }
 </div>

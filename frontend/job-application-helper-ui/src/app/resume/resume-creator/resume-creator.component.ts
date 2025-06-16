@@ -13,11 +13,15 @@ import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
 import { ResumeBasicInfoFormComponent } from '../resume-editor/components/resume-basic-info-form/resume-basic-info-form.component';
 import { ResumeCreatorPages } from './resume-creator-pages';
 import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
+import { ProfileEntriesImporterComponent } from '../shared/components/profile-entries-importer/profile-entries-importer.component';
+import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
+import { lastValueFrom } from 'rxjs';
+import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
 
 
 @Component({
   selector: 'app-resume-creator',
-  imports: [ResumeTemplateSelectorComponent, ResumeBasicInfoFormComponent],
+  imports: [ResumeTemplateSelectorComponent, ResumeBasicInfoFormComponent, ProfileEntriesImporterComponent],
   templateUrl: './resume-creator.component.html',
   styleUrl: './resume-creator.component.scss'
 })
@@ -35,6 +39,8 @@ export class ResumeCreatorComponent
   currentPage: number = 1;
   selectedTemplateId: string = '';
   protected resume: Resume = new Resume();
+  protected quickResume: boolean = false;
+  protected entriesForImporter: any = {};
   // private templateInfo:ResumeTemplateInfo={
   //   id:'',
 
@@ -42,13 +48,19 @@ export class ResumeCreatorComponent
 
   constructor(@Inject(DIALOG_DATA) public data: { quickResume: boolean })
   {
-    this.currentPage = data.quickResume ? 1 : 1;
+    this.quickResume = data.quickResume;
   }
 
   protected selectTemplate(template: ResumeTemplateInfo): void
   {
     this.selectedTemplateId = template.id;
     this.create();
+  }
+
+  protected importProfileEntries(entries: ProfileEntry[])
+  {
+    this.resume.profileEntries = entries;
+    this.nextPage();
   }
 
   protected saveResumeBasicInfo(info: ResumeBasicInfo)
@@ -60,42 +72,85 @@ export class ResumeCreatorComponent
 
   protected nextPage(): void
   {
-    this.currentPage++;
+    if (this.currentPage === ResumeCreatorPages.ResumeName)
+    {
+      if (this.quickResume)
+        this.currentPage = ResumeCreatorPages.TemplateSelector;
+      else
+      {
+        this.currentPage = ResumeCreatorPages.ProfileEntriesImporter;
+        this.getEntriesForImporter();
+      }
+      return;
+    }
+
+    if (this.currentPage === ResumeCreatorPages.ProfileEntriesImporter)
+    {
+      this.currentPage = ResumeCreatorPages.TemplateSelector;
+    }
+
   }
 
-  protected create(): void
+  private getEntriesForImporter(): void
   {
-    this.userService.getUserInfo().subscribe(res =>
+    this.profileEntryService.getProfileEntries().subscribe(res =>
     {
-      if (!res.success)
+      if (!res.success || !res.value)
       {
-        console.log(res.error)
+        console.log(res.error);
         return;
       }
 
-      const personalInfo: UserPersonalInfo = this.convertUserInfoToUserPersonalInfo(res.value);
-      this.profileEntryService.getProfileEntries().subscribe(res =>
+      this.entriesForImporter = ProfileEntryHelperMethods.getGroupedProfileEntriesByCategory(res.value);
+    });
+  }
+
+  protected async create(): Promise<void>
+  {
+    const userInfo = await lastValueFrom(this.userService.getUserInfo());
+    if (!userInfo.success || !userInfo.value)
+      return;
+
+    this.resume.userInfo = this.convertUserInfoToUserPersonalInfo(userInfo.value);
+    this.resume.resumeInfo.templateId = this.selectedTemplateId;
+    this.resumeService.createResume(this.resume).subscribe(res =>
+    {
+      if (res.success && res.value)
       {
-        if (!res.success)
-        {
-          console.log(res.error);
-          return;
-        }
+        this.onResumeCreated.emit(res.value);
+      }
+    })
+    // this.userService.getUserInfo().subscribe(res =>
+    // {
+    //   if (!res.success)
+    //   {
+    //     console.log(res.error)
+    //     return;
+    //   }
 
-        const profileEntries: ProfileEntry[] = res.value ?? [];
-        this.resume.userInfo = personalInfo;
-        this.resume.profileEntries = profileEntries;
-        this.resume.resumeInfo.templateId = this.selectedTemplateId;
+    //   const personalInfo: UserPersonalInfo = this.convertUserInfoToUserPersonalInfo(res.value);
+    //   this.profileEntryService.getProfileEntries().subscribe(res =>
+    //   {
+    //     if (!res.success)
+    //     {
+    //       console.log(res.error);
+    //       return;
+    //     }
 
-        this.resumeService.createResume(this.resume).subscribe(res =>
-        {
-          if (res.success && res.value)
-          {
-            this.onResumeCreated.emit(res.value);
-          }
-        })
-      })
-    });    
+    //     const profileEntries: ProfileEntry[] = res.value ?? [];
+    //     this.resume.userInfo = personalInfo;
+    //     this.resume.profileEntries = profileEntries;
+    //     this.resume.resumeInfo.templateId = this.selectedTemplateId;
+
+    //     this.resumeService.createResume(this.resume).subscribe(res =>
+    //     {
+    //       if (res.success && res.value)
+    //       {
+    //         this.onResumeCreated.emit(res.value);
+    //       }
+    //     })
+    //   })
+    // });
   }
 
   private convertUserInfoToUserPersonalInfo(userInfo?: UserInfo | null): UserPersonalInfo

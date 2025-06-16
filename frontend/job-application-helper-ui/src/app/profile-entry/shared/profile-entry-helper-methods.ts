@@ -1,3 +1,4 @@
+import { ProfileEntryCategory } from "../../core/enums/profile-entry-category";
 import { HelperMethods } from "../../core/helper-methods";
 import { ProfileEntry } from "./models/profile-entry";
 import { ProfileEntryCommand } from "./models/profile-entry-command";
@@ -51,7 +52,7 @@ export class ProfileEntryHelperMethods
     }
 
     public static sortEntries(entries: ProfileEntry[]): ProfileEntry[]
-    {        
+    {
         return entries.sort((a, b) =>
         {
             const dateA = a.startDate instanceof Date ? a.startDate : new Date(a.startDate);
@@ -59,4 +60,42 @@ export class ProfileEntryHelperMethods
             return dateB.getTime() - dateA.getTime();
         });
     }
+
+    public static getTimeframe(startDate: Date, endDate: Date | null): string
+    {        
+        const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
+            timeZone: "UTC",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        };        
+        const timeFrame = startDate.toLocaleDateString(undefined, dateTimeFormatOptions) +
+            (endDate === null
+                ? " - Present"
+                : " - " +
+                endDate.toLocaleDateString(undefined, dateTimeFormatOptions));
+        return timeFrame;
+    }
+
+    public static getGroupedProfileEntriesByCategory(entries: ProfileEntry[]): { [key: string]: ProfileEntry[] }
+      {
+        const grouped: { [key: string]: ProfileEntry[] } = {};
+        const categories = Object.keys(ProfileEntryCategory)
+          .filter(k => isNaN(Number(k))) // filter out numeric keys
+          .map(key => ({
+            key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
+            value: ProfileEntryCategory[key as keyof typeof ProfileEntryCategory]
+          }));
+        for (const entry of entries)
+        {
+          const key = entry.category;
+          const keyName = categories[key].key;
+          if (!grouped[keyName])
+          {
+            grouped[keyName] = [];
+          }
+          grouped[keyName].push(entry);
+        }
+        return grouped;
+      }
 }

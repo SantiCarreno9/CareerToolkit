@@ -1,11 +1,25 @@
 <div>
-    <div class="form-container">
-        @if(currentPage==ResumeCreatorPages.ResumeName){
-            <app-resume-basic-info-form [acceptButtonText]="'Next'" (onSave)="saveResumeBasicInfo($event)"></app-resume-basic-info-form>
-        }
-        @if(currentPage==ResumeCreatorPages.TemplateSelector){
-            <app-resume-template-selector [acceptButtonText]="'Create'" (onSelectTemplate)="selectTemplate($event)" (onCancel)="cancel()"></app-resume-template-selector>
-        }        
+  <div class="form-container">
+    @if(currentPage==ResumeCreatorPages.ResumeName){
+    <app-resume-basic-info-form
+      [acceptButtonText]="'Next'"
+      (onSave)="saveResumeBasicInfo($event)"
+      (onCancel)="cancel()"
+    ></app-resume-basic-info-form>
+    } @if(currentPage==ResumeCreatorPages.ProfileEntriesImporter){
+    <app-profile-entries-importer
+      [acceptButtonText]="'Next'"
+      [entries]="entriesForImporter"
+      (onSubmit)="importProfileEntries($event)"
+      (onCancel)="cancel()"
+    ></app-profile-entries-importer>
+    } @if(currentPage==ResumeCreatorPages.TemplateSelector){
+    <app-resume-template-selector
+      [acceptButtonText]="'Create'"
+      (onSelectTemplate)="selectTemplate($event)"
+      (onCancel)="cancel()"
+    ></app-resume-template-selector>
+    }
     <!-- <button class="btn btn-secondary" (click)="cancel()">Cancel</button> -->
-    </div>
+  </div>
 </div>
