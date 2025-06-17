@@ -1,0 +1,16 @@
+<div class="container d-flex flex-row h-100">
+  <app-profile-entry-form
+    #profileEntryForm
+    class="profile-entry-form"
+    [profileEntry]="this.profileEntry"
+    (onSubmit)="submit($event)"
+    (onCancel)="cancel()"
+  ></app-profile-entry-form>
+  <div style="width: 1px; background-color: gray"></div>
+  <app-ai-section-tool
+    class="container ai-section"
+    [instructionTypeOptions]="this.aiInstructionTypeOptions"
+    [responseText]="aiResponse"
+    (onSubmit)="submitAiInstruction($event)"
+  ></app-ai-section-tool>
+</div>

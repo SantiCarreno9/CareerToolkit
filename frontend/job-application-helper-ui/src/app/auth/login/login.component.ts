@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../shared/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginModel } from '../shared/models/loginmodel';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,9 +12,10 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent
 {
-  authService: AuthService = inject(AuthService);
-  route = inject(Router);
-  loginForm = new FormGroup({
+  protected authService: AuthService = inject(AuthService);
+  protected route = inject(Router);
+  
+  protected loginForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
       Validators.email
@@ -25,16 +26,16 @@ export class LoginComponent
   });
 
 
-  get email()
+  protected get email()
   {
     return this.loginForm.get('email');
   }
-  get password()
+  protected  get password()
   {
     return this.loginForm.get('password');
   }
 
-  login():void
+  protected login():void
   {
     if (this.loginForm.invalid)
     {

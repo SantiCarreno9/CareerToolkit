@@ -41,7 +41,8 @@ export class ResumeTemplateService
           new SectionInfoText(
             '1',
             BasicResumeSections.Summary,
-            ''
+            '',
+            ResumeSectionType.Summary
           ),
           new SectionInfoProfileEntry(
             '2',
@@ -62,7 +63,7 @@ export class ResumeTemplateService
   {
     // console.log('isSectionText', section);
     // return section.content !== undefined;    
-    return section.sectionType === ResumeSectionType.Text;
+    return section.sectionType === ResumeSectionType.Text || section.sectionType === ResumeSectionType.Summary;
   }
 
   isSectionProfileEntry(section: any): boolean

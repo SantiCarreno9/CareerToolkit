@@ -3,7 +3,7 @@ import { Resume } from '../shared/models/resume';
 import { ResumeTemplateService } from '../templates/shared/resume-template.service';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResumeService } from '../shared/resume.service';
+import { ResumeService } from '../../core/services/resume.service';
 
 @Component({
   selector: 'app-displayresume',
@@ -152,6 +152,7 @@ export class DisplayResumeComponent
   }
 
   protected download():void{
+    document.title = this.resume.name;
     window.print();
   }
 }

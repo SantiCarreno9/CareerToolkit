@@ -1,5 +1,6 @@
 import { ProfileEntryCategory } from "../../core/enums/profile-entry-category";
 import { HelperMethods } from "../../core/helper-methods";
+import { ExperienceEntry } from "../../core/models/experience-entry";
 import { ProfileEntry } from "./models/profile-entry";
 import { ProfileEntryCommand } from "./models/profile-entry-command";
 
@@ -62,13 +63,13 @@ export class ProfileEntryHelperMethods
     }
 
     public static getTimeframe(startDate: Date, endDate: Date | null): string
-    {        
+    {
         const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
             timeZone: "UTC",
             year: "numeric",
             month: "long",
             day: "numeric"
-        };        
+        };
         const timeFrame = startDate.toLocaleDateString(undefined, dateTimeFormatOptions) +
             (endDate === null
                 ? " - Present"
@@ -78,24 +79,34 @@ export class ProfileEntryHelperMethods
     }
 
     public static getGroupedProfileEntriesByCategory(entries: ProfileEntry[]): { [key: string]: ProfileEntry[] }
-      {
+    {
         const grouped: { [key: string]: ProfileEntry[] } = {};
         const categories = Object.keys(ProfileEntryCategory)
-          .filter(k => isNaN(Number(k))) // filter out numeric keys
-          .map(key => ({
-            key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
-            value: ProfileEntryCategory[key as keyof typeof ProfileEntryCategory]
-          }));
+            .filter(k => isNaN(Number(k))) // filter out numeric keys
+            .map(key => ({
+                key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
+                value: ProfileEntryCategory[key as keyof typeof ProfileEntryCategory]
+            }));
         for (const entry of entries)
         {
-          const key = entry.category;
-          const keyName = categories[key].key;
-          if (!grouped[keyName])
-          {
-            grouped[keyName] = [];
-          }
-          grouped[keyName].push(entry);
+            const key = entry.category;
+            const keyName = categories[key].key;
+            if (!grouped[keyName])
+            {
+                grouped[keyName] = [];
+            }
+            grouped[keyName].push(entry);
         }
         return grouped;
-      }
+    }
+
+    public static convertProfileEntryToExperienceEntry(entry: ProfileEntry): ExperienceEntry
+    {
+        return {
+            id: entry.id,
+            title: entry.title,
+            organization: entry.organization,
+            description: entry.description ? HelperMethods.convertToPlainText(entry.description) : '',
+        };
+    }
 }

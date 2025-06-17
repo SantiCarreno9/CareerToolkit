@@ -16,6 +16,7 @@ internal sealed class Update : IEndpoint
     UserInfo UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
+    string? JobPosting,
     List<string> Keywords);
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -32,6 +33,7 @@ internal sealed class Update : IEndpoint
                 request.UserInfo,
                 request.ProfileEntries,
                 request.Keywords,
+                request.JobPosting,
                 request.ResumeInfo
             );
 

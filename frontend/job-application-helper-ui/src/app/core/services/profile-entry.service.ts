@@ -4,9 +4,9 @@ import { map, Observable } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { environment } from '../../../environments/environment';
-import { ProfileEntry } from './models/profile-entry';
-import { ProfileEntryHelperMethods } from './profile-entry-helper-methods';
-import { ProfileEntryCommand } from './models/profile-entry-command';
+import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
+import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
+import { ProfileEntryCommand } from '../../profile-entry/shared/models/profile-entry-command';
 
 @Injectable({
   providedIn: 'root'

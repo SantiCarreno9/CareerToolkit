@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { SectionInfoText } from '../../../templates/shared/models/sectioninfo';
@@ -15,7 +15,7 @@ export class TextSectionFormComponent
 {
 
   protected readonly sectionInfoForm: FormGroup;
-  protected sectionInfo: SectionInfoText = new SectionInfoText('','','');
+  @Input() sectionInfo: SectionInfoText = new SectionInfoText('','','');
 
   protected quillModules = {
     toolbar: [

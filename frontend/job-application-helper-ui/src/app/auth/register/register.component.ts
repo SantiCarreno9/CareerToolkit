@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../shared/auth.service';
 import { RegisterModel } from '../shared/models/registermodel';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -13,10 +13,10 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent
 {
-  router = inject(Router);
-  authService: AuthService = inject(AuthService);
+  protected router = inject(Router);
+  protected authService: AuthService = inject(AuthService);
 
-  registerForm = new FormGroup({
+  protected registerForm = new FormGroup({
     fullName: new FormControl('', Validators.required),
     email: new FormControl('', [
       Validators.required,
@@ -28,20 +28,20 @@ export class RegisterComponent
     ])
   });
 
-  get fullName()
+  protected get fullName()
   {
     return this.registerForm.get('fullName');
   }
-  get email()
+  protected get email()
   {
     return this.registerForm.get('email');
   }
-  get password()
+  protected get password()
   {
     return this.registerForm.get('password');
   }
 
-  register(): void
+  protected register(): void
   {
     if (this.registerForm.invalid)
     {

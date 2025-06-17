@@ -1,5 +1,6 @@
 export interface ResumeBasicInfo
 {
     name: string,
-    keywords: string[]
+    keywords: string[],
+    jobPosting?: string
 }

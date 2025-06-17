@@ -1,0 +1,54 @@
+<div class="container d-flex flex-column flex-grow-1">
+  <h2 style="text-align: center">AI Tool</h2>
+  <form [formGroup]="aiSectionForm" (submit)="submit()" class="p-3">
+    <div class="mb-3">
+      <div class="form-floating mb-3" style="height: 10rem">
+        <textarea
+          id="instruction"
+          type="textarea"
+          class="form-control h-100"
+          placeholder="e.g. 3 bullet points"
+          formControlName="instruction"
+          rows="5"
+        ></textarea>
+        <label for="instruction">Instructions (optional)</label>
+      </div>
+      <div class="mb-3">
+        <mat-radio-group
+          class="templates-container my-4"
+          [value]="instructionType"
+          (change)="instructionChanged($event)"
+        >
+          <mat-radio-button
+            class="m-1 radio-card"
+            *ngFor="let instruction of instructionTypeOptions"
+            [value]="instruction.value"
+          >
+            {{ instruction.key }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="justify-content-end d-flex">
+      <button
+        type="submit"
+        class="btn btn-success mx-2"
+        [disabled]="shouldDisableSubmit()"
+      >
+        {{ submitButtonText }}
+      </button>
+    </div>
+  </form>
+  <div class="d-flex flex-column flex-grow-1">
+    <div class="d-flex justify-content-end w-100">
+      <button class="btn btn-icon" (click)="copyToClipboard()">
+        <!-- <i class="bi bi-clipboard" [cdkCopyToClipboard]="clipboardText"></i> -->
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
+    <div
+      class="form-control flex-grow-1"
+      [innerHTML]="responseText"
+    ></div>
+  </div>
+</div>

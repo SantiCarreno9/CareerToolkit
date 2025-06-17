@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ResumeListComponent } from './resume/resume-list/resume-list.component';
-import { AuthGuardService } from './auth/shared/auth-guard.service';
+import { AuthGuardService } from './core/services/auth-guard.service';
 import { HomeComponent } from './core/components/home/home.component';
 import { DisplayResumeComponent } from './resume/displayresume/displayresume.component';
 import { ResumeEditorComponent } from './resume/resume-editor/resume-editor.component';

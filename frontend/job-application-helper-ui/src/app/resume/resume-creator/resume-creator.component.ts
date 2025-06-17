@@ -1,27 +1,27 @@
 import { Component, EventEmitter, inject, Inject, Output } from '@angular/core';
 import { ResumeTemplateSelectorComponent } from '../resume-template-selector/resume-template-selector.component';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { ResumeService } from '../shared/resume.service';
-import { UserService } from '../../user/shared/user.service';
-import { ProfileEntryService } from '../../profile-entry/shared/profile-entry.service';
 import { UserPersonalInfo } from '../shared/models/userpersonalinfo';
 import { UserInfo } from '../../user/shared/models/userinfo';
 import { Resume } from '../shared/models/resume';
 import { Router } from '@angular/router';
 import { ResumeTemplateInfo } from '../shared/models/resume-template';
 import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
-import { ResumeBasicInfoFormComponent } from '../resume-editor/components/resume-basic-info-form/resume-basic-info-form.component';
 import { ResumeCreatorPages } from './resume-creator-pages';
 import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
 import { ProfileEntriesImporterComponent } from '../shared/components/profile-entries-importer/profile-entries-importer.component';
-import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { lastValueFrom } from 'rxjs';
 import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
+import { ProfileEntryService } from '../../core/services/profile-entry.service';
+import { ResumeService } from '../../core/services/resume.service';
+import { UserService } from '../../core/services/user.service';
+import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
+import { AiProfileEntriesImporterComponent } from '../shared/components/ai-profile-entries-importer/ai-profile-entries-importer.component';
 
 
 @Component({
   selector: 'app-resume-creator',
-  imports: [ResumeTemplateSelectorComponent, ResumeBasicInfoFormComponent, ProfileEntriesImporterComponent],
+  imports: [ResumeTemplateSelectorComponent, ResumeBasicInfoFormComponent, ProfileEntriesImporterComponent, AiProfileEntriesImporterComponent],
   templateUrl: './resume-creator.component.html',
   styleUrl: './resume-creator.component.scss'
 })
@@ -41,10 +41,6 @@ export class ResumeCreatorComponent
   protected resume: Resume = new Resume();
   protected quickResume: boolean = false;
   protected entriesForImporter: any = {};
-  // private templateInfo:ResumeTemplateInfo={
-  //   id:'',
-
-  // }
 
   constructor(@Inject(DIALOG_DATA) public data: { quickResume: boolean })
   {
@@ -67,6 +63,7 @@ export class ResumeCreatorComponent
   {
     this.resume.name = info.name;
     this.resume.keywords = info.keywords;
+    this.resume.jobPosting = info.jobPosting || null;
     this.nextPage();
   }
 
