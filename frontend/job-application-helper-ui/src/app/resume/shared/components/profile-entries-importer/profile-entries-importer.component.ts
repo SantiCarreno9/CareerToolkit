@@ -1,13 +1,11 @@
 import { Component, computed, EventEmitter, Inject, inject, Input, OnInit, Output, signal } from '@angular/core';
-import { ResumeService } from '../../resume.service';
 import { ProfileEntry } from '../../../../profile-entry/shared/models/profile-entry';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ProfileEntryService } from '../../../../profile-entry/shared/profile-entry.service';
 import { ProfileEntryHelperMethods } from '../../../../profile-entry/shared/profile-entry-helper-methods';
 import { CommonModule } from '@angular/common';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
-import { ProfileEntryCategory } from '../../../../core/enums/profile-entry-category';
+import { ProfileEntryService } from '../../../../core/services/profile-entry.service';
 
 export interface Entry
 {
@@ -30,10 +28,11 @@ export interface EntryItem
 })
 export class ProfileEntriesImporterComponent implements OnInit
 {
+  profileEntryService = inject(ProfileEntryService);
+
   ProfileEntryHelperMethods = ProfileEntryHelperMethods;
 
-  profileEntryService = inject(ProfileEntryService);
-  selectedEntriesIds: string[] = [];
+  protected selectedEntriesIds: string[] = [];
 
   @Input() entries: { [key: string]: ProfileEntry[] } = {};
   @Input() acceptButtonText: string = "Save"
@@ -69,35 +68,7 @@ export class ProfileEntriesImporterComponent implements OnInit
   ngOnInit(): void
   {
     this.isLoading = false;
-    // this.profileEntryCategoryOptions = Object.keys(ProfileEntryCategory)
-    //   .filter(k => isNaN(Number(k))) // filter out numeric keys
-    //   .map(key => ({
-    //     key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
-    //     value: ProfileEntryCategory[key as keyof typeof ProfileEntryCategory]
-    //   }));
-    // this.categories = Object.keys(ProfileEntryCategory).filter(c => isNaN(Number(c))) as ProfileEntryCategory[];
-    // this.categories = Object.values(ProfileEntryCategory).filter(c => !isNaN(Number(c))) as ProfileEntryCategory[];
-    // console.log(this.categories);
   }
-
-  // private getEntriesFromProfile(existingEntries?: ProfileEntry[]): void
-  // {
-  //   const entriesIds = existingEntries ? existingEntries.map(e => e.id) : [];
-  //   this.isLoading = true;
-  //   this.profileEntryService.getProfileEntries().subscribe((res) =>
-  //   {
-  //     if (res.success && res.value)
-  //     {
-  //       this.entries = res.value;
-  //       this.entries = this.entries.filter(e => !entriesIds.includes(e.id));
-  //       this.entriesManager().entries = this.entries.map(e => ({
-  //         selected: false,
-  //         item: e
-  //       }));
-  //     }
-  //     this.isLoading = false;
-  //   });
-  // }
 
   update(selected: boolean, index?: number)
   {
@@ -121,6 +92,16 @@ export class ProfileEntriesImporterComponent implements OnInit
     return this.selectedEntriesIds.includes(id);
   }
 
+  selectEntries(ids: string[]): void
+  {
+    for (const id of ids)
+    {
+      if (!this.selectedEntriesIds.includes(id))
+      {
+        this.selectedEntriesIds.push(id);
+      }
+    }
+  }
   protected toggleEntrySelection(id: string): void
   {
     if (this.selectedEntriesIds.includes(id))

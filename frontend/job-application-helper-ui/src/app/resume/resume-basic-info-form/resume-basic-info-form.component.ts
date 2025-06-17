@@ -2,7 +2,7 @@ import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { CommonModule, KeyValue } from '@angular/common';
 import { Component, Inject, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
-import { ResumeBasicInfo } from '../../../shared/models/basic-resume-info';
+import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
 
 @Component({
   selector: 'app-resume-basic-info-form',
@@ -19,13 +19,14 @@ export class ResumeBasicInfoFormComponent
   @Output() onSave = new EventEmitter<ResumeBasicInfo>();
   @Output() onCancel = new EventEmitter<void>();
 
-  constructor(@Inject(DIALOG_DATA) public data: { name: string, keywords: string[] }, private formBuilder: FormBuilder)
+  constructor(@Inject(DIALOG_DATA) public data: { name: string, keywords: string[], jobPosting:string }, private formBuilder: FormBuilder)
   {
     this.basicInfoForm = this.formBuilder.group({
       name: new FormControl(data.name, [
         Validators.required,
         Validators.minLength(2)
-      ])
+      ]),
+      jobPosting: new FormControl(this.data.jobPosting)
     });
 
     if (data.keywords && data.keywords.length > 0)
@@ -35,6 +36,11 @@ export class ResumeBasicInfoFormComponent
   get name()
   {
     return this.basicInfoForm.get('name');
+  }
+
+  get jobPosting()
+  {
+    return this.basicInfoForm.get('jobPosting');
   }
 
   protected addKeyword(value: string = ''): void
@@ -79,7 +85,8 @@ export class ResumeBasicInfoFormComponent
     }
     const data: ResumeBasicInfo = {
       name: this.basicInfoForm.value.name,
-      keywords: newKeywords
+      keywords: newKeywords,
+      jobPosting: this.basicInfoForm.value.jobPosting || ''
     };
 
     this.onSave.emit(data);

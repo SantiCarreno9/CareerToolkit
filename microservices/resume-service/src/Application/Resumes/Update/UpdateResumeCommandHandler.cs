@@ -35,6 +35,7 @@ internal sealed class UpdateResumeCommandHandler(
         resume.ProfileEntries = command.ProfileEntries;
         resume.ResumeInfo = command.ResumeInfo;
         resume.Keywords = command.Keywords;
+        resume.JobPosting = command.JobPosting;
         resume.ModifiedAt = dateTimeProvider.UtcNow;
 
         await context.SaveChangesAsync(cancellationToken);
@@ -46,6 +47,7 @@ internal sealed class UpdateResumeCommandHandler(
             resume.ProfileEntries.ToResponse(),
             resume.ResumeInfo,
             resume.Keywords,
+            resume.JobPosting,
             resume.CreatedAt,
             resume.ModifiedAt
             );

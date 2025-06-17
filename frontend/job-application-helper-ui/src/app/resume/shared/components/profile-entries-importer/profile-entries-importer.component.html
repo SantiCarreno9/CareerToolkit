@@ -1,252 +1,81 @@
-<!-- <section class="example-section">
-  <span class="example-list-section">
-    <mat-checkbox
-      class="example-margin"
-      [checked]="entriesManager().selected"
-      [indeterminate]="partiallyComplete()"
-      (change)="update($event.checked)"
+<div class="container d-flex flex-column">
+  <cdk-accordion class="accordion d-flex flex-column flex-grow-1">
+    @for (group of this.entries | keyvalue; track group.key; let groupIndex =
+    $index) {
+    <cdk-accordion-item
+      #accordionItem="cdkAccordionItem"
+      class="accordion-item"
     >
-      {{ entriesManager().name }}
-    </mat-checkbox>
-  </span>
-  <span class="example-list-section">
-    <ul>
-      @for (entry of entriesManager().entries; track entry; let i = $index) {
-      <li>
-        <mat-checkbox
-          [checked]="entry.selected"
-          (change)="update($event.checked, i)"
+      <div class="d-flex flex-row align-items-center">
+        <button
+          class="accordion-item-header"
+          (click)="accordionItem.toggle()"
+          tabindex="0"
+          [attr.id]="'accordion-header-' + groupIndex"
+          [attr.aria-expanded]="accordionItem.expanded"
+          [attr.aria-controls]="'accordion-body-' + groupIndex"
         >
-          {{ entry.name }}
-        </mat-checkbox>
-      </li>
-      }
-    </ul>
-  </span>
-</section> -->
-<!-- <cdk-accordion class="accordion d-flex flex-column">
-@for (category of this.profileEntryCategoryOptions; track category; let categoryIndex = $index) {
-<cdk-accordion-item #accordionItem="cdkAccordionItem" class="accordion-item">
-  <div class="d-flex flex-row align-items-center">
-    <button
-      class="accordion-item-header"
-      (click)="accordionItem.toggle()"
-      tabindex="0"
-      [attr.id]="'accordion-header-' + categoryIndex"
-      [attr.aria-expanded]="accordionItem.expanded"
-      [attr.aria-controls]="'accordion-body-' + categoryIndex"
-    >
-      {{ category.key }}
-    </button>
-  </div>
-  <ng-container *ngIf="accordionItem.expanded">
-    <div
-      class="accordion-item-body"
-      role="region"
-      [style.display]="accordionItem.expanded ? '' : 'none'"
-      [attr.id]="'accordion-body-' + categoryIndex"
-      [attr.aria-labelledby]="'accordion-header-' + categoryIndex"
-    >
-      <ul>
-        <ng-container
-          class="d-flex flex-row w-100 mb-3 align-items-start"
-          *ngFor="let entry of entries"
-        >        
-          @if(entry.category === category.value ) {
-          <li class="mb-2" style="list-style: none">
-            <mat-checkbox
-              [checked]="false"
-              (change)="update($event.checked, 0)"
-            >
-              <div>
-                <div class="mb-1">
-                  <div style="font-weight: 500">
-                    {{ entry.title }}
-                  </div>
-                </div>
-                <div class="mb-1 d-flex flex-row">
-                  <div *ngIf="entry.organization">
-                    {{ entry.organization + " - " }}
-                  </div>
-                  <div *ngIf="entry.location">
-                    {{ entry.location }}
-                  </div>
-                </div>
-                <div class="mb-1">
-                  <div>
-                    {{
-                      ProfileEntryHelperMethods.getTimeframe(
-                        entry.startDate,
-                        entry.endDate
-                      )
-                    }}
-                  </div>
-                </div>
-              </div>
-            </mat-checkbox>
-          </li>
-          }
-        </ng-container>
-      </ul>
-    </div>
-  </ng-container>
-</cdk-accordion-item>
-}
-</cdk-accordion> -->
-
-<cdk-accordion class="accordion d-flex flex-column">
-  @for (group of this.entries | keyvalue; track group.key; let groupIndex =
-  $index) {
-  <cdk-accordion-item #accordionItem="cdkAccordionItem" class="accordion-item">
-    <div class="d-flex flex-row align-items-center">
-      <button
-        class="accordion-item-header"
-        (click)="accordionItem.toggle()"
-        tabindex="0"
-        [attr.id]="'accordion-header-' + groupIndex"
-        [attr.aria-expanded]="accordionItem.expanded"
-        [attr.aria-controls]="'accordion-body-' + groupIndex"
-      >
-        {{ group.key }}
-      </button>
-    </div>
-    <ng-container *ngIf="accordionItem.expanded">
-      <div
-        class="accordion-item-body"
-        role="region"
-        [style.display]="accordionItem.expanded ? '' : 'none'"
-        [attr.id]="'accordion-body-' + groupIndex"
-        [attr.aria-labelledby]="'accordion-header-' + groupIndex"
-      >
-        <ul>
-          <ng-container
-            class="d-flex flex-row w-100 mb-3 align-items-start"
-            *ngFor="let entry of group.value"
-          >
-            <li class="mb-2" style="list-style: none">
-              <mat-checkbox
-                [checked]="this.isSelected(entry.id)"
-                (change)="this.toggleEntrySelection(entry.id)"
-              >
-                <div>
-                  <div class="mb-1">
-                    <div style="font-weight: 500">
-                      {{ entry.title }}
-                    </div>
-                  </div>
-                  <div class="mb-1 d-flex flex-row">
-                    <div *ngIf="entry.organization">
-                      {{ entry.organization + " - " }}
-                    </div>
-                    <div *ngIf="entry.location">
-                      {{ entry.location }}
-                    </div>
-                  </div>
-                  <div class="mb-1">
-                    <div>
-                      {{
-                        ProfileEntryHelperMethods.getTimeframe(
-                          entry.startDate,
-                          entry.endDate
-                        )
-                      }}
-                    </div>
-                  </div>
-                </div>
-              </mat-checkbox>
-            </li>
-          </ng-container>
-        </ul>
+          {{ group.key }}
+        </button>
       </div>
-    </ng-container>
-  </cdk-accordion-item>
-  }
-</cdk-accordion>
-<div class="justify-content-end d-flex mt-3">
-  <button
-    type="submit"
-    class="btn btn-success mx-2"
-    (click)="save()"    
-  >
-    {{ acceptButtonText }}
-  </button>
-  <button type="button" class="btn btn-secondary" (click)="cancel()">
-    Cancel
-  </button>
-</div>
-
-<!-- <section class="example-section">
-  @if(isLoading){
-  <div class="w-100 text-center">
-    <div class="spinner-border" style="width: 3rem; height: 3rem" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
-  }@else { @if(this.entriesManager().entries===undefined ||
-  this.entriesManager().entries!.length === 0){
-  <div>No entries available</div>
-  } @else {
-  <span class="example-list-section">
-    <mat-checkbox
-      class="example-margin"
-      [checked]="entriesManager().selected"
-      [indeterminate]="partiallyComplete()"
-      (change)="update($event.checked)"
-    >
-      {{ entriesManager().name }}
-    </mat-checkbox>
-  </span>
-  <span class="example-list-section">
-    <ul>
-      @for (entry of this.entriesManager().entries; track entry; let i = $index)
-      {
-      <li class="mb-2" style="list-style: none">
-        <mat-checkbox [checked]="false" (change)="update($event.checked, i)">
-          <div>
-            <div class="mb-1">
-              <div style="font-weight: 500">
-                {{ entry.item.title }}
-              </div>
-            </div>
-            <div class="mb-1 d-flex flex-row">
-              <div *ngIf="entry.item.organization">
-                {{ entry.item.organization + " - " }}
-              </div>
-              <div *ngIf="entry.item.location">
-                {{ entry.item.location }}
-              </div>
-            </div>
-            <div class="mb-1">
-              <div>
-                {{
-                  ProfileEntryHelperMethods.getTimeframe(
-                    entry.item.startDate,
-                    entry.item.endDate
-                  )
-                }}
-              </div>
-            </div>
-          </div>
-        </mat-checkbox>
-      </li>
-      }
-    </ul>
-  </span>
-  } }
-  <div class="justify-content-end d-flex">
-    <button
-      type="submit"
-      class="btn btn-success mx-2"
-      (click)="save()"
-      [disabled]="
-        this.entriesManager().entries === undefined ||
-        this.entriesManager().entries!.length === 0
-      "
-    >
+      <ng-container *ngIf="accordionItem.expanded">
+        <div
+          class="accordion-item-body"
+          role="region"
+          [style.display]="accordionItem.expanded ? '' : 'none'"
+          [attr.id]="'accordion-body-' + groupIndex"
+          [attr.aria-labelledby]="'accordion-header-' + groupIndex"
+        >
+          <ul>
+            <ng-container
+              class="d-flex flex-row w-100 mb-3 align-items-start"
+              *ngFor="let entry of group.value"
+            >
+              <li class="mb-2" style="list-style: none">
+                <mat-checkbox
+                  [checked]="this.isSelected(entry.id)"
+                  (change)="this.toggleEntrySelection(entry.id)"
+                >
+                  <div>
+                    <div class="mb-1">
+                      <div style="font-weight: 500">
+                        {{ entry.title }}
+                      </div>
+                    </div>
+                    <div class="mb-1 d-flex flex-row">
+                      <div *ngIf="entry.organization">
+                        {{ entry.organization + " - " }}
+                      </div>
+                      <div *ngIf="entry.location">
+                        {{ entry.location }}
+                      </div>
+                    </div>
+                    <div class="mb-1">
+                      <div>
+                        {{
+                          ProfileEntryHelperMethods.getTimeframe(
+                            entry.startDate,
+                            entry.endDate
+                          )
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                </mat-checkbox>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </ng-container>
+    </cdk-accordion-item>
+    }
+  </cdk-accordion>
+  <div class="justify-content-end d-flex mt-3">
+    <button type="submit" class="btn btn-success mx-2" (click)="save()">
       {{ acceptButtonText }}
     </button>
     <button type="button" class="btn btn-secondary" (click)="cancel()">
       Cancel
     </button>
   </div>
-</section> -->
+</div>

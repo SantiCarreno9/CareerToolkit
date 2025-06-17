@@ -3,9 +3,9 @@ import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { Resume } from '../shared/models/resume';
 import { ResumeCreatorComponent } from '../resume-creator/resume-creator.component';
-import { ResumeService } from '../shared/resume.service';
 import { Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog.component';
+import { ResumeService } from '../../core/services/resume.service';
 
 @Component({
   selector: 'app-resume-list',
@@ -47,7 +47,7 @@ export class ResumeListComponent
   protected openResumeCreatorDialog(quickResume: boolean): void
   {
     const dialogRef = this.dialog.open(ResumeCreatorComponent, {
-      width: '500px',
+      minWidth: '500px',
       data: {
         quickResume: quickResume
       },

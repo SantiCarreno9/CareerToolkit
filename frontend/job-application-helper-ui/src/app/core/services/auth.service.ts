@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@angular/core';
-import { RegisterModel } from './models/registermodel';
-import { LoginModel } from './models/loginmodel';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { map, Observable, Subject, tap } from 'rxjs';
-import { UserBasicInfo } from './models/user-basic-info';
 import { RequestResponse as CustomResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
+import { UserBasicInfo } from '../../auth/shared/models/user-basic-info';
+import { RegisterModel } from '../../auth/shared/models/registermodel';
+import { LoginModel } from '../../auth/shared/models/loginmodel';
 
 @Injectable({
   providedIn: 'root'

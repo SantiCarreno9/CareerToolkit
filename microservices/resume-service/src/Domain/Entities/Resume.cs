@@ -10,6 +10,7 @@ public class Resume : Entity
     public List<ProfileEntry> ProfileEntries { get; set; }
     public string ResumeInfo { get; set; }
     public List<string> Keywords { get; set; }
+    public string? JobPosting {  get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ModifiedAt { get; set; }
 

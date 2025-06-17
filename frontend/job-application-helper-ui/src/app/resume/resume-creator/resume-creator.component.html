@@ -7,13 +7,23 @@
       (onCancel)="cancel()"
     ></app-resume-basic-info-form>
     } @if(currentPage==ResumeCreatorPages.ProfileEntriesImporter){
+    @if(this.resume.jobPosting!==null){
+    <app-ai-profile-entries-importer
+      style="width: 700px"
+      [jobPosting]="this.resume.jobPosting"
+      [acceptButtonText]="'Next'"
+      [entries]="entriesForImporter"
+      (onSubmit)="importProfileEntries($event)"
+      (onCancel)="cancel()"
+    ></app-ai-profile-entries-importer>
+    }@else {
     <app-profile-entries-importer
       [acceptButtonText]="'Next'"
       [entries]="entriesForImporter"
       (onSubmit)="importProfileEntries($event)"
       (onCancel)="cancel()"
     ></app-profile-entries-importer>
-    } @if(currentPage==ResumeCreatorPages.TemplateSelector){
+    } } @if(currentPage==ResumeCreatorPages.TemplateSelector){
     <app-resume-template-selector
       [acceptButtonText]="'Create'"
       (onSelectTemplate)="selectTemplate($event)"

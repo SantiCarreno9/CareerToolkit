@@ -28,6 +28,7 @@ internal sealed class CreateResumeCommandHandler(
             ProfileEntries = command.ProfileEntries,
             ResumeInfo = command.ResumeInfo,
             Keywords = command.Keywords,
+            JobPosting = command.JobPosting,
             CreatedAt = dateTimeProvider.UtcNow,
             ModifiedAt = dateTimeProvider.UtcNow
         };
@@ -43,6 +44,7 @@ internal sealed class CreateResumeCommandHandler(
             resume.ProfileEntries.ToResponse(),
             resume.ResumeInfo,
             resume.Keywords,
+            resume.JobPosting,
             resume.CreatedAt,
             resume.ModifiedAt);
     }

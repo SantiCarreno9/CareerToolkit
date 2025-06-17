@@ -20,7 +20,7 @@ export class ResumeSectionCreatorComponent
   protected sections: any[] = [];
   protected newSectionIndex: number;
 
-  protected resumeSectionType: ResumeSectionType = ResumeSectionType.Text;
+  protected resumeSectionType: ResumeSectionType = ResumeSectionType.ProfileEntry;
 
   @Output() onSubmit = new EventEmitter<any[]>();
   @Output() onCancel = new EventEmitter<void>();
@@ -51,6 +51,11 @@ export class ResumeSectionCreatorComponent
     return this.sectionCreatorForm.get('content');
   }
 
+  protected doesSummarySkillsSectionExist(): boolean
+  {
+    return this.sections.some((section: SectionInfoBase) => section.sectionType === ResumeSectionType.Summary);
+  }
+
   protected typeSelectionChanged(selection: MatRadioChange<ResumeSectionType>): void
   {
     this.resumeSectionType = selection.value;
@@ -71,9 +76,12 @@ export class ResumeSectionCreatorComponent
       console.error('Form is invalid');
       return;
     }
-    this.sections[this.newSectionIndex] = (this.resumeSectionType === ResumeSectionType.Text) ?
-      new SectionInfoText(this.sections.length.toString(), this.sectionCreatorForm.value.title, '') :
-      new SectionInfoProfileEntry(this.sections.length.toString(), this.sectionCreatorForm.value.title, []);
+    this.sections[this.newSectionIndex] = (this.resumeSectionType === ResumeSectionType.ProfileEntry) ?
+      new SectionInfoProfileEntry(this.newSectionIndex.toString(), this.sectionCreatorForm.value.title, []) :
+      new SectionInfoText(this.newSectionIndex.toString(), this.sectionCreatorForm.value.title, '', this.resumeSectionType);
+    for (let i = 0; i < this.sections.length; i++){
+      this.sections[i].id = i.toString();
+    }
     this.onSubmit.emit(this.sections);
   }
 

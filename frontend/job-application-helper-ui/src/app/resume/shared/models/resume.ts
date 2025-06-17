@@ -10,6 +10,7 @@ export class Resume
     profileEntries: ProfileEntry[];
     resumeInfo: ResumeInfo;
     keywords: string[];
+    jobPosting: string | null = null;
     createdAt: Date;
     modifiedAt: Date;
 

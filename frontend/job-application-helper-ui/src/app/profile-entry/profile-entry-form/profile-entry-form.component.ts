@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
@@ -17,8 +17,8 @@ export class ProfileEntryFormComponent
 {
 
   readonly profileEntryFormGroup: FormGroup;
-  ProfileEntryCategory = ProfileEntryCategory;
-  profileEntry: ProfileEntry = {
+  protected ProfileEntryCategory = ProfileEntryCategory;
+  @Input() profileEntry: ProfileEntry = {
     id: '',
     title: '',
     category: ProfileEntryCategory.Education,
@@ -30,7 +30,7 @@ export class ProfileEntryFormComponent
     description: ''
   };
 
-  descriptionQuillModules = {
+  protected descriptionQuillModules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
       [{ 'header': [1, 2, false] }],
@@ -107,7 +107,7 @@ export class ProfileEntryFormComponent
     return this.profileEntryFormGroup.get('description');
   }
 
-  submit():void
+  protected submit():void
   {
     if (this.profileEntryFormGroup.invalid)
     {
@@ -126,7 +126,7 @@ export class ProfileEntryFormComponent
     this.onSubmit.emit(updatedEntry);
   }
 
-  cancel():void
+  protected cancel():void
   {
     this.onCancel.emit();
   }

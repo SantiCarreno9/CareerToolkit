@@ -30,7 +30,9 @@ a {
   p {
     flex: 1;
     text-align: center;
-    min-width: 33%;
+    word-wrap:break-word;
+    word-break: keep-all;
+    width: 30%;
   }
 
   a {

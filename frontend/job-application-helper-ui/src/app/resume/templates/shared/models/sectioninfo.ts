@@ -10,9 +10,9 @@ export class SectionInfoBase
 export class SectionInfoText extends SectionInfoBase
 {
 
-    constructor(id: string, title: string, public content: string)
+    constructor(id: string, title: string, public content: string, sectionType: ResumeSectionType = ResumeSectionType.Text)
     {
-        super(id, title, ResumeSectionType.Text);
+        super(id, title, sectionType);
     }
 }
 

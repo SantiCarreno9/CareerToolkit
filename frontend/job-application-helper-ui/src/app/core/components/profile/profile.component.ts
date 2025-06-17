@@ -1,12 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { UserInfoFormComponent } from '../../../user/user-info-form/user-info-form.component';
 import { UserInfo } from '../../../user/shared/models/userinfo';
-import { UserService } from '../../../user/shared/user.service';
 import { UserInfoViewComponent } from "../../../user/user-info-view/user-info-view.component";
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { UpdateUserInfoModel } from '../../../user/shared/models/updateuserinfomodel';
 import { map, Observable } from 'rxjs';
-import { ProfileEntryService } from '../../../profile-entry/shared/profile-entry.service';
 import { ProfileEntryViewComponent } from '../../../profile-entry/profile-entry-view/profile-entry-view.component';
 import { ProfileEntryFormComponent } from '../../../profile-entry/profile-entry-form/profile-entry-form.component';
 import { ProfileEntryCategory } from '../../../core/enums/profile-entry-category';
@@ -14,7 +12,8 @@ import { CommonModule } from '@angular/common';
 import { ProfileEntry } from '../../../profile-entry/shared/models/profile-entry';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ProfileEntryHelperMethods } from '../../../profile-entry/shared/profile-entry-helper-methods';
-import { HelperMethods } from '../../helper-methods';
+import { ProfileEntryService } from '../../services/profile-entry.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -24,9 +23,9 @@ import { HelperMethods } from '../../helper-methods';
 })
 export class ProfileComponent
 {
-  dialog = inject(Dialog);
-  userService: UserService = inject(UserService);
-  profileEntryService: ProfileEntryService = inject(ProfileEntryService);
+  protected dialog = inject(Dialog);
+  protected userService: UserService = inject(UserService);
+  protected profileEntryService: ProfileEntryService = inject(ProfileEntryService);
 
   protected userInfo: UserInfo = {
     id: '',
@@ -154,7 +153,7 @@ export class ProfileComponent
       {
         if (response.success && response.value)
         {
-          result.id = response.value;          
+          result.id = response.value;
           this.profileEntries.push(result);
           ProfileEntryHelperMethods.sortEntries(this.profileEntries);
           dialogRef.close(result);
@@ -170,22 +169,12 @@ export class ProfileComponent
     });
   }
 
-  protected openEditProfileEntryDialog(profileEntry?: ProfileEntry): void
+  protected openEditProfileEntryDialog(profileEntry: ProfileEntry): void
   {
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
       data: {
-        profileEntry: profileEntry || {
-          id: '',
-          title: '',
-          organization: '',
-          startDate: new Date(),
-          endDate: new Date(),
-          isCurrent: false,
-          location: '',
-          description: '',
-          category: ProfileEntryCategory.WorkExperience
-        }
+        profileEntry: profileEntry
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true
@@ -195,7 +184,7 @@ export class ProfileComponent
       this.profileEntryService.updateProfileEntry(result.id, result).subscribe(response =>
       {
         if (response.success)
-        {          
+        {
           const index = this.profileEntries.findIndex(pe => pe.id === result.id);
           this.profileEntries[index] = { ...result };
           ProfileEntryHelperMethods.sortEntries(this.profileEntries);

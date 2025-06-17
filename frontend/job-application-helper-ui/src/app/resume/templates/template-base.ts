@@ -2,12 +2,11 @@ import { Component, inject, Input, OnInit } from "@angular/core";
 import { ProfileEntryCategory } from "../../core/enums/profile-entry-category";
 import { Resume } from "../shared/models/resume";
 import { ResumeInfo } from "../shared/models/resume-info";
-import { SectionInfoProfileEntry, SectionInfoText } from "./shared/models/sectioninfo";
 import { CommonModule } from "@angular/common";
 import { BasicResumeSections } from "../shared/models/basic-resume-sections";
-import { ResumeService } from "../shared/resume.service";
 import { ResumeTemplateService } from "./shared/resume-template.service";
 import { ResumeTemplateInfo } from "../shared/models/resume-template";
+import { ResumeService } from "../../core/services/resume.service";
 
 @Component({
     selector: 'app-resume-template-1',
@@ -16,10 +15,12 @@ import { ResumeTemplateInfo } from "../shared/models/resume-template";
 })
 export abstract class TemplateBase implements OnInit
 {
-    resumeInfo: ResumeInfo;
     protected resumeService = inject(ResumeService);
     protected templateService = inject(ResumeTemplateService);
+
     @Input() resume: Resume = new Resume();
+    
+    resumeInfo: ResumeInfo;        
 
     constructor()
     {

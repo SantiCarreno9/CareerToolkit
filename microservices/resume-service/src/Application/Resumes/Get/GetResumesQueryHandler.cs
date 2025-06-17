@@ -31,6 +31,7 @@ internal sealed class GetResumesQueryHandler(
                 r.ProfileEntries.ToResponse(),
                 r.ResumeInfo,
                 r.Keywords,
+                r.JobPosting,
                 r.CreatedAt,
                 r.ModifiedAt
             ));

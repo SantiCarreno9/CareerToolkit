@@ -15,7 +15,8 @@ internal sealed class Create : IEndpoint
     UserInfo UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
-    List<string> Keywords);
+    List<string> Keywords,
+    string? JobPosting);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -29,7 +30,8 @@ internal sealed class Create : IEndpoint
                 request.UserInfo,
                 request.ProfileEntries,
                 request.ResumeInfo,
-                request.Keywords
+                request.Keywords,
+                request.JobPosting
                 );
             Result<ResumeResponse> result = await handler.Handle(command, cancellationToken);
 

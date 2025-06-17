@@ -1,6 +1,5 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResumeService } from '../shared/resume.service';
 import { Resume } from '../shared/models/resume';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
@@ -9,12 +8,10 @@ import { UserInfo } from '../../user/shared/models/userinfo';
 import { UserPersonalInfo } from '../shared/models/userpersonalinfo';
 import { UserInfoFormComponent } from '../../user/user-info-form/user-info-form.component';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { UserService } from '../../user/shared/user.service';
-import { ProfileEntryService } from '../../profile-entry/shared/profile-entry.service';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { ProfileEntryFormComponent } from '../../profile-entry/profile-entry-form/profile-entry-form.component';
 import { ProfileEntryViewComponent } from '../../profile-entry/profile-entry-view/profile-entry-view.component';
-import { SectionInfoProfileEntry, SectionInfoText } from '../templates/shared/models/sectioninfo';
+import { SectionInfoText } from '../templates/shared/models/sectioninfo';
 import { ResumeTemplateService } from '../templates/shared/resume-template.service';
 import { TextSectionFormComponent } from './components/text-section-form/text-section-form.component';
 import { TextSectionViewComponent } from "./components/text-section-view/text-section-view.component";
@@ -22,11 +19,17 @@ import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
 import { ResumeSectionCreatorComponent } from './components/resume-section-creator/resume-section-creator.component';
 import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog.component';
 import { ResumeSectionEditorComponent } from './components/resume-section-editor/resume-section-editor.component';
-import { ResumeBasicInfoFormComponent } from './components/resume-basic-info-form/resume-basic-info-form.component';
 import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
 import { ProfileEntriesImporterComponent } from '../shared/components/profile-entries-importer/profile-entries-importer.component';
-import { HelperMethods } from '../../core/helper-methods';
 import { ResumeSectionType } from '../shared/models/resume-section-type';
+import { AiProfileEntryFormComponent } from './components/ai-profile-entry-form/ai-profile-entry-form.component';
+import { UserInfoHelperMethods } from '../../user/shared/user-info-helper-methods';
+import { ProfileEntryService } from '../../core/services/profile-entry.service';
+import { ResumeService } from '../../core/services/resume.service';
+import { UserService } from '../../core/services/user.service';
+import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
+import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
+import { AiTextSectionFormComponent } from './components/ai-text-section-form/ai-text-section-form.component';
 
 @Component({
   selector: 'app-resume-editor',
@@ -36,15 +39,6 @@ import { ResumeSectionType } from '../shared/models/resume-section-type';
 })
 export class ResumeEditorComponent
 {
-  protected expandedIndex = 0;
-
-  @ViewChild(NgComponentOutlet, { static: false }) ngComponentOutlet?: NgComponentOutlet;
-
-  private readonly resumeId: string | null;
-  protected resume: Resume = new Resume();
-  protected template: any;
-  protected isSaving: boolean = false;
-
   private dialog = inject(Dialog);
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
@@ -52,6 +46,17 @@ export class ResumeEditorComponent
   protected templateService = inject(ResumeTemplateService);
   private userService: UserService = inject(UserService);
   private profileEntryService = inject(ProfileEntryService);
+
+  @ViewChild(NgComponentOutlet, { static: false }) ngComponentOutlet?: NgComponentOutlet;
+
+  UserInfoHelperMethods = UserInfoHelperMethods;
+
+  protected expandedIndex = 0;
+
+  private readonly resumeId: string | null;
+  protected resume: Resume = new Resume();
+  protected template: any;
+  protected isSaving: boolean = false;
 
   constructor()
   {
@@ -71,17 +76,7 @@ export class ResumeEditorComponent
     return 'Last time saved: ' + time;
   }
 
-  protected convertToUserInfo(info: UserPersonalInfo): UserInfo
-  {
-    return {
-      id: '',
-      fullName: info.fullName,
-      phoneNumber: info.phoneNumber,
-      address: info.address,
-      email: info.email,
-      additionalContactInfo: info.additionalContactInfo
-    };
-  }
+
 
   //#region Requests
 
@@ -133,6 +128,7 @@ export class ResumeEditorComponent
 
   protected exportPDF(): void
   {
+    document.title = this.resume.name;
     window.print();
   }
 
@@ -172,15 +168,17 @@ export class ResumeEditorComponent
       width: '500px',
       data: {
         name: this.resume.name,
-        keywords: this.resume.keywords
+        keywords: this.resume.keywords,
+        jobPosting: this.resume.jobPosting
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true
     });
-    dialogRef.componentInstance?.onSave.subscribe((result: any) =>
+    dialogRef.componentInstance?.onSave.subscribe((result: ResumeBasicInfo) =>
     {
       this.resume.name = result.name;
       this.resume.keywords = result.keywords;
+      this.resume.jobPosting = result.jobPosting || null;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -271,7 +269,7 @@ export class ResumeEditorComponent
     if (this.resume.resumeInfo.sections.length < index)
       return;
 
-    ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Entry', `Do you want to delete this entry?`, () =>
+    ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Section', `Do you want to delete this section?`, () =>
     {
       this.resume.resumeInfo.sections.splice(index, 1);
     });
@@ -285,6 +283,29 @@ export class ResumeEditorComponent
       width: '500px',
       data: {
         sectionInfo: sectionInfo
+      },
+      panelClass: ['custom-dialog-container', 'p-3'],
+      disableClose: true
+    });
+    dialogRef.componentInstance?.onSubmit.subscribe((result: SectionInfoText) =>
+    {
+      this.resume.resumeInfo.sections[sectionIndex].title = result.title;
+      this.resume.resumeInfo.sections[sectionIndex].content = result.content;
+      dialogRef.close();
+    })
+    dialogRef.componentInstance?.onCancel.subscribe(() =>
+    {
+      dialogRef.close();
+    });
+  }
+
+  protected openAiSectionFormDialog(sectionInfo: SectionInfoText, sectionIndex: number): void
+  {
+    const dialogRef = this.dialog.open(AiTextSectionFormComponent, {
+      width: '800px',
+      data: {
+        sectionInfo: sectionInfo,
+        resume: this.resume
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true
@@ -364,6 +385,33 @@ export class ResumeEditorComponent
     });
   }
 
+  protected openAIEditProfileEntryDialog(profileEntry: ProfileEntry, sectionIndex: number): void
+  {
+    const dialogRef = this.dialog.open(AiProfileEntryFormComponent, {
+      width: '800px',
+      data: {
+        profileEntry: profileEntry,
+        resume: this.resume
+      },
+      panelClass: ['custom-dialog-container', 'p-3'],
+      disableClose: true
+    });
+    dialogRef.componentInstance?.onSubmit.subscribe((result: ProfileEntry) =>
+    {
+      const entryIndex = this.resume.profileEntries.findIndex(pe => pe.id === result.id);
+      if (entryIndex !== -1)
+      {
+        this.resume.profileEntries[entryIndex] = result;
+        this.sortEntries(sectionIndex);
+      }
+      dialogRef.close();
+    })
+    dialogRef.componentInstance?.onCancel.subscribe(() =>
+    {
+      dialogRef.close();
+    });
+  }
+
   protected getProfileEntryById(id: string): ProfileEntry | any
   {
     return this.resume.profileEntries.find(r => r.id === id);
@@ -427,7 +475,7 @@ export class ResumeEditorComponent
   }
 
   protected openImportProfileEntriesFromOtherSectionsDialog(sectionIndex: number): void
-  {    
+  {
     const sections = this.resume.resumeInfo.sections.filter((s, index) => index !== sectionIndex && s.sectionType === ResumeSectionType.ProfileEntry);
     if (sections.length === 0)
       return;
@@ -451,12 +499,13 @@ export class ResumeEditorComponent
       disableClose: true
     });
     dialogRef.componentInstance?.onSubmit.subscribe((result: ProfileEntry[]) =>
-    {      
+    {
       const entriesIds = result.map(e => e.id);
-      for (const section of sections){
-        section.entriesId = section.entriesId.filter((id:string) => !entriesIds.includes(id));
+      for (const section of sections)
+      {
+        section.entriesId = section.entriesId.filter((id: string) => !entriesIds.includes(id));
       }
-      this.resume.resumeInfo.sections[sectionIndex].entriesId.push(...entriesIds);      
+      this.resume.resumeInfo.sections[sectionIndex].entriesId.push(...entriesIds);
       this.sortEntries(sectionIndex);
       dialogRef.close();
     })

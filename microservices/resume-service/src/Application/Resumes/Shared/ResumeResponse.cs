@@ -9,5 +9,6 @@ public sealed record ResumeResponse(
     List<ProfileEntryResponse> ProfileEntries,
     string ResumeInfo,
     List<string> Keywords,
+    string? JobPosting,
     DateTime CreatedAt,
     DateTime ModifiedAt);

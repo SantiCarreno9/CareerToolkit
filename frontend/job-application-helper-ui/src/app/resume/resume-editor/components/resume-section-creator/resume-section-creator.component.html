@@ -24,11 +24,16 @@
       (change)="typeSelectionChanged($event)"
       [value]="resumeSectionType"
     >
-      <mat-radio-button class="m-1" [value]="ResumeSectionType.Text">
-        <div>{{ ResumeSectionType.Text }}</div>
-      </mat-radio-button>
       <mat-radio-button class="m-1" [value]="ResumeSectionType.ProfileEntry">
         <div>{{ ResumeSectionType.ProfileEntry }}</div>
+      </mat-radio-button>
+      @if(!doesSummarySkillsSectionExist()){
+      <mat-radio-button class="m-1" [value]="ResumeSectionType.Summary">
+        <div>{{ ResumeSectionType.Summary }}</div>
+      </mat-radio-button>
+      }
+      <mat-radio-button class="m-1" [value]="ResumeSectionType.Text">
+        <div>{{ ResumeSectionType.Text }}</div>
       </mat-radio-button>
     </mat-radio-group>
     <div cdkDropList class="drag-drop-list" (cdkDropListDropped)="drop($event)">

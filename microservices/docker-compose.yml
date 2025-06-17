@@ -51,6 +51,18 @@ services:
     networks:
         - proxy-backend 
 
+  ai-service-api:
+    image: ${DOCKER_REGISTRY-}aiapi
+    container_name: ai-service-api
+    build:
+        context: .
+        dockerfile: ai-service/src/Web.Api/Dockerfile
+    ports:
+        - "5400:5400"
+        - "5401:5401"        
+    networks:
+        - proxy-backend 
+
 networks:
   proxy-backend:
     name: proxybackend

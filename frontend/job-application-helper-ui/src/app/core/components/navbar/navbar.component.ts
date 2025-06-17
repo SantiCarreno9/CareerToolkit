@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../auth/shared/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,8 +10,8 @@ import { AuthService } from '../../../auth/shared/auth.service';
 })
 export class NavbarComponent implements OnInit
 {  
-  authService: AuthService = inject(AuthService);
-  route: Router = inject(Router);
+  protected authService: AuthService = inject(AuthService);
+  protected route: Router = inject(Router);
 
   protected userName: string = '';
   protected isLoggedIn: boolean = false;
@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit
   ngOnInit(): void
   {
     this.authService.onLoggedInStatusChange.subscribe({
-      next: (isLoggedIn) =>
+      next: (isLoggedIn:boolean) =>
       {
         console.log('NavbarComponent: isLoggedIn status changed:', isLoggedIn);
         this.isLoggedIn = isLoggedIn;

@@ -88,6 +88,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<string>("JobPosting")
+                        .HasColumnType("text")
+                        .HasColumnName("job_posting");
+
                     b.Property<string>("Keywords")
                         .IsRequired()
                         .HasColumnType("jsonb")

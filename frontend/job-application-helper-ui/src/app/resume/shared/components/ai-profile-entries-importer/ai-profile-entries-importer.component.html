@@ -1,0 +1,19 @@
+<div class="container d-flex flex-row h-100">
+  <app-profile-entries-importer
+    #profileEntriesImporter    
+    [entries]="this.entries"
+    [acceptButtonText]="acceptButtonText"
+    (onSubmit)="submit($event)"
+    (onCancel)="cancel()"
+  ></app-profile-entries-importer>
+  <!-- <app-profile-entry-form #profileEntryForm class="profile-entry-form" [profileEntry]="this.profileEntry" (onSubmit)="submit($event)" (onCancel)="cancel()"></app-profile-entry-form> -->
+  <div class="m-2" style="width: 1px; background-color: gray"></div>  
+  <app-ai-section-tool
+    class="container ai-section"
+    [submitButtonText]="'Select Entries'"
+    [responseText]="aiResponse"    
+    [instructionTypeOptions]="aiInstructionTypeOptions"
+    [areInstructionsOptional]="areInstructionsOptional"
+    (onSubmit)="submitAiInstruction($event)"
+  ></app-ai-section-tool>
+</div>

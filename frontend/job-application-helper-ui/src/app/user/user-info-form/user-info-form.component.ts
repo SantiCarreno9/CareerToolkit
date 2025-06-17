@@ -44,12 +44,10 @@ export class UserInfoFormComponent
         Validators.required,
         Validators.email
       ]),
-      phoneNumber: new FormControl(this.userInfo.phoneNumber, [
-        Validators.required,
+      phoneNumber: new FormControl(this.userInfo.phoneNumber, [        
         Validators.pattern('^[0-9]{10,15}$')
       ]),
-      address: new FormControl(this.userInfo.address, [
-        Validators.required,
+      address: new FormControl(this.userInfo.address, [        
       ])
     });
 

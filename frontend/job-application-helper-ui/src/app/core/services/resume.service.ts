@@ -3,11 +3,11 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
-import { Resume } from './models/resume';
 import { PagedList } from '../../core/models/pagedlist';
-import { CreateResumeCommandRequest, UpdateResumeCommandRequest } from './models/resume-command-request';
 import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
 import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-entry-helper-methods';
+import { Resume } from '../../resume/shared/models/resume';
+import { CreateResumeCommandRequest, UpdateResumeCommandRequest } from '../../resume/shared/models/resume-command-request';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +43,8 @@ export class ResumeService
         endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
       })),
       resumeInfo: JSON.stringify(data.resumeInfo),
-      keywords: data.keywords
+      keywords: data.keywords,
+      jobPosting: data.jobPosting ||''
     };
     return this.http.post(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<Resume>(res.status === 201, this.convertToResume(res.body), res.statusText)));
@@ -61,7 +62,8 @@ export class ResumeService
         endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
       })),
       resumeInfo: JSON.stringify(data.resumeInfo),
-      keywords: data.keywords
+      keywords: data.keywords,
+      jobPosting: data.jobPosting ||''
     };
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
@@ -92,6 +94,7 @@ export class ResumeService
     resume.createdAt = new Date(response.createdAt);
     resume.modifiedAt = new Date(response.modifiedAt);
     resume.keywords = response.keywords;
+    resume.jobPosting = response.jobPosting || null;
     return resume;
   }
 

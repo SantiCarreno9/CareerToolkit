@@ -3,10 +3,10 @@
     <button class="btn btn-outline-secondary" (click)="goBack()">
       <i class="bi bi-arrow-left"></i>
     </button>
-    <div>
-      <div class="title mx-2">
-        {{ resume.name
-        }}<i
+    <div class="mw-50" style="max-width: 60%">
+      <div class="title d-flex flex-row">
+        <div style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ resume.name
+        }}</div><i
           class="m-2 btn-icon bi bi-pencil"
           (click)="openEditBasicInfoFormDialog()"
         ></i>
@@ -20,11 +20,22 @@
           >{{ keyword }}</span
         >
       </div>
+      <div
+        class="form-control-plaintext"
+        style="
+          overflow: hidden;
+          text-overflow: ellipsis;          
+          white-space: nowrap;          
+        "
+      >
+        <strong>Job Posting:</strong>
+        {{ this.resume.jobPosting }}
+    </div>
       {{ this.modifiedAtTime }}
     </div>
 
-    <div class="title-buttons">
-      <button class="btn btn-success" [disabled]="isSaving" (click)="save()">
+    <div class="title-buttons d-flex flex-wrap flex-grow-1">
+      <button class="btn btn-success m-1" [disabled]="isSaving" (click)="save()">
         @if(!isSaving){ Save }@else {
         <span
           class="spinner-border spinner-border-sm"
@@ -33,8 +44,8 @@
         <span role="status">Saving...</span>
         }
       </button>
-      <button class="btn btn-secondary" (click)="reset()">Reset</button>
-      <button class="btn btn-primary" (click)="exportPDF()">Donwload</button>
+      <button class="btn btn-secondary m-1" (click)="reset()">Reset</button>
+      <button class="btn btn-primary m-1" (click)="exportPDF()">Donwload</button>
     </div>
   </div>
   <div class="d-flex flex-wrap">
@@ -75,7 +86,9 @@
             </button>
           </div>
           <app-user-info-view
-            [userInfo]="convertToUserInfo(this.resume.userInfo)"
+            [userInfo]="
+              UserInfoHelperMethods.convertToUserInfo(this.resume.userInfo)
+            "
           ></app-user-info-view>
         </div>
         }
@@ -121,14 +134,16 @@
                   <button
                     class="btn btn-icon"
                     style="font-size: 1.5rem"
-                    (click)="openSectionFormDialog(section, sectionIndex)"
+                    (click)="openAiSectionFormDialog(section, sectionIndex)"
                   >
                     <i class="bi bi-pencil-square"></i>
                   </button>
                 </div>
                 <div class="mw-75">
-                <app-text-section-view [info]="section"></app-text-section-view>
-                </div>                
+                  <app-text-section-view
+                    [info]="section"
+                  ></app-text-section-view>
+                </div>
               </div>
               } @else if(this.templateService.isSectionProfileEntry(section)){
 
@@ -142,7 +157,11 @@
                 </button>
                 <button
                   class="btn btn-primary mx-2"
-                  (click)="openImportProfileEntriesFromOtherSectionsDialog(sectionIndex)"
+                  (click)="
+                    openImportProfileEntriesFromOtherSectionsDialog(
+                      sectionIndex
+                    )
+                  "
                 >
                   Import From Other Section
                   <i class="bi bi-arrow-90deg-down"></i>
@@ -165,7 +184,7 @@
                   <button
                     class="btn btn-icon"
                     style="font-size: 1.2rem; flex-shrink: 1"
-                    (click)="openEditProfileEntryDialog(entry, sectionIndex)"
+                    (click)="openAIEditProfileEntryDialog(entry, sectionIndex)"
                   >
                     <i class="bi bi-pencil-square"></i>
                   </button>

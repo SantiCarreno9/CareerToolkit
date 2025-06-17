@@ -1,0 +1,12 @@
+services:
+  resumes-api:
+    image: ${DOCKER_REGISTRY-}resumesapi
+    container_name: resumes.api
+    build:
+      context: ./src/Web.Api
+      dockerfile: Dockerfile
+    ports:
+      - 5200:8080
+      - 5201:8081
+  
+    
