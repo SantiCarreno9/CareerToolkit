@@ -46,8 +46,7 @@ export class ResumeListComponent
 
   protected openResumeCreatorDialog(quickResume: boolean): void
   {
-    const dialogRef = this.dialog.open(ResumeCreatorComponent, {
-      minWidth: '500px',
+    const dialogRef = this.dialog.open(ResumeCreatorComponent, {      
       data: {
         quickResume: quickResume
       },

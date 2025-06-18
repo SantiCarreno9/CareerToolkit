@@ -10,10 +10,33 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.text{  
+.text {
   word-wrap: break-word;
   word-break: keep-all;
   white-space: normal;
+}
+
+.btn-primary {
+  background-color: black;
+  border-color: black;
+
+  &:hover {
+    background-color: white;
+    border-color: black;
+    color:black;
+  }
+
+  &:first-child:active {
+    background-color: gray;
+    border-color: black;
+    color: white;
+  }
+
+  &:disabled{
+    background-color: gray; 
+    color: black; 
+    border-color: black;  
+  }
 }
 
 .custom-dialog-container {
@@ -45,7 +68,7 @@ body {
 @media print {
   .navbar {
     display: none;
-  }  
+  }
 
   @page {
     padding: 0.6in;

@@ -14,6 +14,8 @@ export class LoginComponent
 {
   protected authService: AuthService = inject(AuthService);
   protected route = inject(Router);
+
+  protected isLoading:boolean=false;
   
   protected loginForm = new FormGroup({
     email: new FormControl('', [
@@ -46,8 +48,10 @@ export class LoginComponent
       email: this.loginForm.get('email')?.value ?? '',
       password: this.loginForm.get('password')?.value ?? ''
     }
+    this.isLoading=true;
     this.authService.loginWithCookies(loginData).subscribe(res =>
     {
+      this.isLoading=false;
       if (res.success)
       {        
         this.loginForm.reset();

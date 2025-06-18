@@ -1,6 +1,7 @@
 import { Component, Inject, inject, Input } from '@angular/core';
 import { UserInfo } from '../shared/models/userinfo';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { HelperMethods } from '../../core/helper-methods';
 
 @Component({
   selector: 'app-user-info-view',
@@ -10,6 +11,7 @@ import {CommonModule} from '@angular/common';
 })
 export class UserInfoViewComponent
 {
+  HelperMethods = HelperMethods;
   @Input() userInfo: UserInfo = {
     id: '',
     fullName: '',
@@ -17,5 +19,5 @@ export class UserInfoViewComponent
     phoneNumber: '',
     address: '',
     additionalContactInfo: {}
-  }  
+  }
 }
