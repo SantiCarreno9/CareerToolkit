@@ -24,7 +24,7 @@ export class ResumeBasicInfoFormComponent
     this.basicInfoForm = this.formBuilder.group({
       name: new FormControl(data.name, [
         Validators.required,
-        Validators.minLength(2)
+        Validators.minLength(5)
       ]),
       jobPosting: new FormControl(this.data.jobPosting)
     });
@@ -54,8 +54,7 @@ export class ResumeBasicInfoFormComponent
   }
 
   protected removeKeyword(key: string, index: number): void
-  {
-    console.log(key);
+  {    
     if (this.basicInfoForm.contains('keyword-' + key))
     {
       this.basicInfoForm.removeControl('keyword-' + key);
@@ -94,7 +93,9 @@ export class ResumeBasicInfoFormComponent
 
   protected cancel(): void
   {
-    this.onCancel.emit();
+    this.basicInfoForm.markAsUntouched();
+    this.basicInfoForm.clearValidators();
+    this.onCancel.emit();    
   }
 
 }

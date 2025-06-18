@@ -1,5 +1,5 @@
 <div class="d-flex flex-column justify-content-center">
-  <h2 style="text-align: center">Basic Information</h2>
+  <h2>Create New Resume</h2>
   <form [formGroup]="basicInfoForm" (submit)="save()" class="p-3">
     <div class="mb-3">
       <div class="form-floating mb-3">
@@ -10,10 +10,13 @@
           formControlName="name"
         />
         <label for="name">Name</label>
-        @if (name?.invalid && (name?.touched || name?.dirty)) {
+        @if (name?.invalid && (name?.touched || name?.dirty)) {        
         <div class="alert alert-danger p-2">
           @if (name?.hasError('required')) {
           <div>Name is required.</div>
+          }
+          @else if(name?.hasError('minLength')){
+            <div>Name is too short.</div>
           }
         </div>
         }
@@ -60,10 +63,10 @@
       </div>
     </div>
     <div class="justify-content-end d-flex">
-      <button type="submit" class="btn btn-success mx-2">
+      <button type="submit" class="btn btn-outline-dark mx-2" [disabled]="this.basicInfoForm.invalid">
         {{ acceptButtonText }}
       </button>
-      <button type="button" class="btn btn-secondary" (click)="cancel()">
+      <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
         Cancel
       </button>
     </div>

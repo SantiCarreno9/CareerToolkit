@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Users.Login;
+using Application.Users.LoginUserWithRefreshToken;
 using Microsoft.AspNetCore.Mvc;
 using SharedKernel;
 using Web.Api.Extensions;
@@ -7,20 +8,29 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Users;
 
-internal sealed class Login : IEndpoint
+internal sealed class RefreshToken : IEndpoint
 {
-    public sealed record Request(string Email, string Password);
+    public sealed record Request(string RefreshToken);
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost(EndpointsBase.BasePath + "/login", async (
+        app.MapPost(EndpointsBase.BasePath + "/refresh-token", async (
             bool? useCookies,
-            [FromBody] Request request,
-            ICommandHandler<LoginUserCommand, LoginUserResponse> handler,
+            [FromBody] Request? request,
+            ICommandHandler<LoginUserWithRefreshTokenCommand, LoginUserResponse> handler,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             CancellationToken cancellationToken) =>
         {
-            var command = new LoginUserCommand(request.Email, request.Password);
+            string? refreshToken;
+            httpContextAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out string? cookieRefreshToken);
+            refreshToken = request != null ? request.RefreshToken : cookieRefreshToken;
+
+            if (refreshToken == null)
+            {
+                return Results.BadRequest("No refresh Token was provided");
+            }
+
+            var command = new LoginUserWithRefreshTokenCommand(refreshToken);
 
             Result<LoginUserResponse> result = await handler.Handle(command, cancellationToken);
 

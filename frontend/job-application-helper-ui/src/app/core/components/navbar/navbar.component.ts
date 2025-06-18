@@ -9,22 +9,20 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit
-{  
+{
   protected authService: AuthService = inject(AuthService);
   protected route: Router = inject(Router);
 
   protected userName: string = '';
   protected isLoggedIn: boolean = false;
-  
+
   ngOnInit(): void
   {
-    this.authService.onLoggedInStatusChange.subscribe({
-      next: (isLoggedIn:boolean) =>
-      {
-        console.log('NavbarComponent: isLoggedIn status changed:', isLoggedIn);
-        this.isLoggedIn = isLoggedIn;
-        this.userName = this.authService.userBasicInfo.fullName.split(" ")[0]
-      }
+    this.authService.onLoggedInStatusChange$.subscribe((isLoggedIn: boolean) =>
+    {
+      console.log('NavbarComponent: isLoggedIn status changed:', isLoggedIn);
+      this.isLoggedIn = isLoggedIn;
+      this.userName = this.authService.userBasicInfo.fullName.split(" ")[0]
     });
   }
 

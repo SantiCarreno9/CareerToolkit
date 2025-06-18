@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, Subject, tap } from 'rxjs';
-import { RequestResponse as CustomResponse } from '../../core/models/requestresponse';
+import { RequestResponse as CustomResponse, RequestResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
 import { UserBasicInfo } from '../../auth/shared/models/user-basic-info';
 import { RegisterModel } from '../../auth/shared/models/registermodel';
 import { LoginModel } from '../../auth/shared/models/loginmodel';
+import { AuthEventService } from './auth-event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,9 @@ import { LoginModel } from '../../auth/shared/models/loginmodel';
 export class AuthService
 {
   private readonly baseUrl = environment.apiUrl + 'users';
-  onLoggedInStatusChange = new Subject<boolean>();
+  private onLoggedInStatusChange = new Subject<boolean>();
 
+  onLoggedInStatusChange$ = this.onLoggedInStatusChange.asObservable();
   isLoggedIn: boolean = false;
   userBasicInfo: UserBasicInfo = {
     fullName: '',
@@ -22,9 +24,13 @@ export class AuthService
     id: ''
   };
 
-  constructor(private http: HttpClient)
+  constructor(private http: HttpClient, private authEvents: AuthEventService)
   {
     this.isAuthenticated().subscribe();
+    this.authEvents.onUnauthorized$.subscribe(() =>
+    {
+      this.checkAuthState();
+    });
   }
 
   register(data: RegisterModel): Observable<CustomResponse<any>>
@@ -94,6 +100,36 @@ export class AuthService
           this.onLoggedInStatusChange.next(this.isLoggedIn);
         }
       })
+    );
+  }
+
+  private checkAuthState()
+  {
+    this.getCurrentUser().subscribe(res =>
+    {
+      if (!res.success)
+      {
+        this.refreshLoginWithCookies().subscribe();
+      }
+    });
+  }
+
+  refreshLoginWithCookies(): Observable<RequestResponse<any>>
+  {
+    return this.http.post(`${this.baseUrl}/refresh-token?useCookies=true`, null, { withCredentials: true, observe: 'response' }).pipe(
+      tap(res =>
+      {
+        if (res.status === 200)
+        {
+          this.isLoggedIn = true;
+          this.onLoggedInStatusChange.next(this.isLoggedIn);
+        } else
+        {
+          this.isLoggedIn = false;
+          this.onLoggedInStatusChange.next(this.isLoggedIn);
+        }
+      }),
+      map(res => new RequestResponse<void>(res.status === 200, null, res.statusText))
     );
   }
 }

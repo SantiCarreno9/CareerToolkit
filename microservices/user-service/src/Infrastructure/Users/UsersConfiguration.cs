@@ -13,11 +13,10 @@ internal sealed class UsersConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Address)
             .HasMaxLength(450);
 
-        builder.Property(u => u.AdditionalContactInfo)
-            .HasColumnType("jsonb")//PostgreSQL only
-                                   //Any
-                                    .HasConversion(
-                                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                                    v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, (JsonSerializerOptions)null));
+        builder.Property(u => u.AdditionalContactInfo)           
+            .HasColumnType("jsonb")//PostgreSQL only                                   
+            .HasConversion(
+            v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+            v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, (JsonSerializerOptions)null));
     }
 }
