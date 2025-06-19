@@ -60,16 +60,12 @@ export class ResumeTemplateService
   }
 
   isSectionText(section: any): boolean
-  {
-    // console.log('isSectionText', section);
-    // return section.content !== undefined;    
+  { 
     return section.sectionType === ResumeSectionType.Text || section.sectionType === ResumeSectionType.Summary;
   }
 
   isSectionProfileEntry(section: any): boolean
   {
-    // console.log('isSectionProfileEntry', section);
-    // return section.entriesId !== undefined;
     return section.sectionType === ResumeSectionType.ProfileEntry;
   }
 }

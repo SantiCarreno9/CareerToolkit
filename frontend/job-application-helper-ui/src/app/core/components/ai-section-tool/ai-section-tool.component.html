@@ -1,4 +1,4 @@
-<div class="tool-container d-flex flex-column flex-grow-1">
+<div class="tool-container d-flex flex-column flex-grow-1 mb-2">
   <form
     [formGroup]="aiSectionForm"
     (submit)="submit()"
@@ -22,6 +22,7 @@
           class="form-select m-2"
           aria-label="Default select example"
           formControlName="instructionType"
+          style="width: fit-content;"
           *ngIf="this.instructionTypeOptions.length > 1"
         >
           <!-- <option selected>Open this select menu</option> -->

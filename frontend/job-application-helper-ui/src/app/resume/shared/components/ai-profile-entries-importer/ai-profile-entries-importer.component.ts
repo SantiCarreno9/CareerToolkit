@@ -55,8 +55,7 @@ export class AiProfileEntriesImporterComponent
     this.aiService.selectExperienceEntries(resumeInstruction, experienceEntries).subscribe(res =>
     {
       if (res.success && res.value)
-      {
-        console.log(res.value);
+      {        
         const ids = res.value.map((id: string) => id.split(',')[0]);
         this.profileEntriesImporter?.selectEntries(ids);
         const reasons = res.value.map((id: string) => id.split(',')[1]);

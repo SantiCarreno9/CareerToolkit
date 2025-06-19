@@ -33,7 +33,7 @@ export class ResumeService
   }
 
   createResume(data: Resume): Observable<RequestResponse<Resume>>
-  {
+  {    
     const request: CreateResumeCommandRequest = {
       name: data.name,
       userInfo: data.userInfo,
