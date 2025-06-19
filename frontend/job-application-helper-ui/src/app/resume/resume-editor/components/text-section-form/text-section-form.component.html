@@ -1,14 +1,12 @@
 <div class="d-flex flex-column justify-content-center">
   <h2 style="text-align: center">Section</h2>
   <form [formGroup]="sectionInfoForm" (submit)="submit()" class="p-3">
-    <div class="mb-3">      
-      <div class="mb-3">
+    <div class="d-flex flex-column mb-3">            
         <label class="form-label">Content</label>
         <quill-editor
           [modules]="quillModules"
           formControlName="content"
-        ></quill-editor>
-      </div>
+        ></quill-editor>      
     </div>
     <div class="justify-content-end d-flex">
       <button type="submit" class="btn btn-success mx-2">Save</button>

@@ -2,13 +2,13 @@
   <div class="d-flex flex-column w-100">
     <h1 class="">Login</h1>
     <div class="">
-      <form [formGroup]="loginForm" (submit)="login()">
+      <form [formGroup]="loginForm" (submit)="login()" class="form">
         <div class="mb-3">
           <label for="email">Email address</label>
           <input
             id="email"
             type="email"
-            class="form-control"
+            class="form-control form-text-field"
             formControlName="email"
           />
           @if (email?.invalid && (email?.touched || email?.dirty)) {

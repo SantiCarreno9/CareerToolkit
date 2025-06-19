@@ -36,6 +36,11 @@ export class ResumeTemplateSelectorComponent
       this.onSelectTemplate.emit(this.selectedTemplate);
   }
 
+  isSelected(template: ResumeTemplateInfo): boolean
+  {
+    return this.selectedTemplate !== undefined && this.selectedTemplate.id == template.id;
+  }
+
   cancel(): void
   {
     this.onCancel.emit();

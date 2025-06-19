@@ -1,4 +1,15 @@
-<div class="container d-flex flex-column">
+<div id="profile-entries-importer" class="container d-flex flex-column">
+  <h2>Import Profile Entries</h2>
+  <p>
+    Selected Items: {{ this.selectedEntriesIds.length
+    }}<button
+      class="mx-3 btn btn-outline-primary"
+      [hidden]="this.selectedEntriesIds.length == 0"
+      (click)="this.selectedEntriesIds=[]"
+    >
+      Deselect all
+    </button>
+  </p>
   <cdk-accordion class="accordion d-flex flex-column flex-grow-1">
     @for (group of this.entries | keyvalue; track group.key; let groupIndex =
     $index) {
@@ -16,6 +27,9 @@
           [attr.aria-controls]="'accordion-body-' + groupIndex"
         >
           {{ group.key }}
+          <span class="accordion-item-description">
+            Click to {{ accordionItem.expanded ? "close" : "open" }}
+          </span>
         </button>
       </div>
       <ng-container *ngIf="accordionItem.expanded">
@@ -70,11 +84,11 @@
     </cdk-accordion-item>
     }
   </cdk-accordion>
-  <div class="justify-content-end d-flex mt-3">
-    <button type="submit" class="btn btn-success mx-2" (click)="save()">
+  <div class="justify-content-end d-flex mt-3 align-items-end flex-grow-1">
+    <button type="submit" class="btn btn-outline-dark mx-2" (click)="save()">
       {{ acceptButtonText }}
     </button>
-    <button type="button" class="btn btn-secondary" (click)="cancel()">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
       Cancel
     </button>
   </div>

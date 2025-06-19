@@ -1,21 +1,33 @@
 // auth.interceptor.ts
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
-import { AuthEventService } from './services/auth-event.service';
+import { inject } from '@angular/core';
+import { HttpEvent, HttpRequest, HttpErrorResponse, HttpHandlerFn } from '@angular/common/http';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from './services/auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authEvents: AuthEventService) {}
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.authEvents.triggerUnauthorized();
-        }
-        return throwError(() => error);
-      })
+export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>>
+{
+    // const authEvents = inject(AuthEventService);    
+    const authService = inject(AuthService);
+    return next(req).pipe(
+        catchError((error: HttpErrorResponse) =>
+        {
+            if (error.status === 401)
+            {
+                return authService.refreshLoginWithCookies().pipe(
+                    switchMap(() =>
+                    {
+                        // Retry the original request
+                        return next(req);
+                    }),
+                    catchError(err =>
+                    {
+                        authService.logout();
+                        return throwError(() => err);
+                    })
+                );
+            }
+            // return next(req);
+            return throwError(() => error);
+        })
     );
-  }
 }

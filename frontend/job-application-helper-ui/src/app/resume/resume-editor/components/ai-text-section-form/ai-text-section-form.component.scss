@@ -1,8 +1,5 @@
 .ai-section {
-  display: flex;  
-//   flex: 1;
-  width: 250px;
-  //   width: 300px;
+  display: flex;
 }
 
 .section-form {
@@ -11,4 +8,9 @@
   flex-direction: column;
   align-content: start;
   gap: 1rem;
+}
+
+#ai-section-form {
+  overflow: scroll;
+  max-height: 90vh;
 }

@@ -5,7 +5,7 @@
     (change)="templateSelectionChanged($event)"
   >
     <mat-radio-button
-      class="m-1 radio-card"
+      class="m-1 radio-card {{isSelected(template)?'active':''}}"
       *ngFor="let template of templates"
       [value]="template"
     >
@@ -21,12 +21,12 @@
   </mat-radio-group>
   <div class="d-flex buttons-container justify-content-end">
     <button
-      class="btn btn-success m-2"
+      class="btn btn-outline-dark m-2"
       (click)="selectTemplate()"
       [disabled]="this.selectedTemplate === undefined"
     >
       {{ acceptButtonText }}
     </button>
-    <button class="btn btn-secondary m-2" (click)="cancel()">Cancel</button>
+    <button class="btn btn-outline-secondary m-2" (click)="cancel()">Cancel</button>
   </div>
 </div>

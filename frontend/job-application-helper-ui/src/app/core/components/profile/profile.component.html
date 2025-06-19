@@ -1,6 +1,6 @@
 <div class="container">
   <div class="d-flex flex-row" style="align-items: baseline">
-    <h4>My Profile</h4>
+    <h4 class="data-label">My Profile</h4>
     <button
       class="btn btn-icon"
       style="font-size: 1.5rem"
@@ -12,7 +12,7 @@
   <app-user-info-view class="mb-3" [userInfo]="userInfo"></app-user-info-view>
   <div *ngFor="let category of this.profileEntryCategoryOptions" class="mb-5">
     <div class="d-flex flex-row mb-3" style="align-items: baseline">
-      <h4>{{ category.key }}</h4>
+      <h4 class="data-label">{{ category.key }}</h4>
       <button
         class="btn btn-icon"
         style="font-size: 1.5rem"

@@ -6,10 +6,11 @@ import { ResumeCreatorComponent } from '../resume-creator/resume-creator.compone
 import { Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog.component';
 import { ResumeService } from '../../core/services/resume.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-resume-list',
-  imports: [CommonModule, DialogModule],
+  imports: [CommonModule, DialogModule, MatTooltipModule],
   templateUrl: './resume-list.component.html',
   styleUrl: './resume-list.component.scss'
 })

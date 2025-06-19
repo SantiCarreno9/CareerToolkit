@@ -1,13 +1,9 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Form, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { AiService } from '../../services/ai.service';
-import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AiInstructionType } from '../../models/ai-instruction-type';
 import { AiInstruction } from '../../../resume/shared/models/ai-resume-instruction';
-import { HelperMethods } from '../../helper-methods';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 export enum ContentType
 {
   ExperienceEntry,
@@ -16,17 +12,13 @@ export enum ContentType
 
 @Component({
   selector: 'app-ai-section-tool',
-  imports: [ReactiveFormsModule, MatRadioModule, CommonModule, ClipboardModule],
+  imports: [ReactiveFormsModule, CommonModule, MatTooltipModule],
   templateUrl: './ai-section-tool.component.html',
   styleUrl: './ai-section-tool.component.scss'
 })
-export class AiSectionToolComponent
+export class AiSectionToolComponent implements OnInit, OnChanges
 {
-  AiInstruction = AiInstructionType;
-  protected instructionType?: AiInstructionType;
-
-  protected readonly aiSectionForm: FormGroup;
-  protected readonly options: any;
+  @Input() instructionsPlaceholder: string = "e.g. 3 bullet points, shorter";
   @Input() submitButtonText: string = "Submit";
   @Input() responseText: string = '';
   @Input() instructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
@@ -34,11 +26,17 @@ export class AiSectionToolComponent
 
   @Output() onSubmit = new EventEmitter<AiInstruction>();
 
+  AiInstruction = AiInstructionType;
+  // protected instructionType?: AiInstructionType;
+
+  protected readonly aiSectionForm: FormGroup;
+  protected readonly options: any;
+  protected isWaitingForResponse: boolean = false;
   constructor()
   {
     this.aiSectionForm = new FormGroup({
       instruction: new FormControl('', { nonNullable: false }),
-      instructionType: new FormControl(undefined, { nonNullable: true })
+      instructionType: new FormControl(null, { nonNullable: false })
     });
 
     this.instructionTypeOptions = Object.keys(AiInstructionType)
@@ -48,18 +46,30 @@ export class AiSectionToolComponent
         value: AiInstructionType[key as keyof typeof AiInstructionType]
       }));
   }
-  // @Input() 
-
-  protected instructionChanged(selection: MatRadioChange<AiInstructionType>): void
+  ngOnChanges(changes: SimpleChanges): void
   {
-    this.instructionType = selection.value;
-    console.log(this.instructionType);
-    this.submitButtonText = 'Submit';
+    if (changes['responseText'] !== undefined)
+      this.isWaitingForResponse = false;
+  }
+  ngOnInit(): void
+  {
+    console.log(this.instructionTypeOptions[0].value);
+    this.aiSectionForm.setValue({
+      'instruction': '',
+      'instructionType': this.instructionTypeOptions[0].value
+    });    
+  }
+
+  get instructionType()
+  {
+    return this.aiSectionForm.get('instructionType');
   }
 
   protected shouldDisableSubmit(): boolean
   {
-    return this.instructionType === undefined || (!this.areInstructionsOptional && this.aiSectionForm.get('instruction')?.value === '');
+    return this.instructionType === null ||
+      (!this.areInstructionsOptional && this.aiSectionForm.get('instruction')?.value === '') ||
+      this.isWaitingForResponse;
   }
 
   async copyToClipboard()
@@ -78,8 +88,9 @@ export class AiSectionToolComponent
   }
   protected submit(): void
   {
+    this.isWaitingForResponse = true;
     this.onSubmit.emit({
-      aiInstructionType: this.instructionType!,
+      aiInstructionType: this.aiSectionForm.value.instructionType,
       instruction: this.aiSectionForm.value.instruction,
     });
   }

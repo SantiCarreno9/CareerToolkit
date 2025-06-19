@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 .templates-container {
   overflow-y: scroll;
@@ -9,9 +9,8 @@
     (
       // checked-ripple-color: orange,
       // disabled-label-color: red,
-      
     )
-  )
+  );
 }
 
 .radio-card {
@@ -28,12 +27,20 @@
   }
 }
 
-.mdc-radio {
+input[type="radio"] {
   display: none;
 }
 
+.mat-mdc-radio-touch-target {
+  visibility: hidden;
+}
+
+.mdc-form-field{
+  visibility: hidden;
+}
+
 .radio-card input[type="radio"] {
-  display: none;
+  visibility: hidden;
 }
 
 // .radio-card img {
@@ -43,7 +50,7 @@
 //   margin-bottom: 10px;
 // }
 
-.radio-card input[type="radio"]:checked + .content {
+.input[type="radio"]:checked + .content {
   border-color: #007bff;
   background-color: #e9f2ff;
 }

@@ -72,7 +72,9 @@ export class AiProfileEntryFormComponent
     this.aiService.tailorProfileEntry(resumeInstruction, experienceEntry).subscribe(res =>
     {
       if (res.success && res.value)
-        this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value.join('\n'));
+      {
+        this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(res.value);
+      }
     })
   }
 

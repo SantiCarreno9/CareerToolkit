@@ -1,16 +1,48 @@
-<div class="container d-flex flex-row h-100">
-  <app-text-section-form
-    #textSectionForm
-    [sectionInfo]="this.sectionInfo"
-    (onSubmit)="submit($event)"
-    (onCancel)="cancel()"
-  ></app-text-section-form>
+<div class="container d-flex flex-column h-100">
+  <div>
+    <app-text-section-form
+      #textSectionForm
+      [sectionInfo]="this.sectionInfo"
+      (onSubmit)="submit($event)"
+      (onCancel)="cancel()"
+    ></app-text-section-form>
+  </div>
+  <div class="container">
+    <div
+      class="flex-shrink-1 justify-content-end d-flex"
+      style="flex-shrink: 1"
+    >
+      <button
+        class="btn btn-outline-success ai-button"
+        data-bs-toggle="collapse"
+        data-bs-target="#ai-tools"
+        aria-expanded="false"
+        aria-controls="ai-tools"
+      >
+        Improve with AI
+        <i class="bi bi-filetype-ai"></i>
+      </button>
+    </div>
+    <div class="collapse" id="ai-tools">
+      <app-ai-section-tool
+        class="container ai-section"
+        [instructionsPlaceholder]="
+          'e.g. Write 3 bullet items, make them shorter'
+        "
+        [submitButtonText]="'Submit'"
+        [responseText]="aiResponse"
+        [instructionTypeOptions]="aiInstructionTypeOptions"
+        [areInstructionsOptional]="areInstructionsOptional"
+        (onSubmit)="submitAiInstruction($event)"
+      ></app-ai-section-tool>
+    </div>
+  </div>
   <!-- <app-profile-entry-form #profileEntryForm class="profile-entry-form" [profileEntry]="this.profileEntry" (onSubmit)="submit($event)" (onCancel)="cancel()"></app-profile-entry-form> -->
-  <div style="width: 1px; background-color: gray"></div>
+  <!-- <div style="width: 1px; background-color: gray"></div>
   <app-ai-section-tool
     class="container ai-section"
     [responseText]="aiResponse"
     [areInstructionsOptional]="areInstructionsOptional"
     (onSubmit)="submitAiInstruction($event)"
-  ></app-ai-section-tool>
+  ></app-ai-section-tool> -->
 </div>

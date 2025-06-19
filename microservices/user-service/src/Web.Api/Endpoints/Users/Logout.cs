@@ -17,6 +17,10 @@ internal sealed class Logout : IEndpoint
             if (httpContext.Request.Cookies.ContainsKey("accessToken"))
             {
                 httpContext.Response.Cookies.Delete("accessToken");
+                if (httpContext.Request.Cookies.ContainsKey("refreshToken"))
+                {
+                    httpContext.Response.Cookies.Delete("refreshToken");
+                }
                 return Results.NoContent();
             }
 

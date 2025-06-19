@@ -1,54 +1,64 @@
 <div class="tool-container d-flex flex-column flex-grow-1">
-  <h2 style="text-align: center">AI Tool</h2>
-  <form [formGroup]="aiSectionForm" (submit)="submit()" class="p-3">
-    <div class="mb-3">
-      <div class="form-floating mb-3" style="height: 10rem">
-        <textarea
-          id="instruction"
-          type="textarea"
-          class="form-control h-100"
-          placeholder="e.g. 3 bullet points"
-          formControlName="instruction"
-          rows="5"
-        ></textarea>
-        <label for="instruction">Instructions (optional)</label>
-      </div>
-      <div class="mb-3">
-        <mat-radio-group
-          class="templates-container my-4"
-          [value]="instructionType"
-          (change)="instructionChanged($event)"
+  <form
+    [formGroup]="aiSectionForm"
+    (submit)="submit()"
+    class="form d-flex flex-column p-1 mb-3"
+  >
+    <div class="d-flex flex-row w-100">
+      <label style="flex-basis: min-content" for="instruction">{{
+        "Instructions" + (areInstructionsOptional ? " (optional)" : "")
+      }}</label>
+      <textarea
+        id="instruction"
+        type="textarea"
+        class="form-control w-100 flex-grow-1"
+        [placeholder]="instructionsPlaceholder"
+        formControlName="instruction"
+        oninput="this.parentNode.dataset.replicatedValue = this.value"
+      ></textarea>
+      <div class="align-items-center">
+        <select
+          id="instructionType"
+          class="form-select m-2"
+          aria-label="Default select example"
+          formControlName="instructionType"
+          *ngIf="this.instructionTypeOptions.length > 1"
         >
-          <mat-radio-button
-            class="m-1 radio-card"
-            *ngFor="let instruction of instructionTypeOptions"
-            [value]="instruction.value"
-          >
-            {{ instruction.key }}
-          </mat-radio-button>
-        </mat-radio-group>
+          <!-- <option selected>Open this select menu</option> -->
+          @for (option of this.instructionTypeOptions; track option) {
+          <option [value]="option.value">{{ option.key }}</option>
+          }
+        </select>
+        <button
+          type="submit"
+          class="btn btn-outline-dark mx-2"
+          [disabled]="shouldDisableSubmit()"
+        >
+          @if(isWaitingForResponse){
+          <span
+            class="spinner-border spinner-border-sm mx-2"
+            aria-hidden="true"
+          ></span>
+          }
+          {{ submitButtonText }}
+        </button>
       </div>
-    </div>
-    <div class="justify-content-end d-flex">
-      <button
-        type="submit"
-        class="btn btn-success mx-2"
-        [disabled]="shouldDisableSubmit()"
-      >
-        {{ submitButtonText }}
-      </button>
     </div>
   </form>
+  @if(responseText.length>1 && !isWaitingForResponse){
   <div class="d-flex flex-column flex-grow-1">
     <div class="d-flex justify-content-end w-100">
-      <button class="btn btn-icon" (click)="copyToClipboard()">
-        <!-- <i class="bi bi-clipboard" [cdkCopyToClipboard]="clipboardText"></i> -->
+      <button
+        class="btn btn-icon"
+        #tooltip="matTooltip"
+        matTooltip="Copy to clipboard"            
+        [matTooltipPosition]="'above'"
+        (click)="copyToClipboard()"
+      >
         <i class="bi bi-clipboard"></i>
       </button>
     </div>
-    <div
-      class="form-control flex-grow-1"
-      [innerHTML]="responseText"
-    ></div>
+    <div class="form-control flex-grow-1" [innerHTML]="responseText"></div>
   </div>
+  }
 </div>

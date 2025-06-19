@@ -30,18 +30,44 @@ export class HelperMethods
         return htmlFormatted;
     }
 
+    public static convertPlainTextArrayToHtml(plainTextArray: string[]): string
+    {
+        if (!plainTextArray || plainTextArray.length === 0) return '';
+
+        if (plainTextArray.length === 1)
+        {
+            return this.convertPlainTextToHtml(plainTextArray[0]);
+        }
+
+        const listItems = plainTextArray.map(item => `<li>${this.convertPlainTextToHtml(item)}</li>`).join('');
+        return `<ul>${listItems}</ul>`;
+    }
+
     public static getFormattedPhoneNumber(phoneNumber: string): string | null
     {
+        let cleaned = ('' + phoneNumber).replace(/\D/g, '');
+
+        let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+
+        if (match)
         {
-            let cleaned = ('' + phoneNumber).replace(/\D/g, '');
+            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+        };
+        return null
+    }
 
-            let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-
-            if (match)
-            {
-                return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-            };
-            return null
-        }
+    public static cleanTextForAI(input: string): string
+    {
+        return input
+            // Replace \u00A0 (non-breaking spaces) with regular space
+            .replace(/\u00A0/g, ' ')
+            // Replace multiple newlines with a single newline
+            .replace(/\n{2,}/g, '\n')
+            // Trim leading/trailing whitespace
+            .trim()
+            // Optional: Replace tabs with single spaces
+            .replace(/\t/g, ' ')
+            // Optional: Remove excessive spaces
+            .replace(/ +/g, ' ');
     }
 }

@@ -39,22 +39,37 @@
           <td>{{ resume.modifiedAt.toLocaleString() }}</td>
           <td>
             <span
-              class="badge rounded-pill text-bg-success m-1"
-              style="font-weight: 400;"
+              class="badge rounded-pill text-bg-warning m-1"
+              style="font-weight: 400"
               *ngFor="let keyword of resume.keywords"
               >{{ keyword }}</span
             >
           </td>
 
           <td>
-            <button class="btn btn-icon" (click)="goToResumeViewer(resume.id)">
+            <button
+              class="btn btn-outline-primary"
+              #tooltip="matTooltip"
+              matTooltip="View"
+              [matTooltipPosition]="'above'"
+              (click)="goToResumeViewer(resume.id)"
+            >
               <i class="bi bi-eye"></i>
             </button>
-            <button class="btn btn-icon" (click)="goToResumeEditor(resume.id)">
+            <button
+              class="btn btn-outline-success"
+              #tooltip="matTooltip"
+              matTooltip="Edit"
+              [matTooltipPosition]="'above'"
+              (click)="goToResumeEditor(resume.id)"
+            >
               <i class="bi bi-pencil-square"></i>
             </button>
             <button
-              class="btn btn-icon"
+              class="btn btn-outline-danger"
+              #tooltip="matTooltip"
+              matTooltip="Delete"
+              [matTooltipPosition]="'above'"
               (click)="deleteResume(resume.id, index)"
             >
               <i class="bi bi-trash"></i>

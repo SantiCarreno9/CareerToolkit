@@ -30,10 +30,17 @@ import { UserService } from '../../core/services/user.service';
 import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
 import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
 import { AiTextSectionFormComponent } from './components/ai-text-section-form/ai-text-section-form.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-resume-editor',
-  imports: [CommonModule, DialogModule, CdkAccordionModule, UserInfoViewComponent, ProfileEntryViewComponent, TextSectionViewComponent],
+  imports: [CommonModule,
+    DialogModule,
+    CdkAccordionModule,
+    UserInfoViewComponent,
+    ProfileEntryViewComponent,
+    TextSectionViewComponent,
+    MatTooltipModule],
   templateUrl: './resume-editor.component.html',
   styleUrl: './resume-editor.component.scss'
 })
@@ -165,7 +172,6 @@ export class ResumeEditorComponent
   protected openEditBasicInfoFormDialog(): void
   {
     const dialogRef = this.dialog.open(ResumeBasicInfoFormComponent, {
-      width: '500px',
       data: {
         name: this.resume.name,
         keywords: this.resume.keywords,
@@ -302,7 +308,6 @@ export class ResumeEditorComponent
   protected openAiSectionFormDialog(sectionInfo: SectionInfoText, sectionIndex: number): void
   {
     const dialogRef = this.dialog.open(AiTextSectionFormComponent, {
-      width: '800px',
       data: {
         sectionInfo: sectionInfo,
         resume: this.resume

@@ -24,15 +24,17 @@
   .drag-icon {
     max-width: 1.5rem;
     height: 2rem;
-    background-color: lightblue;
+    background-color: gray;
     display: flex;
     padding: 6px;
+    border:solid 1px black;
   }
 
   i {
     font-size: medium;
     padding: 0;
     margin: 0 -5px;
+    color:white
   }
 }
 

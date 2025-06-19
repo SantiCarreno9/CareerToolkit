@@ -1,6 +1,6 @@
 <div class="d-flex flex-column justify-content-center">
   <h2 style="text-align: center">My Info</h2>
-  <form [formGroup]="userInfoFormGroup" (submit)="submit()" class="p-3">
+  <form [formGroup]="userInfoFormGroup" (submit)="submit()" class="form p-3">
     <div class="mb-3">
       <div class="mb-3">
         <label for="fullName">Full Name</label>
@@ -9,7 +9,7 @@
           type="text"
           class="form-control"
           formControlName="fullName"
-        />        
+        />
         @if (fullName?.invalid && (fullName?.touched || fullName?.dirty)) {
         <div class="alert alert-danger p-2">
           @if (fullName?.hasError('required')) {
@@ -18,23 +18,43 @@
         </div>
         }
       </div>
-      <div class="mb-3">
-        <label for="email">Email address</label>
-        <input
-          id="email"
-          type="email"
-          class="form-control disabled"
-          formControlName="email"
-        />        
+      <div class="d-flex mb-3">
+        <div class="flex-grow-1">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            type="email"
+            class="form-control disabled"
+            formControlName="email"
+          />
+        </div>
+        <button
+          [hidden]="!isFieldEmpty('email')"
+          type="button"
+          class="btn btn-icon"
+          (click)="cleanField('email')"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
-      <div class="mb-3">
-        <label for="phoneNumber">Phone Number</label>
-        <input
-          id="phoneNumber"
-          type="number"
-          class="form-control"
-          formControlName="phoneNumber"
-        />        
+      <div class="d-flex mb-3">
+        <div class="flex-grow-1">
+          <label for="phoneNumber">Phone Number</label>
+          <input
+            id="phoneNumber"
+            type="number"
+            class="form-control"
+            formControlName="phoneNumber"
+          />
+        </div>
+        <button
+          [hidden]="!isFieldEmpty('phoneNumber')"
+          type="button"
+          class="btn btn-icon"
+          (click)="cleanField('phoneNumber')"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
         @if (phoneNumber?.invalid && (phoneNumber?.touched ||
         phoneNumber?.dirty)) {
         <div class="alert alert-danger p-2">
@@ -44,14 +64,24 @@
         </div>
         }
       </div>
-      <div class="mb-3">
-        <label for="address">Address</label>
-        <input
-          id="address"
-          type="text"
-          class="form-control"
-          formControlName="address"
-        />        
+      <div class="d-flex mb-3">
+        <div class="flex-grow-1">
+          <label for="address">Address</label>
+          <input
+            id="address"
+            type="text"
+            class="form-control"
+            formControlName="address"
+          />
+        </div>
+        <button
+          [hidden]="!isFieldEmpty('address')"
+          type="button"
+          class="btn btn-icon"
+          (click)="cleanField('address')"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
         @if (address?.invalid && (address?.touched || address?.dirty)) {
         <div class="alert alert-danger p-2">
           @if (address?.hasError('required')) {
@@ -61,7 +91,7 @@
         }
       </div>
       <h5>Additional Contact Info</h5>
-      <select class="form-control" (change)="addAdditionalContactInfo($event)">
+      <select class="form-select" (change)="addAdditionalContactInfo($event)">
         <option value="" selected>Select a type</option>
         <option
           *ngFor="let item of this.availableContactOptions; index as i"
@@ -74,32 +104,36 @@
     <div
       *ngFor="let item of userInfo.additionalContactInfo | keyvalue; index as i"
     >
-      <div class="input-group mb-3">
+      <div class="d-flex mb-3">
         <input
           type="text"
           class="form-control"
+          style="width: 30%"
           placeholder="Key"
           [value]="item.key"
           readonly
         />
         <input
           type="text"
-          class="form-control"
-          placeholder="Value"          
+          class="form-control flex-grow-1"
+          placeholder="Value"
           [formControlName]="'contact-' + item.key"
         />
         <button
-          type="button"
-          class="btn btn-danger"
+          class="btn btn-outline-danger delete-btn"
           (click)="removeContactInfo(item.key)"
         >
-          -
+          <i class="bi bi-trash"></i>
         </button>
       </div>
     </div>
     <div class="justify-content-end d-flex">
-      <button type="submit" class="btn btn-primary mx-2">Save</button>
-      <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+      <button type="submit" class="btn btn-outline-dark mx-2">Save</button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="cancel()"
+      >
         Cancel
       </button>
     </div>
