@@ -113,7 +113,6 @@ export class UserInfoFormComponent
   {
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue = selectElement.value;
-    console.log('Selected value:', selectedValue);
     if (!selectedValue || selectedValue.length === 0)
     {
       console.warn('No valid contact option selected.');

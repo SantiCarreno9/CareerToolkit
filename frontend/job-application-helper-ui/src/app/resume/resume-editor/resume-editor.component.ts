@@ -101,7 +101,6 @@ export class ResumeEditorComponent
       }
 
       this.resume = res.value;
-      console.log(this.resume);
       this.updateTemplate();
     })
   }

@@ -79,8 +79,7 @@ export class AiSectionToolComponent implements OnInit, OnChanges
 
     try
     {
-      await navigator.clipboard.write([clipboardItem]);
-      console.log('Copied as rich text (HTML)!');
+      await navigator.clipboard.write([clipboardItem]);      
     } catch (err)
     {
       console.error('Failed to copy:', err);

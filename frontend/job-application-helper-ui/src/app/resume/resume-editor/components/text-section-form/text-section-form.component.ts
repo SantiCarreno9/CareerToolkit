@@ -60,10 +60,6 @@ export class TextSectionFormComponent
       return;
     }
     this.sectionInfo.content = this.sectionInfoForm.value.content;
-    // const newInfo: SectionInfoText = new SectionInfoText(
-    //   this.sectionInfo.id,
-    //   this.sectionInfoForm.value.title,
-    //   this.sectionInfoForm.value.content);
     this.onSubmit.emit(this.sectionInfo);
   }
 
