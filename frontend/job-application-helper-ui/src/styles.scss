@@ -16,35 +16,13 @@ body {
   white-space: normal;
 }
 
-.btn-primary {
-  background-color: black;
-  border-color: black;
-
-  &:hover {
-    background-color: white;
-    border-color: black;
-    color:black;
-  }
-
-  &:first-child:active {
-    background-color: gray;
-    border-color: black;
-    color: white;
-  }
-
-  &:disabled{
-    background-color: gray; 
-    color: black; 
-    border-color: black;  
-  }
-}
-
 .custom-dialog-container {
   display: block;
   border-radius: 3%;
   background: white;
   max-height: 70vh;
-  overflow-y: scroll;
+  max-width: 90vw;
+  // overflow-y: scroll;
   // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   // border-width: 2px;
 }
@@ -63,6 +41,153 @@ body {
   font-weight: 500;
   border-bottom: 2px solid gray;
   width: 100%;
+}
+
+.form {
+  label {
+    font-weight: 500;
+    color: black;
+  }
+
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="text"],
+  input[type="number"],
+  select {
+    border-width: 0;
+    border-radius: 0;
+    border-bottom-width: 2px;
+    border-color: black;
+  }
+
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="text"],
+  input[type="number"],
+  select:focus {
+    box-shadow: none;
+  }
+
+  textarea {
+    border-width: 0;
+    border-radius: 0;
+    border-bottom-width: 2px;
+    border-color: black;
+  }
+
+  textarea:focus {
+    box-shadow: none;
+  }
+
+  .alert {
+    background-color: transparent;
+    border: none;
+  }
+
+  .alert-danger {
+    color: darkred;
+  }
+}
+
+.form-text-field {
+}
+
+.grow-wrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+  resize: vertical;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) " ";
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: vertical;
+
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow-y: scroll;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  /* Identical styling required!! */
+  // border: 1px solid black;
+  padding: 0.5rem;
+  font: inherit;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.ai-button {
+  border-color: purple;
+  color: purple;
+
+  &:hover {
+    background-color: purple;
+  }
+}
+
+.accordion {
+  flex: 1;
+  display: block;
+  margin-right: 1rem;
+}
+
+.accordion-item {
+  display: block;
+  border: none;
+  // border-bottom: solid 2px black;
+}
+
+.accordion-item + .accordion-item {
+  border-top: none;
+}
+
+.accordion-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: solid 2px black;
+  padding: 16px;
+  text-align: left;
+}
+
+.accordion-item-description {
+  font-size: 0.85em;
+  // color: #999;
+}
+
+.accordion-item-body {
+  padding: 1rem;
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
+.accordion-item-header:hover {
+  cursor: pointer;
+  // background-color: #eee;
+}
+
+.accordion-item:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.accordion-item:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 @media print {

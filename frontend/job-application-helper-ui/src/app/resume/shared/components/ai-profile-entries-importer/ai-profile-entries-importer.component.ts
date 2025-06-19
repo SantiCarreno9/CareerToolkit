@@ -7,6 +7,7 @@ import { ProfileEntry } from '../../../../profile-entry/shared/models/profile-en
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { AiInstruction, AiResumeInstruction } from '../../models/ai-resume-instruction';
 import { ProfileEntryHelperMethods } from '../../../../profile-entry/shared/profile-entry-helper-methods';
+import { HelperMethods } from '../../../../core/helper-methods';
 
 @Component({
   selector: 'app-ai-profile-entries-importer',
@@ -18,7 +19,8 @@ export class AiProfileEntriesImporterComponent
 {
   protected aiService: AiService = inject(AiService);
 
-  @ViewChild('profileEntriesImporter') profileEntriesImporter!: ProfileEntriesImporterComponent;  
+  // protected showAiTools:boolean
+  @ViewChild('profileEntriesImporter') profileEntriesImporter!: ProfileEntriesImporterComponent;
   protected aiInstructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
   protected aiResponse: string = '';
 
@@ -55,14 +57,30 @@ export class AiProfileEntriesImporterComponent
       if (res.success && res.value)
       {
         console.log(res.value);
-        const ids = res.value.map((id:string)=>id.split(',')[0]);
+        const ids = res.value.map((id: string) => id.split(',')[0]);
         this.profileEntriesImporter?.selectEntries(ids);
-        const reasons = res.value.map((id:string)=>id.split(',')[1]);
-        this.aiResponse = reasons.join('\n');
+        const reasons = res.value.map((id: string) => id.split(',')[1]);
+
+        const allEntries = Object.values(this.entries).flat();
+        for (let i = 0; i < reasons.length; i++)
+        {
+          const originalReason = reasons[i];
+          reasons[i] = '**' + this.getEntryInfoById(allEntries, ids[i]) + '**';
+          reasons[i] += ': ' + originalReason;
+        }
+        this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(reasons);
       }
     });
   }
 
+  private getEntryInfoById(array: ProfileEntry[], id: string): string
+  {
+    const entry = array.find(e => e.id === id);
+    if (entry === undefined)
+      return '';
+    const info = entry.title + (entry.organization.length > 1 ? ' at ' + entry.organization : '');
+    return info;
+  }
   protected submit(sectionInfo: ProfileEntry[]): void
   {
     this.onSubmit.emit(sectionInfo);

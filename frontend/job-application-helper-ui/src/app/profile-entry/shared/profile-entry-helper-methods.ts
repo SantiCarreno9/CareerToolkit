@@ -106,7 +106,7 @@ export class ProfileEntryHelperMethods
             id: entry.id,
             title: entry.title,
             organization: entry.organization,
-            description: entry.description ? HelperMethods.convertToPlainText(entry.description) : '',
+            description: entry.description ? HelperMethods.cleanTextForAI(HelperMethods.convertToPlainText(entry.description)) : '',
         };
     }
 }

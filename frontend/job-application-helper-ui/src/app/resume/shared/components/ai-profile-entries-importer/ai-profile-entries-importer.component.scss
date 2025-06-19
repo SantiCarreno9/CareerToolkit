@@ -1,14 +1,20 @@
 .ai-importer-container {
+  display: flex;  
   overflow: scroll;
+  max-height: 90vh;  
+  width: 500px;
+  max-width: 90vw;
 }
 .ai-section {
   display: flex;
+  overflow-y: scroll;
   //   flex: 1;
   //   width: 300px;
 }
 
 .profile-entries-importer {
   display: flex;
+  min-width: 200px;
   flex: 1;
   flex-direction: column;
   align-content: start;

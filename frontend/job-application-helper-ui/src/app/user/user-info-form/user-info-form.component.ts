@@ -44,10 +44,10 @@ export class UserInfoFormComponent
         Validators.required,
         Validators.email
       ]),
-      phoneNumber: new FormControl(this.userInfo.phoneNumber, [        
+      phoneNumber: new FormControl(this.userInfo.phoneNumber, [
         Validators.pattern('^[0-9]{10,15}$')
       ]),
-      address: new FormControl(this.userInfo.address, [        
+      address: new FormControl(this.userInfo.address, [
       ])
     });
 
@@ -143,6 +143,16 @@ export class UserInfoFormComponent
     this.removeAdditionalContactInfoControl(key);
   }
 
+  protected cleanField(fieldName: string): void
+  {
+    this.userInfoFormGroup.get(fieldName)?.patchValue('');
+  }
+
+  protected isFieldEmpty(fieldName: string): boolean
+  {
+    return this.userInfoFormGroup.get(fieldName)?.value.length > 0;
+  }
+
   submit(): void
   {
     if (this.userInfoFormGroup.invalid)
@@ -167,7 +177,7 @@ export class UserInfoFormComponent
     //Creates a new UserInfo object with the updated values
     const updatedUserInfo: UserInfo = {
       id: this.userInfo.id,
-      email: this.allowEmailEditing? this.userInfoFormGroup.value.email : this.userInfo.email,
+      email: this.allowEmailEditing ? this.userInfoFormGroup.value.email : this.userInfo.email,
       fullName: this.userInfoFormGroup.value.fullName || '',
       phoneNumber: this.userInfoFormGroup.value.phoneNumber || '',
       address: this.userInfoFormGroup.value.address || '',

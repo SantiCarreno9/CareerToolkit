@@ -3,6 +3,7 @@ import { CommonModule, KeyValue } from '@angular/common';
 import { Component, Inject, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
+import { HelperMethods } from '../../core/helper-methods';
 
 @Component({
   selector: 'app-resume-basic-info-form',
@@ -19,7 +20,7 @@ export class ResumeBasicInfoFormComponent
   @Output() onSave = new EventEmitter<ResumeBasicInfo>();
   @Output() onCancel = new EventEmitter<void>();
 
-  constructor(@Inject(DIALOG_DATA) public data: { name: string, keywords: string[], jobPosting:string }, private formBuilder: FormBuilder)
+  constructor(@Inject(DIALOG_DATA) public data: { name: string, keywords: string[], jobPosting: string }, private formBuilder: FormBuilder)
   {
     this.basicInfoForm = this.formBuilder.group({
       name: new FormControl(data.name, [
@@ -54,7 +55,7 @@ export class ResumeBasicInfoFormComponent
   }
 
   protected removeKeyword(key: string, index: number): void
-  {    
+  {
     if (this.basicInfoForm.contains('keyword-' + key))
     {
       this.basicInfoForm.removeControl('keyword-' + key);
@@ -85,7 +86,7 @@ export class ResumeBasicInfoFormComponent
     const data: ResumeBasicInfo = {
       name: this.basicInfoForm.value.name,
       keywords: newKeywords,
-      jobPosting: this.basicInfoForm.value.jobPosting || ''
+      jobPosting: this.basicInfoForm.value.jobPosting ? HelperMethods.cleanTextForAI(this.basicInfoForm.value.jobPosting) : ''
     };
 
     this.onSave.emit(data);
@@ -95,7 +96,7 @@ export class ResumeBasicInfoFormComponent
   {
     this.basicInfoForm.markAsUntouched();
     this.basicInfoForm.clearValidators();
-    this.onCancel.emit();    
+    this.onCancel.emit();
   }
 
 }

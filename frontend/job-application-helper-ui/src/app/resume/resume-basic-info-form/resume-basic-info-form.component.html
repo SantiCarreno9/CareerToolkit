@@ -1,22 +1,20 @@
-<div class="d-flex flex-column justify-content-center">
-  <h2>Create New Resume</h2>
-  <form [formGroup]="basicInfoForm" (submit)="save()" class="p-3">
+<div id="basic-info-form-container" class="d-flex flex-column justify-content-center">  
+  <form [formGroup]="basicInfoForm" (submit)="save()" class="form p-3">
     <div class="mb-3">
-      <div class="form-floating mb-3">
+      <div class="mb-3">
+        <label for="name">Name</label>
         <input
           id="name"
           type="text"
           class="form-control"
           formControlName="name"
         />
-        <label for="name">Name</label>
-        @if (name?.invalid && (name?.touched || name?.dirty)) {        
+        @if (name?.invalid && (name?.touched || name?.dirty)) {
         <div class="alert alert-danger p-2">
           @if (name?.hasError('required')) {
           <div>Name is required.</div>
-          }
-          @else if(name?.hasError('minLength')){
-            <div>Name is too short.</div>
+          } @else if(name?.hasError('minLength')){
+          <div>Name is too short.</div>
           }
         </div>
         }
@@ -26,8 +24,7 @@
           >Keywords
           <button
             type="button"
-            class="btn btn-success"
-            style="padding: 3px 4px"
+            class="btn btn-outline-success add-btn"            
             (click)="addKeyword()"
           >
             <i class="bi bi-plus-lg"></i></button
@@ -37,36 +34,45 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Value"
+              placeholder="e.g. Location, Company, Skills"
               [formControlName]="'keyword-' + keyword.key"
             />
             <button
               type="button"
-              class="btn btn-danger"
+              class="btn btn-outline-danger delete-btn"
               (click)="removeKeyword(keyword.key, i)"
             >
-              -
+              <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
       </div>
-      <div class="form-floating mb-3" style="flex:1">
-        <textarea
-          id="jobPosting"
-          type="textarea"
-          class="form-control"
-          style="height: 20rem;"
-          formControlName="jobPosting"
-          >{{ jobPosting }}</textarea
-        >
+      <div class="mb-3" style="flex: 1">
         <label for="jobPosting">Job Posting (optional)</label>
+        <div>
+          <textarea
+            id="jobPosting"
+            type="textarea"
+            class="form-control"
+            formControlName="jobPosting"            
+            >{{ jobPosting }}</textarea
+          >
+        </div>
       </div>
     </div>
-    <div class="justify-content-end d-flex">
-      <button type="submit" class="btn btn-outline-dark mx-2" [disabled]="this.basicInfoForm.invalid">
+    <div class="justify-content-end d-flex flex-wrap">
+      <button
+        type="submit"
+        class="btn btn-outline-dark m-2"
+        [disabled]="this.basicInfoForm.invalid"
+      >
         {{ acceptButtonText }}
       </button>
-      <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+      <button
+        type="button"
+        class="btn btn-outline-secondary m-2"
+        (click)="cancel()"
+      >
         Cancel
       </button>
     </div>

@@ -65,7 +65,9 @@ export class AiTextSectionFormComponent
       this.aiService.tailorSummary(resumeInstruction, experienceEntries, currentSummary).subscribe(res =>
       {
         if (res.success && res.value)
-          this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value.join('\n'));
+        {
+          this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(res.value);
+        }
       })
     }
     else
@@ -74,7 +76,9 @@ export class AiTextSectionFormComponent
       this.aiService.tailorSection(resumeInstruction, currentContent).subscribe(res =>
       {
         if (res.success && res.value)
-          this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value.join('\n'));
+        {
+          this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(res.value);
+        }
       });
     }
   }

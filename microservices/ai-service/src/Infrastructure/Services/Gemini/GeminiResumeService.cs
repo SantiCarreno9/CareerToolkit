@@ -14,6 +14,7 @@ internal class GeminiResumeService : BaseGeminiService, IAiResumeService
     public async Task<Result<List<string>>> SelectExperienceEntries(ResumeInstruction instruction, List<ExperienceEntry> experienceEntries)
     {
         string prompt = "I'm applying for the following job. First, read the job posting carefully. Then, I will send you all of my experience entries, each one has its id.";
+        prompt += $"\n Job posting: {instruction.JobPosting}";
         prompt += "\n Please select around 5 entries and give me the list of the ids of the experience entries that are the most relevant to the job requirements";
         foreach (ExperienceEntry item in experienceEntries)
         {
@@ -97,7 +98,7 @@ internal class GeminiResumeService : BaseGeminiService, IAiResumeService
     public async Task<List<string>> TailorSummary(ResumeInstruction instruction, List<ExperienceEntry> experienceEntries, string? currentSummary)
     {
         string prompt = "I'm applying for the following job. First, read the job posting carefully.\n Then I will send you all my experience.";
-        string instructionText = "Keep the writing clear, short, and professional. Don’t use fancy words. Around 3-4 short items. Always try to highlight keywords." + instruction.Instruction;
+        string instructionText = "Keep the writing clear, short, and professional. Don’t use fancy words. Around 3-4 short bullet items. Always try to highlight keywords." + instruction.Instruction;
         switch (instruction.AiInstructionType)
         {
             case AiInstruction.Generate:

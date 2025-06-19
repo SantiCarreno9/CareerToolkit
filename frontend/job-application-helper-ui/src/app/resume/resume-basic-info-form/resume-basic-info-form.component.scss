@@ -1,3 +1,24 @@
-h2{
-    text-align: center;
+h2 {
+  text-align: center;
+}
+
+#basic-info-form-container {
+  width: 500px;
+  max-width: 80vw;
+}
+.grow-wrap {
+  max-height: 20rem;
+}
+#jobPosting {
+  word-wrap: normal;
+  max-height: 20rem;
+}
+
+.delete-btn {
+  border-width: 0;
+}
+
+.add-btn {
+  padding: 2px 5px;
+  border-width: 0;
 }
