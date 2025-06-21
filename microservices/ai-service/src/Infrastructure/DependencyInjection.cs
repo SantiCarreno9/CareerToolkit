@@ -32,7 +32,7 @@ public static class DependencyInjection
 
         services.AddTransient<DomainEventsDispatcher>();
         services.AddHttpClient();
-        services.AddScoped<IAiResumeService, GeminiResumeService>();
+        services.AddScoped<IAIService, GeminiResumeService>();
         
         return services;
     }

@@ -40,8 +40,7 @@ export class UserInfoFormComponent
       fullName: new FormControl(this.userInfo.fullName, [
         Validators.required,
       ]),
-      email: new FormControl({ value: this.userInfo.email, disabled: !this.allowEmailEditing }, [
-        Validators.required,
+      email: new FormControl({ value: this.userInfo.email, disabled: !this.allowEmailEditing }, [        
         Validators.email
       ]),
       phoneNumber: new FormControl(this.userInfo.phoneNumber, [

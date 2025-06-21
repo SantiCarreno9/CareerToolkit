@@ -5,4 +5,4 @@ namespace Application.Resumes.TailorSection;
 public sealed record TailorSectionCommand(
     ResumeInstruction Instruction,
     string SectionContent
-    ) : ICommand<List<string>>;
+    ) : ICommand<string>;

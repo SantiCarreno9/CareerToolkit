@@ -36,15 +36,15 @@ export class AiSectionToolComponent implements OnInit, OnChanges
   {
     this.aiSectionForm = new FormGroup({
       instruction: new FormControl('', { nonNullable: false }),
-      instructionType: new FormControl(null, { nonNullable: false })
+      instructionType: new FormControl(AiInstructionType.Custom, { nonNullable: false })
     });
 
-    this.instructionTypeOptions = Object.keys(AiInstructionType)
-      .filter(k => isNaN(Number(k))) // filter out numeric keys
-      .map(key => ({
-        key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
-        value: AiInstructionType[key as keyof typeof AiInstructionType]
-      }));
+    this.instructionTypeOptions = [
+      { key: 'Generate', value: AiInstructionType.Generate },
+      { key: 'Tailor', value: AiInstructionType.Tailor },
+      { key: 'Improve', value: AiInstructionType.Improve },
+      { key: 'Custom', value: AiInstructionType.Custom }
+    ];
   }
   ngOnChanges(changes: SimpleChanges): void
   {
@@ -57,7 +57,7 @@ export class AiSectionToolComponent implements OnInit, OnChanges
     this.aiSectionForm.setValue({
       'instruction': '',
       'instructionType': this.instructionTypeOptions[0].value
-    });    
+    });
   }
 
   get instructionType()
@@ -79,7 +79,7 @@ export class AiSectionToolComponent implements OnInit, OnChanges
 
     try
     {
-      await navigator.clipboard.write([clipboardItem]);      
+      await navigator.clipboard.write([clipboardItem]);
     } catch (err)
     {
       console.error('Failed to copy:', err);
@@ -88,8 +88,9 @@ export class AiSectionToolComponent implements OnInit, OnChanges
   protected submit(): void
   {
     this.isWaitingForResponse = true;
+    const instructionType: AiInstructionType = parseInt(this.aiSectionForm.value.instructionType) as AiInstructionType;    
     this.onSubmit.emit({
-      aiInstructionType: this.aiSectionForm.value.instructionType,
+      aiInstructionType: instructionType,
       instruction: this.aiSectionForm.value.instruction,
     });
   }
