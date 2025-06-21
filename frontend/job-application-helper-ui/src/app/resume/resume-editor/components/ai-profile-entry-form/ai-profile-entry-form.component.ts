@@ -52,6 +52,7 @@ export class AiProfileEntryFormComponent
 
     this.resume = data.resume;
     this.aiInstructionTypeOptions = [
+      { key: 'Generate', value: AiInstructionType.Generate },
       { key: 'Tailor', value: AiInstructionType.Tailor },
       { key: 'Improve', value: AiInstructionType.Improve },
       { key: 'Custom', value: AiInstructionType.Custom }
@@ -66,9 +67,10 @@ export class AiProfileEntryFormComponent
       jobPosting: ''
     };
     resumeInstruction.jobPosting = this.resume.jobPosting || '';
-
+    if (this.profileEntryForm !== undefined && this.profileEntryForm.description?.value)
+      this.profileEntry.description = this.profileEntryForm.description?.value;
+    
     const experienceEntry = ProfileEntryHelperMethods.convertProfileEntryToExperienceEntry(this.profileEntry);
-    experienceEntry.description = this.profileEntryForm !== undefined ? this.profileEntryForm.description?.value : this.profileEntry.description ? HelperMethods.convertToPlainText(this.profileEntry.description) : '';
     this.aiService.tailorProfileEntry(resumeInstruction, experienceEntry).subscribe(res =>
     {
       if (res.success && res.value)

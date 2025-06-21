@@ -5,11 +5,13 @@ using Microsoft.Extensions.Logging;
 using SharedKernel;
 
 namespace Infrastructure.Services.Gemini;
-internal class GeminiResumeService : BaseGeminiService, IAiResumeService
+internal class GeminiResumeService : GeminiService
 {
     public GeminiResumeService(HttpClient httpClient, IConfiguration configuration, ILogger<GeminiResumeService> logger) : base(httpClient, configuration, logger)
     {
-    }
+    }    
+
+    
 
     public async Task<Result<List<string>>> SelectExperienceEntries(ResumeInstruction instruction, List<ExperienceEntry> experienceEntries)
     {
@@ -36,64 +38,64 @@ internal class GeminiResumeService : BaseGeminiService, IAiResumeService
         return await Post<List<string>>(request);
     }
 
-    public async Task<List<string>> TailorExperienceEntry(ResumeInstruction instruction, ExperienceEntry experienceEntry)
-    {
-        string prompt = "I'm applying for the following job. First, read the job posting carefully. Then, I will send you one project or job description from my resume.";
-        //string instructionText = "Read the job posting first.\r\nThen I’ll send you one of my past jobs or projects.\r\nKeep only the parts that match what the job is asking for.\r\nWrite the result as 3–5 bullet points.\r\nKeep it clear, short, and professional — no fancy words.";
-        string instructionText = "Keep the writing clear, short, and professional. Don’t use fancy words. Around 3-4 short items. Always try to highlight keywords. " + instruction.Instruction;
-        switch (instruction.AiInstructionType)
-        {
-            case AiInstruction.Generate:
-                break;
-            case AiInstruction.Tailor:
-                prompt += $"\n Your task is to tailor it by selecting only the most relevant tasks and responsibilities that align with the job requirements.\r\n\r\nFocus on:\r\n\r\nTechnologies, tools, and methods listed in the job post.";
-                break;
-            case AiInstruction.Improve:
-                prompt += $"\n Please improve the grammar and flow of the following job tasks from my experience";
-                break;
-            case AiInstruction.Custom:
-                prompt += instruction.Instruction;
-                instructionText = "";
-                break;
-        }
+    //public async Task<List<string>> TailorExperienceEntry(ResumeInstruction instruction, ExperienceEntry experienceEntry)
+    //{
+    //    string prompt = "I'm applying for the following job. First, read the job posting carefully. Then, I will send you one project or job description from my resume.";
+    //    //string instructionText = "Read the job posting first.\r\nThen I’ll send you one of my past jobs or projects.\r\nKeep only the parts that match what the job is asking for.\r\nWrite the result as 3–5 bullet points.\r\nKeep it clear, short, and professional — no fancy words.";
+    //    string instructionText = "Keep the writing clear, short, and professional. Don’t use fancy words. Around 3-4 short items. Always try to highlight keywords. " + instruction.Instruction;
+    //    switch (instruction.AiInstructionType)
+    //    {
+    //        case AiInstruction.Generate:
+    //            break;
+    //        case AiInstruction.Tailor:
+    //            prompt += $"\n Your task is to tailor it by selecting only the most relevant tasks and responsibilities that align with the job requirements.\r\n\r\nFocus on:\r\n\r\nTechnologies, tools, and methods listed in the job post.";
+    //            break;
+    //        case AiInstruction.Improve:
+    //            prompt += $"\n Please improve the grammar and flow of the following job tasks from my experience";
+    //            break;
+    //        case AiInstruction.Custom:
+    //            prompt += instruction.Instruction;
+    //            instructionText = "";
+    //            break;
+    //    }
 
-        prompt += $"\r\n\r\nHere’s the job posting: {instruction.JobPosting}";
-        prompt += $"Here is one of my project/job descriptions:{experienceEntry.Description}";
+    //    prompt += $"\r\n\r\nHere’s the job posting: {instruction.JobPosting}";
+    //    prompt += $"Here is one of my project/job descriptions:{experienceEntry.Description}";
 
-        var request = AiRequest.CreateRequest(prompt, instructionText);
-        request.GenerationConfig = new AiSOResponseContainer
-        {
-            ResponseSchema = new AiSOArray
-            {
-                Items = new AiSOResponseSchema
-                {
-                    Type = "STRING"
-                }
-            }
-        };
+    //    var request = AiRequest.CreateRequest(prompt, instructionText);
+    //    request.GenerationConfig = new AiSOResponseContainer
+    //    {
+    //        ResponseSchema = new AiSOArray
+    //        {
+    //            Items = new AiSOResponseSchema
+    //            {
+    //                Type = "STRING"
+    //            }
+    //        }
+    //    };
 
-        return await Post<List<string>>(request);
-    }
+    //    return await Post<List<string>>(request);
+    //}
 
-    public async Task<List<string>> TailorSection(ResumeInstruction instruction, string SectionContent)
-    {
-        string prompt = $"I'm applying for the following job. {instruction.JobPosting}";
-        prompt += $"\n{instruction.Instruction}";
+    //public async Task<List<string>> TailorSection(ResumeInstruction instruction, string SectionContent)
+    //{
+    //    string prompt = $"I'm applying for the following job. {instruction.JobPosting}";
+    //    prompt += $"\n{instruction.Instruction}";
 
-        var request = AiRequest.CreateRequest(prompt);
-        request.GenerationConfig = new AiSOResponseContainer
-        {
-            ResponseSchema = new AiSOArray
-            {
-                Items = new AiSOResponseSchema
-                {
-                    Type = "STRING"
-                }
-            }
-        };
+    //    var request = AiRequest.CreateRequest(prompt);
+    //    request.GenerationConfig = new AiSOResponseContainer
+    //    {
+    //        ResponseSchema = new AiSOArray
+    //        {
+    //            Items = new AiSOResponseSchema
+    //            {
+    //                Type = "STRING"
+    //            }
+    //        }
+    //    };
 
-        return await Post<List<string>>(request);
-    }
+    //    return await Post<List<string>>(request);
+    //}
 
     public async Task<List<string>> TailorSummary(ResumeInstruction instruction, List<ExperienceEntry> experienceEntries, string? currentSummary)
     {

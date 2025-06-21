@@ -41,7 +41,26 @@ public class AiRequest
                 }
         };
         return aiRequest;
-    }    
+    }
+
+    public static AiRequest CreateRequest<T>(string prompt, string? instructions)
+    {
+        AiRequest request = instructions != null ? CreateRequest(prompt, instructions) : CreateRequest(prompt);
+        if (typeof(T).IsAssignableFrom(typeof(List<string>)))
+        {
+            request.GenerationConfig = new AiSOResponseContainer
+            {
+                ResponseSchema = new AiSOArray
+                {
+                    Items = new AiSOResponseSchema
+                    {
+                        Type = "STRING"
+                    }
+                }
+            };
+        }
+        return request;
+    }
 }
 
 public class AiPartContainer

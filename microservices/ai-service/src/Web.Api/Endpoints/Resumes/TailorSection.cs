@@ -1,5 +1,4 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Resumes.TailorExperienceEntry;
 using Application.Resumes.TailorSection;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -20,18 +19,18 @@ internal sealed class TailorSection : IEndpoint
     {
         app.MapPost(EndpointsBase.AIResumesPath + "/tailor-section", async (
             [FromBody] Request request,
-            ICommandHandler<TailorSectionCommand, List<string>> handler,
+            ICommandHandler<TailorSectionCommand, string> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new TailorSectionCommand(
                 request.Instruction,
                 request.SectionContent                
                 );
-            Result<List<string>> result = await handler.Handle(command, cancellationToken);
+            Result<string> result = await handler.Handle(command, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-            .Produces<List<string>>(StatusCodes.Status200OK)
+            .Produces<string>(StatusCodes.Status200OK)
             .RequireAuthorization()
             .WithTags(Tags.Resumes);
     }
