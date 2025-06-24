@@ -1,12 +1,11 @@
 <div id="ai-profile-entry-form" class="container d-flex flex-column h-100 pb-3">
   <app-profile-entry-form
-    #profileEntryForm
-    class="profile-entry-form"
+    #profileEntryForm    
     [profileEntry]="this.profileEntry"
     (onSubmit)="submit($event)"
     (onCancel)="cancel()"
   ></app-profile-entry-form>
-  <div class="container">
+  <div class="container mt-2">
     <div
       class="flex-shrink-1 justify-content-end d-flex"
       style="flex-shrink: 1"

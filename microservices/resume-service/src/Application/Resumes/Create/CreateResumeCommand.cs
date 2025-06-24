@@ -8,5 +8,5 @@ public sealed record CreateResumeCommand(
     UserInfo UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
-    List<string> Keywords,
+    string Keywords,
     string? JobPosting) : ICommand<ResumeResponse>;

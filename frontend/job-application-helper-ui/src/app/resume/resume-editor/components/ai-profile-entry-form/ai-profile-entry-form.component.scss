@@ -1,18 +1,26 @@
 .ai-section {
-  display: flex;  
-//   flex: 1;
+  display: flex;
+  //   flex: 1;
   //   width: 300px;
 }
 
-.profile-entry-form {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-content: start;
-  gap: 1rem;
+#profile-entry-form {
+  max-height: none;
+  overflow-y: hidden;
+
+  .form {
+    max-height: 2px;
+  }
+  // display: flex;
+  // flex: 1;
+  // flex-direction: column;
+  // align-content: start;
+  // gap: 1rem;
+  // overflow: hidden;
+  // max-height: none;
 }
 
-#ai-profile-entry-form{
+#ai-profile-entry-form {
   overflow: scroll;
   max-height: 90vh;
 }

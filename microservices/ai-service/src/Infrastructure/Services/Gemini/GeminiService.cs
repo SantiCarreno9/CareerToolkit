@@ -38,7 +38,8 @@ internal class GeminiService : IAIService
 
                 if (typeof(T) == typeof(string))
                 {
-                    return (T)content;
+                    string? stringContent = content is JsonElement element ? element.GetString() : content.ToString();
+                    return (T)(object)stringContent!;
                 }
                 string contentStr = content.ToString();
                 if (string.IsNullOrEmpty(contentStr))

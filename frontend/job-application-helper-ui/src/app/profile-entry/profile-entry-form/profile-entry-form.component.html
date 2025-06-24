@@ -1,4 +1,4 @@
-<div class="d-flex flex-column justify-content-center">
+<div id="profile-entry-form" class="flex-column justify-content-center">
   <h2 style="text-align: center">Profile Entry</h2>
   <form [formGroup]="profileEntryFormGroup" (submit)="submit()" class="form p-3">
     <div class="mb-3">
@@ -50,14 +50,7 @@
           class="form-control"
           formControlName="startDate"
         />
-        <label for="startDate">Start Date</label>
-        <!-- @if (address?.invalid && (address?.touched || address?.dirty)) {
-        <div class="alert alert-danger p-2">
-          @if (address?.hasError('required')) {
-          <div>Address is required.</div>
-          }
-        </div>
-        } -->
+        <label for="startDate">Start Date</label>        
       </div>
       <div class="form-check mb-3">
         <input
@@ -78,7 +71,7 @@
         <label for="endDate">End Date</label>
       </div>
       }
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column">
         <label class="form-label">Description</label>
         <quill-editor
           [modules]="descriptionQuillModules"

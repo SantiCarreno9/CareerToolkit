@@ -177,7 +177,7 @@ export class UserInfoFormComponent
       id: this.userInfo.id,
       email: this.allowEmailEditing ? this.userInfoFormGroup.value.email : this.userInfo.email,
       fullName: this.userInfoFormGroup.value.fullName || '',
-      phoneNumber: this.userInfoFormGroup.value.phoneNumber || '',
+      phoneNumber: this.userInfoFormGroup.value.phoneNumber.toString() || '',
       address: this.userInfoFormGroup.value.address || '',
       additionalContactInfo: this.userInfo.additionalContactInfo || {}
     }

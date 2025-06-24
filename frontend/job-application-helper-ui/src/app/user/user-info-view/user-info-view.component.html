@@ -1,19 +1,57 @@
 <div>
   <div class="mb-3">
     <label class="form-label data-label">Full Name</label>
-    <div class="form-control-plaintext">{{ this.userInfo.fullName }}</div>
+    <div class="d-flex flex-row">
+      <div class="align-content-center">{{ this.userInfo.fullName }}</div>
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(this.userInfo.fullName)"
+        [cdkCopyToClipboard]="this.userInfo.fullName"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label data-label">Email</label>
-    <div class="form-control-plaintext">{{ this.userInfo.email }}</div>
+    <div class="d-flex flex-row">
+      <div class="align-content-center">{{ this.userInfo.email }}</div>
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(this.userInfo.email)"
+        [cdkCopyToClipboard]="this.userInfo.email"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label data-label">Phone Number</label>
-    <div class="form-control-plaintext">{{ HelperMethods.getFormattedPhoneNumber(this.userInfo.phoneNumber) }}</div>
+    <div class="d-flex flex-row">
+      <div class="align-content-center">
+        {{ HelperMethods.getFormattedPhoneNumber(this.userInfo.phoneNumber) }}
+      </div>
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(this.userInfo.phoneNumber)"
+        [cdkCopyToClipboard]="this.userInfo.phoneNumber"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label data-label">Address</label>
-    <div class="form-control-plaintext">{{ this.userInfo.address }}</div>
+    <div class="d-flex flex-row">
+      <div class="align-content-center">{{ this.userInfo.address }}</div>
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(this.userInfo.address)"
+        [cdkCopyToClipboard]="this.userInfo.address"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
   </div>
   <div
     class="mb-3"
@@ -22,13 +60,22 @@
     <label for="{{ item.key }}" class="form-label data-label">{{
       item.key
     }}</label>
-    <a
-      id="{{ item.key }}"
-      class="form-control-plaintext"
-      href="{{ item.value }}"
-      target="_blank"
-      rel="noopener noreferrer"
-      >{{ item.value }}</a
-    >
+    <div class="d-flex flex-row">
+      <a
+        id="{{ item.key }}"
+        class="align-content-center"
+        href="{{ item.value }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ item.value }}</a
+      >
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(item.value)"
+        [cdkCopyToClipboard]="item.value"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
   </div>
 </div>

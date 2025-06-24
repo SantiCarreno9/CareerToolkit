@@ -22,7 +22,7 @@ public class PagedList<T>
     public static async Task<PagedList<T>> CreateAsync(IQueryable<T> query, int page, int pageSize)
     {
         int totalCount = await query.CountAsync();
-        List<T> items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        List<T> items = await query.Skip(page * pageSize).Take(pageSize).ToListAsync();
 
         return new(items, page, pageSize, totalCount);
     }
@@ -30,7 +30,7 @@ public class PagedList<T>
     public static PagedList<T> Create(IQueryable<T> query, int page, int pageSize)
     {
         int totalCount = query.Count();
-        var items = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        var items = query.Skip(page* pageSize).Take(pageSize).ToList();
 
         return new(items, page, pageSize, totalCount);
     }

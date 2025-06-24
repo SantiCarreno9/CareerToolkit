@@ -8,7 +8,7 @@ public sealed record ResumeResponse(
     UserInfo UserInfo,
     List<ProfileEntryResponse> ProfileEntries,
     string ResumeInfo,
-    List<string> Keywords,
+    string Keywords,
     string? JobPosting,
     DateTime CreatedAt,
     DateTime ModifiedAt);

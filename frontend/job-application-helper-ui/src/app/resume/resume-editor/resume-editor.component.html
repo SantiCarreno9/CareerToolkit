@@ -49,7 +49,7 @@
         #tooltip="matTooltip"
         matTooltip="Save"
         [matTooltipPosition]="'above'"
-        [disabled]="isSaving"
+        [disabled]="isSaving||!hasUnsavedChanges"
         (click)="save()"
       >
         @if(!isSaving){ <i class="bi bi-floppy2-fill"></i> }@else {

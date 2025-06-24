@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Inject, Input, Output, ViewChild } from '@angular/core';
 import { TextSectionFormComponent } from '../text-section-form/text-section-form.component';
 import { SectionInfoText } from '../../../templates/shared/models/sectioninfo';
 import { Resume } from '../../../shared/models/resume';
@@ -22,7 +22,8 @@ export class AiTextSectionFormComponent
 
   protected aiService: AiService = inject(AiService);
 
-  protected textSectionForm?: TextSectionFormComponent;
+  @ViewChild('textSectionForm') textSectionForm!: TextSectionFormComponent;
+
   protected readonly resume: Resume;
   protected aiInstructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
   protected sectionInfo: SectionInfoText = new SectionInfoText('', '', '');
@@ -59,8 +60,9 @@ export class AiTextSectionFormComponent
     resumeInstruction.jobPosting = this.resume.jobPosting || '';
     if (this.sectionInfo.sectionType === ResumeSectionType.Summary)
     {
-      const currentSummary: string | null = instruction.aiInstructionType === AiInstructionType.Generate ? null : this.textSectionForm?.content?.value;
-
+      var currentSummary: string | null = instruction.aiInstructionType === AiInstructionType.Generate ? null : this.textSectionForm?.content?.value;
+      if (currentSummary != null)
+        currentSummary = HelperMethods.convertToPlainText(currentSummary);
       const experienceEntries = this.resume.profileEntries.map(entry => ProfileEntryHelperMethods.convertProfileEntryToExperienceEntry(entry));
       this.aiService.tailorSummary(resumeInstruction, experienceEntries, currentSummary).subscribe(res =>
       {
@@ -72,12 +74,14 @@ export class AiTextSectionFormComponent
     }
     else
     {
-      const currentContent: string = this.textSectionForm?.content?.value || '';
+      var currentContent: string = this.textSectionForm?.content?.value || '';
+      if (currentContent != null)
+        currentContent = HelperMethods.convertToPlainText(currentContent);
       this.aiService.tailorSection(resumeInstruction, currentContent).subscribe(res =>
       {
         if (res.success && res.value)
         {
-          this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(res.value);
+          this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value);
         }
       });
     }

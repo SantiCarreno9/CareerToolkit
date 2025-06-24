@@ -17,7 +17,7 @@ internal sealed class Update : IEndpoint
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
     string? JobPosting,
-    List<string> Keywords);
+    string Keywords);
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(EndpointsBase.ResumesPath + "/{id}", async (
