@@ -15,7 +15,7 @@ internal sealed class Create : IEndpoint
     UserInfo UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
-    List<string> Keywords,
+    string Keywords,
     string? JobPosting);
 
     public void MapEndpoint(IEndpointRouteBuilder app)

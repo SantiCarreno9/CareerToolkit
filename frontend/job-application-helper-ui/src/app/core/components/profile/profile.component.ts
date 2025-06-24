@@ -14,10 +14,16 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { ProfileEntryHelperMethods } from '../../../profile-entry/shared/profile-entry-helper-methods';
 import { ProfileEntryService } from '../../services/profile-entry.service';
 import { UserService } from '../../services/user.service';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 @Component({
   selector: 'app-profile',
-  imports: [DialogModule, CommonModule, UserInfoViewComponent, ProfileEntryViewComponent],
+  imports: [DialogModule,
+    CommonModule,
+    UserInfoViewComponent,
+    ProfileEntryViewComponent,
+    CdkAccordionModule
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })

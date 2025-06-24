@@ -59,9 +59,9 @@ export class ResumeEditorComponent
   UserInfoHelperMethods = UserInfoHelperMethods;
 
   protected expandedIndex = 0;
-
+  protected hasUnsavedChanges: boolean = false;
   private readonly resumeId: string | null;
-  protected resume: Resume = new Resume();
+  protected resume: Resume = new Resume();  
   protected template: any;
   protected isSaving: boolean = false;
 
@@ -119,6 +119,7 @@ export class ResumeEditorComponent
       if (res.success && res.value)
         this.resume.modifiedAt = res.value.modifiedAt;
       this.isSaving = false;
+      this.hasUnsavedChanges = false;
     });
   }
 
@@ -184,6 +185,7 @@ export class ResumeEditorComponent
       this.resume.name = result.name;
       this.resume.keywords = result.keywords;
       this.resume.jobPosting = result.jobPosting || null;
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -216,6 +218,7 @@ export class ResumeEditorComponent
         additionalContactInfo: result.additionalContactInfo
       }
       this.resume.userInfo = updatedInfo;
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -239,6 +242,7 @@ export class ResumeEditorComponent
     dialogRef.componentInstance?.onSubmit.subscribe((result: any[]) =>
     {
       this.resume.resumeInfo.sections = result;
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -261,6 +265,7 @@ export class ResumeEditorComponent
     dialogRef.componentInstance?.onSubmit.subscribe((result: any[]) =>
     {
       this.resume.resumeInfo.sections = [...result];
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -296,6 +301,7 @@ export class ResumeEditorComponent
     {
       this.resume.resumeInfo.sections[sectionIndex].title = result.title;
       this.resume.resumeInfo.sections[sectionIndex].content = result.content;
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -318,6 +324,7 @@ export class ResumeEditorComponent
     {
       this.resume.resumeInfo.sections[sectionIndex].title = result.title;
       this.resume.resumeInfo.sections[sectionIndex].content = result.content;
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -354,6 +361,7 @@ export class ResumeEditorComponent
       this.resume.resumeInfo.sections[sectionIndex].entriesId.push(result.id);
       this.resume.profileEntries.push(result);
       this.sortEntries(sectionIndex);
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -378,9 +386,9 @@ export class ResumeEditorComponent
       if (entryIndex !== -1)
       {
         this.resume.profileEntries[entryIndex] = result;
-        // if(profileEntry.startDate)
         this.sortEntries(sectionIndex);
       }
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -408,6 +416,7 @@ export class ResumeEditorComponent
         this.resume.profileEntries[entryIndex] = result;
         this.sortEntries(sectionIndex);
       }
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -434,6 +443,7 @@ export class ResumeEditorComponent
       const entryIdInSectionIndex = this.resume.resumeInfo.sections[sectionIndex].entriesId.findIndex((value: string) => value === id);
       if (entryIdInSectionIndex !== -1)
         this.resume.resumeInfo.sections[sectionIndex].entriesId.splice(entryIdInSectionIndex, 1);
+      this.hasUnsavedChanges = true;
     });
   }
 
@@ -469,6 +479,7 @@ export class ResumeEditorComponent
           this.resume.resumeInfo.sections[sectionIndex].entriesId.push(entry.id)
         });
         this.sortEntries(sectionIndex);
+        this.hasUnsavedChanges = true;
         dialogRef.close();
       })
       dialogRef.componentInstance?.onCancel.subscribe(() =>
@@ -511,6 +522,7 @@ export class ResumeEditorComponent
       }
       this.resume.resumeInfo.sections[sectionIndex].entriesId.push(...entriesIds);
       this.sortEntries(sectionIndex);
+      this.hasUnsavedChanges = true;
       dialogRef.close();
     })
     dialogRef.componentInstance?.onCancel.subscribe(() =>

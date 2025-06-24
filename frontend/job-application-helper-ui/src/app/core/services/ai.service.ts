@@ -39,14 +39,14 @@ export class AiService
     );
   }
 
-  tailorSection(instruction: AiResumeInstruction, sectionContent: string): Observable<RequestResponse<string[]>>
+  tailorSection(instruction: AiResumeInstruction, sectionContent: string): Observable<RequestResponse<string>>
   {
     const body = {
       instruction: instruction,
       sectionContent: sectionContent
     };
-    return this.http.post<string[]>(`${this.baseUrl}/tailor-section`, body, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText))
+    return this.http.post<string>(`${this.baseUrl}/tailor-section`, body, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<string>(res.status === 200, res.body, res.statusText))
     );
   }
 

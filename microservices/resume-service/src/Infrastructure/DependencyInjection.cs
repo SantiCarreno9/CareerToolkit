@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Behaviors;
 using Application.Abstractions.Data;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
@@ -29,7 +30,8 @@ public static class DependencyInjection
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         services.AddTransient<DomainEventsDispatcher>();
-        
+
+        services.AddScoped<IResumeDbOperations, ResumeDbOperations>();
         return services;
     }
 
@@ -60,7 +62,7 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthenticationInternal(
         this IServiceCollection services)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);            
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
 

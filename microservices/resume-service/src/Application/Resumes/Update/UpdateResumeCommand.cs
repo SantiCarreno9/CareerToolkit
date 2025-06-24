@@ -8,6 +8,6 @@ public sealed record UpdateResumeCommand(
     string Name,
     UserInfo UserInfo,
     List<ProfileEntry> ProfileEntries,
-    List<string> Keywords,
+    string Keywords,
     string? JobPosting,
     string ResumeInfo) : ICommand<ResumeResponse>;

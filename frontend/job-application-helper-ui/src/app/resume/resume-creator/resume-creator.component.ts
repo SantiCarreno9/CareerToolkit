@@ -127,37 +127,6 @@ export class ResumeCreatorComponent
         this.onResumeCreated.emit(res.value);
       }
     })
-    // this.userService.getUserInfo().subscribe(res =>
-    // {
-    //   if (!res.success)
-    //   {
-    //     console.log(res.error)
-    //     return;
-    //   }
-
-    //   const personalInfo: UserPersonalInfo = this.convertUserInfoToUserPersonalInfo(res.value);
-    //   this.profileEntryService.getProfileEntries().subscribe(res =>
-    //   {
-    //     if (!res.success)
-    //     {
-    //       console.log(res.error);
-    //       return;
-    //     }
-
-    //     const profileEntries: ProfileEntry[] = res.value ?? [];
-    //     this.resume.userInfo = personalInfo;
-    //     this.resume.profileEntries = profileEntries;
-    //     this.resume.resumeInfo.templateId = this.selectedTemplateId;
-
-    //     this.resumeService.createResume(this.resume).subscribe(res =>
-    //     {
-    //       if (res.success && res.value)
-    //       {
-    //         this.onResumeCreated.emit(res.value);
-    //       }
-    //     })
-    //   })
-    // });
   }
 
   private convertUserInfoToUserPersonalInfo(userInfo?: UserInfo | null): UserPersonalInfo
