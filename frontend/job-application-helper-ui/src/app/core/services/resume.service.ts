@@ -21,10 +21,10 @@ export class ResumeService
   {
   }
 
-  getResumes(searchTerm: string, page: number, pageSize: number): Observable<RequestResponse<PagedList<Resume>>>
+  getResumes(searchTerm: string, page: number, pageSize: number): Observable<RequestResponse<PagedList<LightResume>>>
   {
     return this.http.get(`${this.baseUrl}?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<PagedList<Resume>>(res.status === 200, this.convertResponseToPagedList(res.body), res.statusText)))
+      map((res) => new RequestResponse<PagedList<LightResume>>(res.status === 200, this.convertResponseToPagedList(res.body), res.statusText)))
   }
 
   getResumeById(id: string): Observable<RequestResponse<Resume>>
@@ -44,7 +44,7 @@ export class ResumeService
         endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
       })),
       resumeInfo: JSON.stringify(data.resumeInfo),
-      keywords: data.keywords,
+      keywords: JSON.stringify(data.keywords),
       jobPosting: data.jobPosting || ''
     };
     return this.http.post(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
@@ -63,7 +63,7 @@ export class ResumeService
         endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
       })),
       resumeInfo: JSON.stringify(data.resumeInfo),
-      keywords: data.keywords,
+      keywords: JSON.stringify(data.keywords),
       jobPosting: data.jobPosting || ''
     };
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
@@ -94,7 +94,7 @@ export class ResumeService
     return resume;
   }
 
-  private convertToCompressedResume(response: any): LightResume
+  private convertToLightResume(response: any): LightResume
   {
     const resume: LightResume = {
       id: '',
@@ -120,7 +120,7 @@ export class ResumeService
     if (response.items as Resume[] === undefined)
       return pagedList;
 
-    pagedList.items = response.items.map((re: Resume) => this.convertToCompressedResume(re));
+    pagedList.items = response.items.map((re: Resume) => this.convertToLightResume(re));
     return pagedList;
   }
 }

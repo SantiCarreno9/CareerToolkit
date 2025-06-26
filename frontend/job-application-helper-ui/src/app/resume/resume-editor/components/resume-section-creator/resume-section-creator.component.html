@@ -27,9 +27,14 @@
       <mat-radio-button class="m-1" [value]="ResumeSectionType.ProfileEntry">
         <div>{{ ResumeSectionType.ProfileEntry }}</div>
       </mat-radio-button>
-      @if(!doesSummarySkillsSectionExist()){
+      @if(!doesSummarySectionExist()){
       <mat-radio-button class="m-1" [value]="ResumeSectionType.Summary">
         <div>{{ ResumeSectionType.Summary }}</div>
+      </mat-radio-button>
+      }
+      @if(!doesSkillsSectionExist()){
+      <mat-radio-button class="m-1" [value]="ResumeSectionType.Skills">
+        <div>{{ ResumeSectionType.Skills }}</div>
       </mat-radio-button>
       }
       <mat-radio-button class="m-1" [value]="ResumeSectionType.Text">

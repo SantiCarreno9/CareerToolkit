@@ -27,14 +27,26 @@ export class AiService
     );
   }
 
-  tailorSummary(instruction: AiResumeInstruction, experienceEntries: ExperienceEntry[], currentSummary: string | null): Observable<RequestResponse<string[]>>
+  tailorSummary(instruction: AiResumeInstruction, experienceEntries: ExperienceEntry[], currentSummary: string | null): Observable<RequestResponse<string>>
   {
     const body = {
       instruction: instruction,
       experienceEntries: experienceEntries,
       currentSummary: currentSummary
     };
-    return this.http.post<string[]>(`${this.baseUrl}/tailor-summary`, body, { withCredentials: true, observe: 'response' }).pipe(
+    return this.http.post<string>(`${this.baseUrl}/tailor-summary`, body, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<string>(res.status === 200, res.body, res.statusText))
+    );
+  }
+
+  tailorSkills(instruction: AiResumeInstruction, experienceEntries: ExperienceEntry[], currentSkills: string | null): Observable<RequestResponse<string[]>>
+  {
+    const body = {
+      instruction: instruction,
+      experienceEntries: experienceEntries,
+      currentSkills: currentSkills
+    };
+    return this.http.post<string[]>(`${this.baseUrl}/tailor-skills`, body, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText))
     );
   }

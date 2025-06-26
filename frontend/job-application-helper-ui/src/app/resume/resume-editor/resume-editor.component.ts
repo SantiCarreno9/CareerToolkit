@@ -1,5 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, CanDeactivate, CanDeactivateFn, Router, UrlTree } from '@angular/router';
 import { Resume } from '../shared/models/resume';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
@@ -31,6 +31,8 @@ import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-b
 import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
 import { AiTextSectionFormComponent } from './components/ai-text-section-form/ai-text-section-form.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-resume-editor',
@@ -44,7 +46,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './resume-editor.component.html',
   styleUrl: './resume-editor.component.scss'
 })
-export class ResumeEditorComponent
+export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, OnDestroy
 {
   private dialog = inject(Dialog);
   private activatedRoute = inject(ActivatedRoute);
@@ -59,9 +61,9 @@ export class ResumeEditorComponent
   UserInfoHelperMethods = UserInfoHelperMethods;
 
   protected expandedIndex = 0;
-  protected hasUnsavedChanges: boolean = false;
+  public hasUnsavedChanges: boolean = false;
   private readonly resumeId: string | null;
-  protected resume: Resume = new Resume();  
+  protected resume: Resume = new Resume();
   protected template: any;
   protected isSaving: boolean = false;
 
@@ -73,9 +75,34 @@ export class ResumeEditorComponent
       this.goBack();
       return;
     }
-
     this.requestResumeData();
   }
+  canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree
+  {
+    if (this.hasUnsavedChanges)
+    {
+      return confirm('You have unsaved changes. Do you want to leave?');
+    }
+    return true;
+  };
+
+  ngOnInit(): void
+  {
+    window.addEventListener('beforeunload', this.beforeUnloadHandler);
+  }
+
+  ngOnDestroy(): void
+  {
+    window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+  }
+
+  beforeUnloadHandler = (event: BeforeUnloadEvent) =>
+  {
+    if (this.hasUnsavedChanges)
+    {
+      event.preventDefault();
+    }
+  };
 
   protected get modifiedAtTime()
   {
@@ -130,7 +157,7 @@ export class ResumeEditorComponent
 
   protected goBack(): void
   {
-    this.router.navigate(['/resume']);
+    this.router.navigate(['/resumes']);
   }
 
   protected exportPDF(): void

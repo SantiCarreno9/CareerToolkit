@@ -17,12 +17,13 @@ export class NavbarComponent implements OnInit
   protected isLoggedIn: boolean = false;
 
   ngOnInit(): void
-  {    
+  {
+    this.authService.checkAuthState();
     this.authService.onLoggedInStatusChange$.subscribe((isLoggedIn: boolean) =>
-    {      
+    {
       this.isLoggedIn = isLoggedIn;
       this.userName = this.authService.userBasicInfo.fullName.split(" ")[0]
-    });    
+    });
   }
 
   protected logout(): void

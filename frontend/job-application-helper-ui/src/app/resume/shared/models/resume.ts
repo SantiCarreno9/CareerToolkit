@@ -1,3 +1,4 @@
+import { HelperMethods } from "../../../core/helper-methods";
 import { ProfileEntry } from "../../../profile-entry/shared/models/profile-entry";
 import { ResumeInfo } from "./resume-info";
 import { UserPersonalInfo } from "./userpersonalinfo";
@@ -36,16 +37,8 @@ export class Resume
     }
 
     getPhoneNumber(): string | null
-    {
-        let cleaned = ('' + this.userInfo.phoneNumber).replace(/\D/g, '');
-
-        let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-
-        if (match)
-        {
-            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-        };
-        return null
+    {        
+        return HelperMethods.getFormattedPhoneNumber(this.userInfo.phoneNumber);
     }
 
     getAdditionalContactInfo(): { [key: string]: string }

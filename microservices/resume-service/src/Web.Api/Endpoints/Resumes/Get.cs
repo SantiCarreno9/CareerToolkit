@@ -1,7 +1,6 @@
 ﻿using Application.Abstractions;
 using Application.Abstractions.Messaging;
 using Application.Resumes.Get;
-using Microsoft.AspNetCore.Mvc;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -30,6 +29,6 @@ internal sealed class Get : IEndpoint
         })
             .Produces<PagedList<GetResumesResponse>>(StatusCodes.Status200OK)
             .RequireAuthorization()
-            .WithTags(Tags.ProfileEntries);
+            .WithTags(Tags.Resumes);
     }
 }

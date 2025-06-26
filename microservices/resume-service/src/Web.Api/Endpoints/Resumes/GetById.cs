@@ -24,6 +24,6 @@ internal sealed class GetById : IEndpoint
         })
             .Produces<ResumeResponse>(StatusCodes.Status200OK)
             .RequireAuthorization()
-            .WithTags(Tags.ProfileEntries);
+            .WithTags(Tags.Resumes);
     }
 }

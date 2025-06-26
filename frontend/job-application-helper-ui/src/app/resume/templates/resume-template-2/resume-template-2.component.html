@@ -1,0 +1,31 @@
+<div class="resume">
+  <div class="name">
+    <p>{{ this.resume.userInfo.fullName }}</p>
+  </div>
+  <div class="contact-info-container">
+    <p>{{ this.resume.getPhoneNumber() }}</p>
+    @if(this.resume.userInfo.address!==''){
+    <p>{{ this.resume.userInfo.address }}</p>
+    }
+    <p>{{ this.resume.userInfo.email }}</p>
+    <a
+      *ngFor="let item of this.resume.getAdditionalContactInfo() | keyvalue"
+      href="{{ item.key }}"
+      target="_blank"
+      rel="noopener"
+    >
+      {{ item.value }}
+    </a>
+  </div>
+  <div *ngFor="let section of this.resumeInfo.sections">
+    @if(this.templateService.isSectionText(section)){
+    <app-section-text class="mb-2" [info]="section"></app-section-text>
+    }@else if(this.templateService.isSectionProfileEntry(section)){
+    <app-section-profile-entry
+      class="mb-2"
+      [entries]="this.resume.profileEntries"
+      [info]="section"
+    ></app-section-profile-entry>
+    }
+  </div>
+</div>

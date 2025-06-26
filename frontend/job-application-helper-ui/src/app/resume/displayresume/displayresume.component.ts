@@ -148,7 +148,7 @@ export class DisplayResumeComponent
 
   protected goBack(): void
   {
-    this.router.navigate(['/resume']);
+    this.router.navigate(['/resumes']);
   }
 
   protected download():void{

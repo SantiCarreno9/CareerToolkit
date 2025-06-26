@@ -13,7 +13,7 @@ import { ResumeService } from "../../core/services/resume.service";
     imports: [CommonModule],
     template: ``
 })
-export abstract class TemplateBase implements OnInit
+export abstract class ResumeTemplateBase implements OnInit
 {
     protected resumeService = inject(ResumeService);
     protected templateService = inject(ResumeTemplateService);

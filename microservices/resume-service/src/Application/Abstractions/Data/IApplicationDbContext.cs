@@ -11,6 +11,7 @@ public interface IApplicationDbContext
 {
     DbSet<ProfileEntry> ProfileEntries { get; }    
     DbSet<Resume> Resumes { get; }    
+    DbSet<CoverLetter> CoverLetters { get; }    
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

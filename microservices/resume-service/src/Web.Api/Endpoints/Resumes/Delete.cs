@@ -1,6 +1,5 @@
 ﻿
 using Application.Abstractions.Messaging;
-using Application.ProfileEntries.Delete;
 using Application.Resumes.Delete;
 using SharedKernel;
 using Web.Api.Extensions;

@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.Resumes.Create;
+using FluentValidation;
 
-namespace Application.Resumes.Create;
+namespace Application.Resumes.Update;
 internal sealed class UpdateResumeCommandValidator:AbstractValidator<CreateResumeCommand>
 {
     public UpdateResumeCommandValidator()

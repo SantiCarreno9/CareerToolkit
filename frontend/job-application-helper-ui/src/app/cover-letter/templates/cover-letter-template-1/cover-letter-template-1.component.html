@@ -1,0 +1,27 @@
+<div class="cover-letter">
+  <div class="name">
+    <div>{{ this.coverLetter.userInfo.fullName }}</div>
+  </div>  
+  <div class="contact-info-container">
+    <p>{{ this.coverLetter.getPhoneNumber() }}</p>
+    <p>{{ this.coverLetter.userInfo.address }}</p>    
+    <p>{{ this.coverLetter.userInfo.email }}</p>
+  </div>
+  <!-- <div class="line"></div>
+  <div class="line"></div> -->
+  <p class="date">{{ this.coverLetter.getDate() }}</p>
+  <div class="company-info">
+    @if(this.coverLetter.organizationInfo.recipientName){
+    <p>{{ this.coverLetter.organizationInfo.recipientName }}</p>
+    } @if(this.coverLetter.organizationInfo.recipientInfo){
+    <p>{{ this.coverLetter.organizationInfo.recipientInfo }}</p>
+    } @if(this.coverLetter.organizationInfo.organizationName){
+    <p>{{ this.coverLetter.organizationInfo.organizationName }}</p>
+    }
+    @if(this.coverLetter.organizationInfo.organizationAddress){
+    <p>{{ this.coverLetter.organizationInfo.organizationAddress }}</p>
+    }
+  </div>
+  <div class="subject">{{ this.coverLetter.jobPosition }}</div>
+  <div class="text" [innerHTML]="this.coverLetter.getContent()"></div>
+</div>

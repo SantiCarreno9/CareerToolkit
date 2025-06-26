@@ -19,7 +19,6 @@
     <button class="btn btn-outline-dark" (click)="search()">
       <i class="bi bi-search"></i>
     </button>
-    <!-- <button type="button" class="btn btn-success">Create New Resume</button> -->
     <button
       type="button"
       class="mx-2 btn btn-outline-success dropdown-toggle"
@@ -44,62 +43,6 @@
     </ul>
   </div>
   <div class="mt-4">
-    <!-- <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Modified At</th>
-          <th scope="col">Keywords</th>
-        </tr>
-      </thead>
-      <tbody class="table-group-divider">
-        @if(!isLoading){
-        <tr *ngFor="let resume of resumes; let index = index">
-          <th scope="row">{{ resume.name }}</th>
-          <td>{{ resume.modifiedAt.toLocaleString() }}</td>
-          <td>
-            <span
-              class="badge rounded-pill text-bg-warning m-1"
-              style="font-weight: 400"
-              *ngFor="let keyword of resume.keywords"
-              >{{ keyword }}</span
-            >
-          </td>
-
-          <td>
-            <a
-              class="btn btn-outline-primary"
-              #tooltip="matTooltip"
-              matTooltip="View"
-              [matTooltipPosition]="'above'"
-              [href]="'/resume/' + resume.id"
-            >
-              <i class="bi bi-eye"></i>
-            </a>
-            <a
-              class="btn btn-outline-success"
-              #tooltip="matTooltip"
-              matTooltip="Edit"
-              [matTooltipPosition]="'above'"
-              [href]="'/edit-resume/' + resume.id"
-            >
-              <i class="bi bi-pencil-square"></i>
-            </a>
-            <button
-              class="btn btn-outline-danger"
-              #tooltip="matTooltip"
-              matTooltip="Delete"
-              [matTooltipPosition]="'above'"
-              (click)="deleteResume(resume.id, index)"
-            >
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table> -->
-
     <table mat-table [dataSource]="this.resumes">
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
@@ -127,7 +70,9 @@
 
       <ng-container matColumnDef="modifiedAt">
         <th mat-header-cell *matHeaderCellDef>Modified At</th>
-        <td mat-cell *matCellDef="let resume">{{ resume.modifiedAt.toLocaleString() }}</td>
+        <td mat-cell *matCellDef="let resume">
+          {{ resume.modifiedAt.toLocaleString() }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="keywords">
@@ -180,7 +125,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
         mat-row
-        *matRowDef="let row; columns: isLoading ? [] : displayedColumns"        
+        *matRowDef="let row; columns: isLoading ? [] : displayedColumns"
       ></tr>
     </table>
     @if(isLoading){
