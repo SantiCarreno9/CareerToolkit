@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddTransient<DomainEventsDispatcher>();
 
         services.AddScoped<IResumeDbOperations, ResumeDbOperations>();
+        services.AddScoped<ICoverLetterDbOperations, CoverLetterDbOperations>();
         return services;
     }
 

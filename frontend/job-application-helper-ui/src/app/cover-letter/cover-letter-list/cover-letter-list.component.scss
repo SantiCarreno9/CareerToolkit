@@ -1,0 +1,33 @@
+#cover-letter-list {
+  overflow: scroll;
+}
+
+.btn-icon {
+  font-size: large;
+}
+
+.delete-btn {
+  border-width: 0;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.input-wrapper input {
+  padding-right: 40px;  
+}
+
+.input-wrapper button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+table{
+    background-color: transparent;
+}

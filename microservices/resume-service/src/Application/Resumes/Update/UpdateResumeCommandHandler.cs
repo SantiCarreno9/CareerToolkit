@@ -3,13 +3,12 @@ using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Extensions;
 using Application.Resumes.Shared;
-using Application.Resumes.Update;
 using Domain.Entities;
 using Domain.Errors;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
-namespace Application.ProfileEntries.Update;
+namespace Application.Resumes.Update;
 internal sealed class UpdateResumeCommandHandler(
     IApplicationDbContext context,
     IUserContext userContext,

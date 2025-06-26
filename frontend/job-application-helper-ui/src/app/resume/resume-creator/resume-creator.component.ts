@@ -18,7 +18,6 @@ import { UserService } from '../../core/services/user.service';
 import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
 import { AiProfileEntriesImporterComponent } from '../shared/components/ai-profile-entries-importer/ai-profile-entries-importer.component';
 
-
 @Component({
   selector: 'app-resume-creator',
   imports: [ResumeTemplateSelectorComponent, ResumeBasicInfoFormComponent, ProfileEntriesImporterComponent, AiProfileEntriesImporterComponent],

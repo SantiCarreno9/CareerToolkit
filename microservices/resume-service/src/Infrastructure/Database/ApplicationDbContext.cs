@@ -10,6 +10,7 @@ public class ApplicationDbContext(
 {
     public DbSet<ProfileEntry> ProfileEntries { get; set; }
     public DbSet<Resume> Resumes { get; set; }
+    public DbSet<CoverLetter> CoverLetters { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

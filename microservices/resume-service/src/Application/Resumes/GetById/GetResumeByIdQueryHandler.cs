@@ -2,13 +2,12 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Extensions;
-using Application.Resumes.GetById;
 using Application.Resumes.Shared;
 using Domain.Errors;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
-namespace Application.ProfileEntries.GetById;
+namespace Application.Resumes.GetById;
 
 internal sealed class GetResumeByIdQueryHandler(
     IApplicationDbContext context,

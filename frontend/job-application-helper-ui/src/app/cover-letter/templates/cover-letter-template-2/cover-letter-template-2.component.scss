@@ -1,0 +1,78 @@
+$base-color: black;
+:host {
+  color: $base-color;
+  font-size: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: $base-color;
+}
+.cover-letter {
+  // padding: 1rem;
+}
+
+.name {
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: x-large;
+}
+
+.contact-info-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+
+  p {
+    flex: 1;
+    text-align: center;
+    word-wrap:break-word;
+    word-break: keep-all;
+    min-width: 50%;
+    margin: 0;
+  }
+
+  a {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.line{
+    flex: 1;
+    background-color: black;
+    height: 1px;
+    margin-bottom: 1px;
+    // border-width: 3px;
+    width: 100%;
+}
+
+.date{
+    margin: 1rem 0;
+}
+
+.company-info{
+    max-width: 26%;
+    margin-bottom: 1rem;
+
+    p{
+        margin: 0;
+    }
+}
+
+.subject{
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.section{
+  margin-bottom: 2rem;
+
+  .title{
+    text-transform: uppercase;
+    font-size: x-large;
+    font-weight: 600;
+  }
+}

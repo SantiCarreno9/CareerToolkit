@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BasicResumeSections } from '../../shared/models/basic-resume-sections';
 import { SectionInfoBase, SectionInfoProfileEntry, SectionInfoText } from './models/sectioninfo';
-import { Template1Component } from '../template1/template1.component';
+import { ResumeTemplate1Component } from '../template1/resume-template-1.component';
 import { ResumeTemplateInfo } from '../../shared/models/resume-template';
 import { ResumeSectionType } from '../../shared/models/resume-section-type';
+import { ResumeTemplate2Component } from '../resume-template-2/resume-template-2.component';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class ResumeTemplateService
     var info = this.templatesInfo.find(ti => ti.id === id);
     if (info === undefined)
       return null;
-    return info;
+    return { ...info };
   }
 
   getTemplatesInfo(): ResumeTemplateInfo[]
@@ -36,7 +37,7 @@ export class ResumeTemplateService
         id: '1',
         name: 'Template 1',
         imageUrl: './resume-templates-thumbnail/Template1-Snapshot.png',
-        component: Template1Component,
+        component: ResumeTemplate1Component,
         defaultSections: [
           new SectionInfoText(
             '1',
@@ -53,6 +54,34 @@ export class ResumeTemplateService
             '3',
             BasicResumeSections.Education,
             []
+          ),
+          new SectionInfoText(
+            '4',
+            BasicResumeSections.Skills,
+            ''
+          )
+        ]
+      },
+      {
+        id: '2',
+        name: 'Template 2',
+        imageUrl: './resume-templates-thumbnail/Template2-Snapshot.png',
+        component: ResumeTemplate2Component,
+        defaultSections: [
+          new SectionInfoProfileEntry(
+            '1',
+            BasicResumeSections.WorkExperience,
+            []
+          ),
+          new SectionInfoProfileEntry(
+            '2',
+            BasicResumeSections.Education,
+            []
+          ),
+          new SectionInfoText(
+            '3',
+            'Skills',
+            ''
           )
         ]
       }
@@ -60,8 +89,8 @@ export class ResumeTemplateService
   }
 
   isSectionText(section: any): boolean
-  { 
-    return section.sectionType === ResumeSectionType.Text || section.sectionType === ResumeSectionType.Summary;
+  {
+    return section.sectionType !== ResumeSectionType.ProfileEntry;
   }
 
   isSectionProfileEntry(section: any): boolean

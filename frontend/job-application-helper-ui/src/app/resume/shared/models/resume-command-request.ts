@@ -7,7 +7,7 @@ export interface CreateResumeCommandRequest
     userInfo: UserPersonalInfo,
     profileEntries: any[],
     resumeInfo: string,
-    keywords: string[],
+    keywords: string,
     jobPosting?: string
 };
 
@@ -18,6 +18,6 @@ export interface UpdateResumeCommandRequest
     userInfo: UserPersonalInfo,
     profileEntries: any[],
     resumeInfo: string,
-    keywords: string[],
+    keywords: string,
     jobPosting?: string
 }

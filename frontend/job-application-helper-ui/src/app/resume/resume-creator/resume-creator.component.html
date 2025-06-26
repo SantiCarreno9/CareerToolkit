@@ -1,5 +1,6 @@
 <div id="resume-creator">
-  <div class="form-container">    
+  <div class="form-container">
+    <h5>{{(quickResume?"Quick Resume":"Custom Resume")}}</h5>
     @if(currentPage==ResumeCreatorPages.ResumeName){
     <app-resume-basic-info-form
       [acceptButtonText]="'Next'"

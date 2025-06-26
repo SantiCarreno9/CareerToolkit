@@ -20,7 +20,7 @@ internal sealed class TailorSummary : IEndpoint
     {
         app.MapPost(EndpointsBase.AIResumesPath + "/tailor-summary", async (
             [FromBody] Request request,
-            ICommandHandler<TailorSummaryCommand, List<string>> handler,
+            ICommandHandler<TailorSummaryCommand, string> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new TailorSummaryCommand(
@@ -28,11 +28,11 @@ internal sealed class TailorSummary : IEndpoint
                 request.ExperienceEntries,
                 request.CurrentSummary
                 );
-            Result<List<string>> result = await handler.Handle(command, cancellationToken);
+            Result<string> result = await handler.Handle(command, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-            .Produces<List<string>>(StatusCodes.Status200OK)
+            .Produces<string>(StatusCodes.Status200OK)
             .RequireAuthorization()
             .WithTags(Tags.Resumes);
     }

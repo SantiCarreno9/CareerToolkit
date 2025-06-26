@@ -6,4 +6,4 @@ public sealed record TailorSummaryCommand(
     ResumeInstruction Instruction,
     List<ExperienceEntry> ExperienceEntries,
     string? CurrentSummary
-    ) : ICommand<List<string>>;
+    ) : ICommand<string>;

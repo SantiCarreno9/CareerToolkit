@@ -51,9 +51,14 @@ export class ResumeSectionCreatorComponent
     return this.sectionCreatorForm.get('content');
   }
 
-  protected doesSummarySkillsSectionExist(): boolean
+  protected doesSummarySectionExist(): boolean
   {
     return this.sections.some((section: SectionInfoBase) => section.sectionType === ResumeSectionType.Summary);
+  }
+
+  protected doesSkillsSectionExist(): boolean
+  {
+    return this.sections.some((section: SectionInfoBase) => section.sectionType === ResumeSectionType.Skills);
   }
 
   protected typeSelectionChanged(selection: MatRadioChange<ResumeSectionType>): void

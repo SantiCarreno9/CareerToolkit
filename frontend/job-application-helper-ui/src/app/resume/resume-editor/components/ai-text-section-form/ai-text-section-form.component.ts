@@ -40,7 +40,8 @@ export class AiTextSectionFormComponent
       this.sectionInfo = data.sectionInfo;
     this.resume = data.resume;
 
-    this.areInstructionsOptional = this.sectionInfo.sectionType === ResumeSectionType.Summary;
+    this.areInstructionsOptional = this.sectionInfo.sectionType === ResumeSectionType.Summary ||
+      this.sectionInfo.sectionType === ResumeSectionType.Skills;
     // if(this.sectionInfo)
     this.aiInstructionTypeOptions = [
       { key: 'Generate', value: AiInstructionType.Generate },
@@ -58,6 +59,7 @@ export class AiTextSectionFormComponent
       jobPosting: ''
     };
     resumeInstruction.jobPosting = this.resume.jobPosting || '';
+
     if (this.sectionInfo.sectionType === ResumeSectionType.Summary)
     {
       var currentSummary: string | null = instruction.aiInstructionType === AiInstructionType.Generate ? null : this.textSectionForm?.content?.value;
@@ -65,6 +67,20 @@ export class AiTextSectionFormComponent
         currentSummary = HelperMethods.convertToPlainText(currentSummary);
       const experienceEntries = this.resume.profileEntries.map(entry => ProfileEntryHelperMethods.convertProfileEntryToExperienceEntry(entry));
       this.aiService.tailorSummary(resumeInstruction, experienceEntries, currentSummary).subscribe(res =>
+      {
+        if (res.success && res.value)
+        {
+          this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value);
+        }
+      })
+    }
+    else if (this.sectionInfo.sectionType === ResumeSectionType.Skills)
+    {
+      var currentSkills: string | null = instruction.aiInstructionType === AiInstructionType.Generate ? null : this.textSectionForm?.content?.value;
+      if (currentSkills != null)
+        currentSkills = HelperMethods.convertToPlainText(currentSkills);
+      const experienceEntries = this.resume.profileEntries.map(entry => ProfileEntryHelperMethods.convertProfileEntryToExperienceEntry(entry));
+      this.aiService.tailorSkills(resumeInstruction, experienceEntries, currentSkills).subscribe(res =>
       {
         if (res.success && res.value)
         {
