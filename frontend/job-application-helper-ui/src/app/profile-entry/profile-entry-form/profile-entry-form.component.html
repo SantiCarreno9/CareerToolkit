@@ -1,6 +1,10 @@
 <div id="profile-entry-form" class="flex-column justify-content-center">
-  <h2 style="text-align: center">Profile Entry</h2>
-  <form [formGroup]="profileEntryFormGroup" (submit)="submit()" class="form p-3">
+  <h2 style="text-align: center">{{ header }}</h2>
+  <form
+    [formGroup]="profileEntryFormGroup"
+    (submit)="submit()"
+    class="form p-3"
+  >
     <div class="mb-3">
       <div class="form-floating mb-3">
         <input
@@ -14,9 +18,8 @@
         <div class="alert alert-danger p-2">
           @if (title?.hasError('required')) {
           <div>Title is required.</div>
-          }
-          @if(title?.hasError('minlength')){
-            <div>Minimun 2 characters</div>
+          } @if(title?.hasError('minlength')){
+          <div>Minimun 2 characters</div>
           }
         </div>
         }
@@ -50,7 +53,7 @@
           class="form-control"
           formControlName="startDate"
         />
-        <label for="startDate">Start Date</label>        
+        <label for="startDate">Start Date</label>
       </div>
       <div class="form-check mb-3">
         <input
@@ -72,16 +75,28 @@
       </div>
       }
       <div class="mb-3 d-flex flex-column">
-        <label class="form-label">Description</label>
+        <div>
+          <label class="form-label">Description</label>
+          <i
+        [hidden]="isDescriptionEmpty()"
+        class="btn bi bi-x-lg"
+        (click)="cleanDescription()"
+      ></i>
+        </div>        
         <quill-editor
           [modules]="descriptionQuillModules"
           formControlName="description"
-        ></quill-editor>
-      </div>
+        >
+        </quill-editor>
+      </div>      
     </div>
     <div class="justify-content-end d-flex">
       <button type="submit" class="btn btn-outline-dark mx-2">Save</button>
-      <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="cancel()"
+      >
         Cancel
       </button>
     </div>

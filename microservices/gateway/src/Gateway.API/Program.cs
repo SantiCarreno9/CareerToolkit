@@ -1,4 +1,6 @@
 using Gateway.API.Extensions;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,19 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("fixed-by-ip", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Request.Headers["X-Forwarded-For"].ToString(),
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+});
+
 var app = builder.Build();
 
 app.MapGet("/api/test", () =>
@@ -34,5 +49,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapReverseProxy(proxyPipeline => proxyPipeline.AddAutheticationHeaders());
+
+app.UseRateLimiter();
 
 app.Run();

@@ -5,8 +5,10 @@ export class HelperMethods
         return date.toISOString().slice(0, 10);
     }
 
-    public static cleanHtmlString(htmlString: string): string
+    public static cleanHtmlString(htmlString: string | null): string
     {
+        if (htmlString === null)
+            return '';
         return htmlString.replace(/&nbsp;/g, ' ');
     }
 
@@ -69,5 +71,27 @@ export class HelperMethods
             .replace(/\t/g, ' ')
             // Optional: Remove excessive spaces
             .replace(/ +/g, ' ');
+    }
+
+    public static cleanUrl(url: string): string
+    {
+        let newUrl: string = url;
+        if (url.includes('https://'))
+        {
+            newUrl = url.slice('https://'.length);
+        } else if (url.includes('http://'))
+        {
+            newUrl = url.slice('http://'.length);
+        }
+
+        if (newUrl.includes('www.'))
+        {
+            newUrl = newUrl.slice('www.'.length);
+        }
+        return newUrl;
+    }
+
+    public static isNullOrEmpty(text?:string):boolean{
+        return text===null || text===undefined || text.length==0 || text.trim()==='';
     }
 }

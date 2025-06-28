@@ -15,19 +15,21 @@ internal sealed class TailorExperienceEntryCommandHandler(
 
         prompt += command.Instruction.AiInstructionType switch
         {
-            AiInstruction.Generate => "Generate three bullet points that describe this experience in a compelling way.",
+            AiInstruction.Generate => "Generate points that describe this experience in a compelling way relevant to the job posting.",
             AiInstruction.Tailor => "Rewrite the responsibilities to better match the job posting. Highlight relevant keywords and required skills.",
             AiInstruction.Improve => "Improve the wording of the responsibilities. Make them more concise, professional, and results-oriented.",
             AiInstruction.Custom => $"{command.Instruction.Instruction}",
             _ => "Summarize the experience in three clear and concise bullet points.",
-        };
+        };        
 
-        prompt += "\n Try to limit them to 3 bullet items.";
-        
-        string instruction = "\"You are a resume assistant. Always respond in short, impactful bullet points. Each point must be under 15 words, start with an action verb, and have keywords highlighted when applicable.";
+        string instruction = "\"You are a resume assistant. Always respond in short, impactful bullet points. Start with an action verb, and have keywords highlighted when applicable.";
         if (!string.IsNullOrWhiteSpace(command.Instruction.Instruction))
         {
-            instruction += $"\n\nAdditional instructions:\n{command.Instruction.Instruction}";
+            instruction += $"\n\nAdditional instructions with higher priority:\n{command.Instruction.Instruction}";
+        }
+        if (command.Instruction.AiInstructionType == AiInstruction.Custom)
+        {
+            instruction = "";
         }
         return await service.GenerateText<List<string>>(new InstructionToAi(prompt, instruction));
     }

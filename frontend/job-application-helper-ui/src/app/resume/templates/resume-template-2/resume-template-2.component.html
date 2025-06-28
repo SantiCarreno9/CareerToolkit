@@ -1,31 +1,67 @@
 <div class="resume">
-  <div class="name">
-    <p>{{ this.resume.userInfo.fullName }}</p>
+  <div id="header">
+    <div class="name">
+      {{ this.resume.userInfo.fullName }}
+    </div>
+    <div class="contact-info-container">
+      <ng-container *ngFor="let item of getContactItems(this.resume.userInfo.contactInfo)">
+        @if(item.isUrl){
+        <a
+          class="d-flex flex-row"
+          href="{{ item.url }}"
+          target="_blank"
+          rel="noopener"
+        >
+          <p>
+            <span class="mx-1" [innerHTML]="item.icon"></span
+            >{{ item.displayText }}
+          </p>
+        </a>
+        }@else {
+        <p>
+          <span class="mx-1" [innerHTML]="item.icon"></span>
+          {{ item.displayText }}
+        </p>
+        }
+      </ng-container>
+    </div>
   </div>
-  <div class="contact-info-container">
-    <p>{{ this.resume.getPhoneNumber() }}</p>
-    @if(this.resume.userInfo.address!==''){
-    <p>{{ this.resume.userInfo.address }}</p>
-    }
-    <p>{{ this.resume.userInfo.email }}</p>
-    <a
-      *ngFor="let item of this.resume.getAdditionalContactInfo() | keyvalue"
-      href="{{ item.key }}"
-      target="_blank"
-      rel="noopener"
-    >
-      {{ item.value }}
-    </a>
-  </div>
+
   <div *ngFor="let section of this.resumeInfo.sections">
     @if(this.templateService.isSectionText(section)){
-    <app-section-text class="mb-2" [info]="section"></app-section-text>
-    }@else if(this.templateService.isSectionProfileEntry(section)){
-    <app-section-profile-entry
-      class="mb-2"
-      [entries]="this.resume.profileEntries"
-      [info]="section"
-    ></app-section-profile-entry>
+    <div class="section">
+      <div class="title">{{ section.title }}</div>
+      <p
+        class="text content"
+        [innerHTML]="HelperMethods.cleanHtmlString(section.content)"
+      ></p>
+    </div>
+    } @else if(this.templateService.isSectionProfileEntry(section)){
+
+    <div class="section">
+      <div class="title">{{ section.title }}</div>
+      <div *ngFor="let id of section.entriesId">
+        @let entry = getProfileEntryById(id); @if(entry!==undefined){
+        <div class="entry-container">
+          <div class="title-container">
+            <div class="title">{{ entry.title }}</div>
+            <div class="time-frame">
+              {{ getTimeFrame(entry) }}
+            </div>
+          </div>
+          @if(entry.organization || entry.location){
+          <div class="organization-info">
+            {{ `${entry.organization}, ${entry.location}` }}
+          </div>
+          }
+          <p
+            class="description text"
+            [innerHTML]="HelperMethods.cleanHtmlString(entry.description)"
+          ></p>
+        </div>
+        }
+      </div>
+    </div>
     }
   </div>
 </div>

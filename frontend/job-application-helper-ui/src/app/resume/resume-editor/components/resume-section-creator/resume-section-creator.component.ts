@@ -32,7 +32,7 @@ export class ResumeSectionCreatorComponent
       this.sections = [...data.sections];
     }
     this.newSectionIndex = this.sections.length;
-    this.sections.push(new SectionInfoBase(this.newSectionIndex.toString(), '', this.resumeSectionType));
+    this.sections.push(new SectionInfoBase('', this.resumeSectionType));
     this.sectionCreatorForm = new FormGroup({
       title: new FormControl('', [
         Validators.required,
@@ -82,9 +82,10 @@ export class ResumeSectionCreatorComponent
       return;
     }
     this.sections[this.newSectionIndex] = (this.resumeSectionType === ResumeSectionType.ProfileEntry) ?
-      new SectionInfoProfileEntry(this.newSectionIndex.toString(), this.sectionCreatorForm.value.title, []) :
-      new SectionInfoText(this.newSectionIndex.toString(), this.sectionCreatorForm.value.title, '', this.resumeSectionType);
-    for (let i = 0; i < this.sections.length; i++){
+      new SectionInfoProfileEntry(this.sectionCreatorForm.value.title, []) :
+      new SectionInfoText(this.sectionCreatorForm.value.title, this.resumeSectionType, '');
+    for (let i = 0; i < this.sections.length; i++)
+    {
       this.sections[i].id = i.toString();
     }
     this.onSubmit.emit(this.sections);

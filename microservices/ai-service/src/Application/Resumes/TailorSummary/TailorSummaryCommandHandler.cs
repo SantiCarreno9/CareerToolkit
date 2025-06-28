@@ -34,7 +34,8 @@ internal sealed class TailorSummaryCommandHandler(
                 "\nHere is my current summary:\n" + command.CurrentSummary +
                 "\nImprove this summary to sound more polished and impactful, while keeping the general content. Keep it in paragraph format.",
 
-            AiInstruction.Custom => command.Instruction.Instruction,
+            AiInstruction.Custom => (!string.IsNullOrEmpty(command.CurrentSummary) ? "Here is my current summary: " + command.CurrentSummary + "\n" : "") +
+            command.Instruction.Instruction,
 
             _ => "\nWrite a resume summary based on this information. It should be a short, professional paragraph (2–4 sentences)."
         };
@@ -49,7 +50,12 @@ internal sealed class TailorSummaryCommandHandler(
 
         if (!string.IsNullOrWhiteSpace(command.Instruction.Instruction) && command.Instruction.AiInstructionType != AiInstruction.Custom)
         {
-            instruction += $"\n\nAdditional instructions:\n{command.Instruction.Instruction}";
+            instruction += $"\n\nAdditional instructions with higher priority:\n{command.Instruction.Instruction}";
+        }
+
+        if (command.Instruction.AiInstructionType == AiInstruction.Custom)
+        {
+            instruction = "";
         }
 
         return await service.GenerateText<string>(new InstructionToAi(prompt, instruction));

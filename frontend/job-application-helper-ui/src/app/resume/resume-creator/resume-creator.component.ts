@@ -1,8 +1,6 @@
 import { Component, EventEmitter, inject, Inject, Output } from '@angular/core';
 import { ResumeTemplateSelectorComponent } from '../resume-template-selector/resume-template-selector.component';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { UserPersonalInfo } from '../shared/models/userpersonalinfo';
-import { UserInfo } from '../../user/shared/models/userinfo';
 import { Resume } from '../shared/models/resume';
 import { Router } from '@angular/router';
 import { ResumeTemplateInfo } from '../shared/models/resume-template';
@@ -17,6 +15,7 @@ import { ResumeService } from '../../core/services/resume.service';
 import { UserService } from '../../core/services/user.service';
 import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
 import { AiProfileEntriesImporterComponent } from '../shared/components/ai-profile-entries-importer/ai-profile-entries-importer.component';
+import { ResumeHelperMethods } from '../shared/resume-helper-methods';
 
 @Component({
   selector: 'app-resume-creator',
@@ -117,7 +116,7 @@ export class ResumeCreatorComponent
       }
       this.resume.profileEntries = entries.value;
     }
-    this.resume.userInfo = this.convertUserInfoToUserPersonalInfo(userInfo.value);
+    this.resume.userInfo = ResumeHelperMethods.convertUserInfoToUserPersonalInfo(userInfo.value);
     this.resume.resumeInfo.templateId = this.selectedTemplateId;
     this.resumeService.createResume(this.resume).subscribe(res =>
     {
@@ -126,27 +125,6 @@ export class ResumeCreatorComponent
         this.onResumeCreated.emit(res.value);
       }
     })
-  }
-
-  private convertUserInfoToUserPersonalInfo(userInfo?: UserInfo | null): UserPersonalInfo
-  {
-    if (userInfo === undefined || userInfo === null)
-    {
-      return {
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        address: '',
-        additionalContactInfo: {}
-      }
-    }
-    return {
-      fullName: userInfo.fullName,
-      email: userInfo.email,
-      phoneNumber: userInfo.phoneNumber,
-      address: userInfo.address,
-      additionalContactInfo: userInfo.additionalContactInfo
-    };
   }
 
   protected cancel()

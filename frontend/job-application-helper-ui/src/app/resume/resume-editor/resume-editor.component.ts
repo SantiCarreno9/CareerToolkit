@@ -1,12 +1,9 @@
 import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, CanDeactivate, CanDeactivateFn, Router, UrlTree } from '@angular/router';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { Resume } from '../shared/models/resume';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
-import { UserInfoViewComponent } from '../../user/user-info-view/user-info-view.component';
-import { UserInfo } from '../../user/shared/models/userinfo';
-import { UserPersonalInfo } from '../shared/models/userpersonalinfo';
-import { UserInfoFormComponent } from '../../user/user-info-form/user-info-form.component';
+import { UserPersonalInfo } from '../shared/models/user-personal-info';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { ProfileEntryFormComponent } from '../../profile-entry/profile-entry-form/profile-entry-form.component';
@@ -23,7 +20,6 @@ import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-en
 import { ProfileEntriesImporterComponent } from '../shared/components/profile-entries-importer/profile-entries-importer.component';
 import { ResumeSectionType } from '../shared/models/resume-section-type';
 import { AiProfileEntryFormComponent } from './components/ai-profile-entry-form/ai-profile-entry-form.component';
-import { UserInfoHelperMethods } from '../../user/shared/user-info-helper-methods';
 import { ProfileEntryService } from '../../core/services/profile-entry.service';
 import { ResumeService } from '../../core/services/resume.service';
 import { UserService } from '../../core/services/user.service';
@@ -33,13 +29,16 @@ import { AiTextSectionFormComponent } from './components/ai-text-section-form/ai
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { Observable } from 'rxjs';
+import { UserPersonalInfoFormComponent } from './components/user-personal-info-form/user-personal-info-form.component';
+import { ResumeHelperMethods } from '../shared/resume-helper-methods';
+import { UserPersonalInfoViewComponent } from './components/user-personal-info-view/user-personal-info-view.component';
 
 @Component({
   selector: 'app-resume-editor',
   imports: [CommonModule,
     DialogModule,
     CdkAccordionModule,
-    UserInfoViewComponent,
+    UserPersonalInfoViewComponent,
     ProfileEntryViewComponent,
     TextSectionViewComponent,
     MatTooltipModule],
@@ -58,7 +57,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
 
   @ViewChild(NgComponentOutlet, { static: false }) ngComponentOutlet?: NgComponentOutlet;
 
-  UserInfoHelperMethods = UserInfoHelperMethods;
+  ResumeHelperMethods = ResumeHelperMethods;
 
   protected expandedIndex = 0;
   public hasUnsavedChanges: boolean = false;
@@ -223,28 +222,24 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
 
   protected openUserInfoFormDialog(): void
   {
-    const dialogRef = this.dialog.open(UserInfoFormComponent, {
+    const dialogRef = this.dialog.open(UserPersonalInfoFormComponent, {
       width: '500px',
       data: {
-        userInfo: {
+        userPersonalInfo: {
           ...this.resume.userInfo,
-          additionalContactInfo: { ...this.resume.userInfo.additionalContactInfo }
-        },
-        allowEmailEditing: true
+          contactInfo: [...this.resume.userInfo.contactInfo]
+        }
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true
     });
-    dialogRef.componentInstance?.onSubmit.subscribe((result: UserInfo) =>
+    dialogRef.componentInstance?.onSubmit.subscribe((result: UserPersonalInfo) =>
     {
       const updatedInfo: UserPersonalInfo = {
         fullName: result.fullName,
-        email: result.email,
-        phoneNumber: result.phoneNumber,
-        address: result.address,
-        additionalContactInfo: result.additionalContactInfo
-      }
-      this.resume.userInfo = updatedInfo;
+        contactInfo: result.contactInfo
+      }      
+      this.resume.userInfo = updatedInfo;      
       this.hasUnsavedChanges = true;
       dialogRef.close();
     })

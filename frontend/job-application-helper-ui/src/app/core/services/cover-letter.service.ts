@@ -37,37 +37,14 @@ export class CoverLetterService
 
   createCoverLetter(data: Resume): Observable<RequestResponse<CoverLetter>>
   {
-    const request: CreateResumeCommandRequest = {
-      name: data.name,
-      userInfo: data.userInfo,
-      profileEntries: data.profileEntries.map((entry: ProfileEntry) => ({
-        ...entry,
-        startDate: entry.startDate.toISOString().slice(0, 10),
-        endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
-      })),
-      resumeInfo: JSON.stringify(data.resumeInfo),
-      keywords: JSON.stringify(data.keywords),
-      jobPosting: data.jobPosting || ''
-    };
+    const request={};
     return this.http.post(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<CoverLetter>(res.status === 201, this.convertToCoverLetter(res.body), res.statusText)));
   }
 
   updateCoverLetter(id: string, data: Resume): Observable<RequestResponse<CoverLetter>>
   {
-    const request: UpdateResumeCommandRequest = {
-      id: data.id,
-      name: data.name,
-      userInfo: data.userInfo,
-      profileEntries: data.profileEntries.map((entry: ProfileEntry) => ({
-        ...entry,
-        startDate: entry.startDate.toISOString().slice(0, 10),
-        endDate: entry.endDate !== null ? entry.endDate.toISOString().slice(0, 10) : null
-      })),
-      resumeInfo: JSON.stringify(data.resumeInfo),
-      keywords: JSON.stringify(data.keywords),
-      jobPosting: data.jobPosting || ''
-    };
+    const request={};    
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<CoverLetter>(res.status === 200, this.convertToCoverLetter(res.body), res.statusText)));
   }

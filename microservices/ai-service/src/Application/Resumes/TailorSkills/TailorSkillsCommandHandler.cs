@@ -45,7 +45,12 @@ internal sealed class TailorSkillsCommandHandler(
 
         if (!string.IsNullOrWhiteSpace(command.Instruction.Instruction) && command.Instruction.AiInstructionType != AiInstruction.Custom)
         {
-            instruction += $"\n\nAdditional instructions:\n{command.Instruction.Instruction}";
+            instruction += $"\n\nAdditional instructions with higher priority:\n{command.Instruction.Instruction}";
+        }
+
+        if (command.Instruction.AiInstructionType == AiInstruction.Custom)
+        {
+            instruction = "";
         }
 
         return await service.GenerateText<List<string>>(new InstructionToAi(prompt, instruction));

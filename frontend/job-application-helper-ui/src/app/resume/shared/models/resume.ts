@@ -1,7 +1,7 @@
 import { HelperMethods } from "../../../core/helper-methods";
 import { ProfileEntry } from "../../../profile-entry/shared/models/profile-entry";
 import { ResumeInfo } from "./resume-info";
-import { UserPersonalInfo } from "./userpersonalinfo";
+import { UserPersonalInfo } from "./user-personal-info";
 
 export class Resume
 {
@@ -21,10 +21,7 @@ export class Resume
         this.name = '';
         this.userInfo = {
             fullName: '',
-            phoneNumber: '',
-            address: '',
-            email: '',
-            additionalContactInfo: {}
+            contactInfo: []
         };
         this.createdAt = new Date();
         this.modifiedAt = new Date();
@@ -34,36 +31,5 @@ export class Resume
             templateId: '',
             sections: []
         };
-    }
-
-    getPhoneNumber(): string | null
-    {        
-        return HelperMethods.getFormattedPhoneNumber(this.userInfo.phoneNumber);
-    }
-
-    getAdditionalContactInfo(): { [key: string]: string }
-    {
-        const contactInfo: { [key: string]: string } = {};
-
-        Object.values(this.userInfo.additionalContactInfo).forEach(value =>
-        {
-            const newKey = value;
-            if (value.includes('https://'))
-            {
-                value = value.slice('https://'.length);
-            } else if (value.includes('http://'))
-            {
-                value = value.slice('http://'.length);
-            }
-
-            if (value.includes('www.'))
-            {
-                value = value.slice('www.'.length);
-            }
-
-            contactInfo[newKey] = value;
-        });
-
-        return contactInfo;
-    }
+    }    
 }

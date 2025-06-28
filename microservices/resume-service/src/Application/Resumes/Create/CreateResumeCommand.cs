@@ -5,7 +5,7 @@ using Domain.Entities;
 namespace Application.Resumes.Create;
 public sealed record CreateResumeCommand(    
     string Name,
-    UserInfo UserInfo,
+    string UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
     string Keywords,

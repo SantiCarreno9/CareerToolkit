@@ -13,7 +13,7 @@ internal sealed class Update : IEndpoint
 {
     public sealed record Request(
     string Name,
-    UserInfo UserInfo,
+    string UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
     string? JobPosting,

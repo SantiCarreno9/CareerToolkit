@@ -4,7 +4,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { ResumeListComponent } from './resume/resume-list/resume-list.component';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { HomeComponent } from './core/components/home/home.component';
-import { DisplayResumeComponent } from './resume/displayresume/displayresume.component';
+import { DisplayResumeComponent } from './resume/display-resume/display-resume.component';
 import { ResumeEditorComponent } from './resume/resume-editor/resume-editor.component';
 import { ProfileComponent } from './core/components/profile/profile.component';
 import { CanDeactivateGuard } from './core/services/can-deactivate-guard.service';

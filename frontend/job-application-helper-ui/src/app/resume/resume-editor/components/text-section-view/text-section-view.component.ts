@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SectionInfoText } from '../../../templates/shared/models/sectioninfo';
 import { HelperMethods } from '../../../../core/helper-methods';
+import { ResumeSectionType } from '../../../shared/models/resume-section-type';
 
 @Component({
   selector: 'app-text-section-view',
@@ -10,7 +11,7 @@ import { HelperMethods } from '../../../../core/helper-methods';
 })
 export class TextSectionViewComponent
 {
-  @Input() info: SectionInfoText = new SectionInfoText('','','');
+  @Input() info: SectionInfoText = new SectionInfoText('',ResumeSectionType.Text,'');
 
   get content():string{
     return HelperMethods.cleanHtmlString(this.info.content);

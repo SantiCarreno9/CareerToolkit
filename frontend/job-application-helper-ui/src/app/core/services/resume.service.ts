@@ -9,6 +9,7 @@ import { ProfileEntryHelperMethods } from '../../profile-entry/shared/profile-en
 import { Resume } from '../../resume/shared/models/resume';
 import { CreateResumeCommandRequest, UpdateResumeCommandRequest } from '../../resume/shared/models/resume-command-request';
 import { LightResume } from '../../resume/shared/models/light-resume';
+import { ResumeHelperMethods } from '../../resume/shared/resume-helper-methods';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class ResumeService
   {
     const request: CreateResumeCommandRequest = {
       name: data.name,
-      userInfo: data.userInfo,
+      userInfo: JSON.stringify(data.userInfo),
       profileEntries: data.profileEntries.map((entry: ProfileEntry) => ({
         ...entry,
         startDate: entry.startDate.toISOString().slice(0, 10),
@@ -56,7 +57,7 @@ export class ResumeService
     const request: UpdateResumeCommandRequest = {
       id: data.id,
       name: data.name,
-      userInfo: data.userInfo,
+      userInfo: JSON.stringify(data.userInfo),
       profileEntries: data.profileEntries.map((entry: ProfileEntry) => ({
         ...entry,
         startDate: entry.startDate.toISOString().slice(0, 10),
@@ -84,11 +85,18 @@ export class ResumeService
 
     resume.id = response.id;
     resume.name = response.name;
-    resume.userInfo = response.userInfo;
+    let userInfo = JSON.parse(response.userInfo);
+    if (userInfo.contactInfo === undefined)
+    {
+      //Conversion from previous userInfo object: {FullName,Email,Address,PhoneNumber,AdditionalContactInfo}
+      //To {FullName,ContactInfo}
+      userInfo = ResumeHelperMethods.convertUserInfoToUserPersonalInfo(userInfo)
+    }
+    resume.userInfo = userInfo;
     resume.profileEntries = ProfileEntryHelperMethods.convertResponseToProfileEntries(response.profileEntries) ?? [];
     resume.resumeInfo = response.resumeInfo !== undefined ? JSON.parse(response.resumeInfo) : { templateId: '1', sections: [] };
     resume.createdAt = new Date(response.createdAt);
-    resume.modifiedAt = new Date(response.modifiedAt);    
+    resume.modifiedAt = new Date(response.modifiedAt);
     resume.keywords = JSON.parse(response.keywords);
     resume.jobPosting = response.jobPosting || null;
     return resume;

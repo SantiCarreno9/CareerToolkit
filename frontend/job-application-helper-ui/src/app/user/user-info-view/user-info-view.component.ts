@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UserInfo } from '../shared/models/userinfo';
+import { UserInfo } from '../shared/models/user-info';
 import { CommonModule } from '@angular/common';
 import { HelperMethods } from '../../core/helper-methods';
 import { ClipboardModule } from '@angular/cdk/clipboard';

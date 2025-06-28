@@ -1,0 +1,92 @@
+$base-color: black;
+:host {
+  color: $base-color;
+  font-size: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: $base-color;
+}
+
+p,
+div{
+  font-size: 1rem;
+}
+
+.resume {
+  // padding: 1rem;
+}
+
+#header {
+  .name {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+  }
+
+  .contact-info-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+
+    p {
+      flex: 1;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      word-wrap: break-word;
+      word-break: keep-all;
+      min-width: 30%;
+    }
+
+    a {
+      flex: 1;
+      text-align: center;
+      min-width: 30%;
+      display: flex;
+      p{
+        flex:1;
+      }
+    }
+  }
+}
+
+.section {
+  margin-bottom: 1rem;
+
+  .title {
+    text-transform: uppercase;
+    font-size: x-large;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.entry-container {  
+  margin-bottom: 1rem;
+  break-inside: avoid;
+
+  .title-container {
+    display: flex;
+    width: 100%;
+    break-inside: avoid;    
+
+    div {
+      flex: 1;
+    }
+    .title {
+      text-align: left;
+      text-transform: none;
+      font-size: 1.2rem;
+      margin-bottom: 0;
+    }
+    .time-frame {
+      text-align: right;
+      font-size: 1.1rem;
+    }
+  }
+}

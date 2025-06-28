@@ -18,16 +18,21 @@
       ></textarea>
       <div class="align-items-center">
         <select
+          #tooltip="matTooltip"
+          [matTooltip]="getCurrentInstructionDescription()"          
+          [matTooltipPosition]="'above'"
           id="instructionType"
           class="form-select m-2"
           aria-label="Default select example"
           formControlName="instructionType"
-          style="width: fit-content;"
+          style="width: fit-content"
           *ngIf="this.instructionTypeOptions.length > 1"
         >
           <!-- <option selected>Open this select menu</option> -->
           @for (option of this.instructionTypeOptions; track option) {
-          <option [value]="option.value">{{ option.key }}</option>
+          <option [value]="option.value">
+            {{ option.key }}
+          </option>
           }
         </select>
         <button
@@ -52,7 +57,7 @@
       <button
         class="btn btn-icon"
         #tooltip="matTooltip"
-        matTooltip="Copy to clipboard"            
+        matTooltip="Copy to clipboard"
         [matTooltipPosition]="'above'"
         (click)="copyToClipboard()"
       >

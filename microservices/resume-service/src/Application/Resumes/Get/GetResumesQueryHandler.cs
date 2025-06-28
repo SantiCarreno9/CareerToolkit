@@ -21,24 +21,12 @@ internal sealed class GetResumesQueryHandler(
         {
             return Result.Failure<PagedList<GetResumesResponse>>(ResumeErrors.Unauthorized());
         }
-        //IQueryable<GetResumesResponse?> resumes = context.Resumes
-        //    .Where(r => r.UserId == userContext.UserId)
-        //    .OrderByDescending(pe => pe.ModifiedAt)
-        //    .Select(r => new GetResumesResponse
-        //    (
-        //        r.Id,
-        //        r.Name,                
-        //        r.Keywords,                
-        //        r.CreatedAt,
-        //        r.ModifiedAt
-        //    ));
-
         IQueryable<GetResumesResponse?> resumes = !string.IsNullOrEmpty(query.SearchTerm) || !string.IsNullOrWhiteSpace(query.SearchTerm)
             ? await resumeDbOperations.FullTextSearch(context.Resumes
             .Where(r => r.UserId == userContext.UserId), query.SearchTerm)
             : context.Resumes
             .Where(r => r.UserId == userContext.UserId)
-            .OrderByDescending(pe => pe.ModifiedAt)
+            .OrderByDescending(pe => pe.CreatedAt)
             .Select(r => new GetResumesResponse
             (
                 r.Id,

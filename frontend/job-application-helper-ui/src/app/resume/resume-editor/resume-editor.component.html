@@ -49,7 +49,7 @@
         #tooltip="matTooltip"
         matTooltip="Save"
         [matTooltipPosition]="'above'"
-        [disabled]="isSaving||!hasUnsavedChanges"
+        [disabled]="isSaving || !hasUnsavedChanges"
         (click)="save()"
       >
         @if(!isSaving){ <i class="bi bi-floppy2-fill"></i> }@else {
@@ -117,16 +117,14 @@
               <i class="bi bi-pencil-square"></i>
             </button>
           </div>
-          <app-user-info-view
-            [userInfo]="
-              UserInfoHelperMethods.convertToUserInfo(this.resume.userInfo)
-            "
-          ></app-user-info-view>
+          <app-user-personal-info-view
+            [userPersonalInfo]="this.resume.userInfo"
+          ></app-user-personal-info-view>
         </div>
         }
       </cdk-accordion-item>
       <ng-container *ngIf="this.resume.resumeInfo.sections.length > 0">
-        @for (section of this.resume.resumeInfo.sections; track section.id; let
+        @for (section of this.resume.resumeInfo.sections; track section; let
         sectionIndex = $index) {
         <cdk-accordion-item
           #accordionItem="cdkAccordionItem"
@@ -251,13 +249,13 @@
           </button>
         </div>
       </ng-container>
-    </cdk-accordion>
-    @if(this.template!==undefined){
-    <div id="resume-container" class="resume-container">
-      <ng-container
-        *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
-      ></ng-container>
-    </div>
-    }
+    </cdk-accordion>    
+      @if(this.template!==undefined){
+      <div id="resume-container" class="resume-container">
+        <ng-container
+          *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
+        ></ng-container>
+      </div>
+      }    
   </div>
 </div>

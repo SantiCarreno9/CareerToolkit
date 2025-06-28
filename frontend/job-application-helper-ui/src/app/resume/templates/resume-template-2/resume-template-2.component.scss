@@ -2,52 +2,97 @@ $base-color: black;
 :host {
   color: $base-color;
   font-size: 1rem;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
   text-decoration: none;
   color: $base-color;
 }
+
+p,
+div {
+  font-size: 1rem;
+}
+
 .resume {
   // padding: 1rem;
 }
 
-.name {
-  text-align: center;
-  margin-bottom: 1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: x-large;
-}
-
-.contact-info-container {
-  width: 100%;
+#header {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-
-  p {
-    flex: 1;
-    text-align: center;
-    word-wrap:break-word;
-    word-break: keep-all;
-    width: 30%;
+  .name {
+    text-align: left;
+    // text-wrap: nowrap;
+    text-wrap-mode: nowrap;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    width: fit-content;
+    // flex-grow: 1;
   }
 
-  a {
-    flex: 1;
-    text-align: center;
+  .contact-info-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    text-wrap-mode: nowrap;
+    // margin-bottom: 1rem;
+    text-align: end;
+
+    a,
+    p {
+      flex: 1;
+      margin-bottom: 0;
+      text-align: end;
+      word-wrap: break-word;
+      word-break: keep-all;
+      min-width: 50%;
+    }
+
+    // a {
+    //   flex: 1;
+    //   // text-align: center;
+    // }
   }
 }
 
-.section{
-  margin-bottom: 2rem;
+.section {
+  margin-bottom: 1rem;
 
-  .title{
+  .title {
     text-transform: uppercase;
-    font-size: x-large;
+    font-size: 1.2rem;
     font-weight: 600;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    border-bottom: solid black;
+  }
+}
+
+.entry-container {
+  margin-bottom: 1rem;
+  break-inside: avoid;
+
+  .title-container {
+    display: flex;
+    width: 100%;
+    break-inside: avoid;
+
+    div {
+      flex: 1;
+    }
+    .title {
+      text-align: left;
+      text-transform: none;
+      font-size: 1.1rem;
+      margin-bottom: 0;
+      border: none;
+    }
+    .time-frame {
+      text-align: right;
+      font-size: 1.1rem;
+    }
   }
 }

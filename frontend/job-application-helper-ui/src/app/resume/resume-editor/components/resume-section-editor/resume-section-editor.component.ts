@@ -42,10 +42,10 @@ export class ResumeSectionEditorComponent
   }
 
   protected drop(event: CdkDragDrop<string[]>)
-  {
+  {     
+    moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
     if (event.previousIndex == this.sectionIndex)
       this.sectionIndex = event.currentIndex;
-    moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
   }
 
   protected submit(): void

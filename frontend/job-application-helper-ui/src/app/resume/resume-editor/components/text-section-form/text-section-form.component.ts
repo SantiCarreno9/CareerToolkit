@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { QuillModule } from 'ngx-quill';
 import { SectionInfoText } from '../../../templates/shared/models/sectioninfo';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { ResumeSectionType } from '../../../shared/models/resume-section-type';
 
 @Component({
   selector: 'app-text-section-form',
@@ -15,7 +16,7 @@ export class TextSectionFormComponent
 {
 
   protected readonly sectionInfoForm: FormGroup;
-  @Input() sectionInfo: SectionInfoText = new SectionInfoText('','','');
+  @Input() sectionInfo: SectionInfoText = new SectionInfoText('', ResumeSectionType.Text, '');
 
   protected quillModules = {
     toolbar: [
@@ -39,7 +40,7 @@ export class TextSectionFormComponent
       this.sectionInfo = data.sectionInfo;
     }
 
-    this.sectionInfoForm = new FormGroup({      
+    this.sectionInfoForm = new FormGroup({
       content: new FormControl(this.sectionInfo.content, [
         Validators.required
       ])
