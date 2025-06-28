@@ -22,11 +22,11 @@ internal sealed class ResumesConfiguration : IEntityTypeConfiguration<Resume>
             .IsRequired()
             .HasMaxLength(450);
 
-        builder.Property(r => r.UserInfo)
-            .HasColumnType("jsonb")
-            .HasConversion(
-                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                v => JsonSerializer.Deserialize<UserInfo>(v, (JsonSerializerOptions)null));
+        //builder.Property(r => r.UserInfo)
+        //    .HasColumnType("jsonb")
+        //    .HasConversion(
+        //        v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+        //        v => JsonSerializer.Deserialize<UserInfo>(v, (JsonSerializerOptions)null));
 
         builder.Property(r => r.ProfileEntries)
             .HasColumnType("jsonb")

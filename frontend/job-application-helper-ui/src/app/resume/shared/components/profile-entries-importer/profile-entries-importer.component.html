@@ -26,7 +26,7 @@
           [attr.aria-expanded]="accordionItem.expanded"
           [attr.aria-controls]="'accordion-body-' + groupIndex"
         >
-          {{ group.key }}
+          {{ getTitle(group.key) }}
           <span class="accordion-item-description">
             Click to {{ accordionItem.expanded ? "close" : "open" }}
           </span>

@@ -1,4 +1,4 @@
-export enum ContactOptions {
+export enum AdditionalContactOptions {    
     LinkedIn = 'LinkedIn',
     GitHub = 'GitHub',
     Website = 'Website',

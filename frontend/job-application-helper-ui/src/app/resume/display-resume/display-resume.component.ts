@@ -4,12 +4,13 @@ import { ResumeTemplateService } from '../templates/shared/resume-template.servi
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResumeService } from '../../core/services/resume.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-displayresume',
-  imports: [CommonModule],
-  templateUrl: './displayresume.component.html',
-  styleUrl: './displayresume.component.scss'
+  selector: 'app-display-resume',
+  imports: [CommonModule,MatTooltipModule],
+  templateUrl: './display-resume.component.html',
+  styleUrl: './display-resume.component.scss'
 })
 export class DisplayResumeComponent
 {
@@ -118,8 +119,7 @@ export class DisplayResumeComponent
         return;
       }
 
-      this.resume = res.value;
-      console.log(this.resume);
+      this.resume = res.value;      
       this.updateTemplate();
     })
   }
@@ -154,5 +154,11 @@ export class DisplayResumeComponent
   protected download():void{
     document.title = this.resume.name;
     window.print();
+  }
+
+  protected get modifiedAtTime()
+  {
+    const time = this.resume.modifiedAt.toLocaleTimeString();
+    return 'Last time saved: ' + time;
   }
 }

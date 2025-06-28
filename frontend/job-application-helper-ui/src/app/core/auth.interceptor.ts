@@ -1,33 +1,43 @@
-// auth.interceptor.ts
 import { inject } from '@angular/core';
 import { HttpEvent, HttpRequest, HttpErrorResponse, HttpHandlerFn } from '@angular/common/http';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { EMPTY, Observable, catchError, map, switchMap, throwError } from 'rxjs';
 import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>>
 {
-    // const authEvents = inject(AuthEventService);    
     const authService = inject(AuthService);
+    const router = inject(Router);
     return next(req).pipe(
         catchError((error: HttpErrorResponse) =>
         {
             if (error.status === 401)
             {
-                return authService.refreshLoginWithCookies().pipe(
-                    switchMap(() =>
-                    {
-                        // Retry the original request
-                        return next(req);
-                    }),
-                    catchError(err =>
-                    {
-                        authService.logout();
-                        return throwError(() => err);
-                    })
-                );
+                if (!req.url.includes('refresh-token'))
+                {
+                    return authService.refreshLoginWithCookies().pipe(
+                        switchMap(res =>
+                        {
+                            if (res.success)
+                            {
+                                return next(req);
+                            } else
+                            {
+                                router.navigate(['login']);
+                                return EMPTY;
+                            }
+                        })
+                    );
+                }
+                else
+                {
+                    router.navigate(['login']);
+                    return EMPTY;
+                }
             }
-            // return next(req);
-            return throwError(() => error);
+            if (error.status === 429)
+                return EMPTY;
+            throw error;
         })
     );
 }

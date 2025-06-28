@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
-import { UserInfo } from '../../user/shared/models/userinfo';
-import { UpdateUserInfoModel } from '../../user/shared/models/updateuserinfomodel';
+import { UserInfo } from '../../user/shared/models/user-info';
+import { UpdateUserInfoModel } from '../../user/shared/models/update-user-info-model';
 
 @Injectable({
   providedIn: 'root'

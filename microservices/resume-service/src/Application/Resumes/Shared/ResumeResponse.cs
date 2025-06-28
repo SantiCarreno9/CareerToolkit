@@ -5,7 +5,7 @@ namespace Application.Resumes.Shared;
 public sealed record ResumeResponse(
     string Id,
     string Name,
-    UserInfo UserInfo,
+    string UserInfo,
     List<ProfileEntryResponse> ProfileEntries,
     string ResumeInfo,
     string Keywords,

@@ -6,7 +6,7 @@ namespace Application.Resumes.Update;
 public sealed record UpdateResumeCommand(
     string Id,    
     string Name,
-    UserInfo UserInfo,
+    string UserInfo,
     List<ProfileEntry> ProfileEntries,
     string Keywords,
     string? JobPosting,

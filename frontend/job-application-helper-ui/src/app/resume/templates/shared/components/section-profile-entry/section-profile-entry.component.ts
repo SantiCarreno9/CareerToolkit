@@ -13,7 +13,7 @@ import { ProfileEntry } from '../../../../../profile-entry/shared/models/profile
 export class SectionProfileEntryComponent
 {
     @Input() entries: ProfileEntry[] = [];
-    @Input() info: SectionInfoProfileEntry = new SectionInfoProfileEntry('', '', []);
+    @Input() info: SectionInfoProfileEntry = new SectionInfoProfileEntry('', []);
 
     filteredEntries: ProfileEntry[] = []
 

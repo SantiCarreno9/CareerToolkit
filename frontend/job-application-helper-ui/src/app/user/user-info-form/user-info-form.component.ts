@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { UserInfo } from '../shared/models/userinfo';
+import { UserInfo } from '../shared/models/user-info';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { ContactOptions } from '../../core/enums/contactoptions';
 import { KeyValue } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { ContactOptions } from '../../resume/shared/models/user-personal-info';
 
 @Component({
   selector: 'app-user-info-form',

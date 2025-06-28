@@ -1,0 +1,82 @@
+.form {
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+
+.accordion-item-header{
+  padding: 0.3rem;
+}
+
+.drag-drop-list {
+  width: 100%;
+  border: solid 1px #ccc;
+  display: flex;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.draggable-box {  
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+  text-align: start;  
+
+  .drag-icon {    
+    max-width: 1.5rem;    
+    background-color: gray;
+    display: flex;
+    padding: 6px;
+    border: solid 1px black;
+    align-items: center;
+  }
+
+  i {
+    font-size: medium;
+    padding: 0;
+    margin: 0 -5px;
+    color: white;
+  }
+}
+
+.cdk-drag-preview {
+  border: none;
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.delete-btn {
+  i {
+    color: red;
+  }
+
+  &:hover {
+    i {
+      color: white;
+    }
+  }
+}

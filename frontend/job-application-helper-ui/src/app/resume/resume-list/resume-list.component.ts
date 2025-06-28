@@ -39,7 +39,7 @@ export class ResumeListComponent
   protected isLoading: boolean = false;
   protected searchTermForm: FormControl = new FormControl('');
   protected selection = new SelectionModel<LightResume>(true, []);
-  displayedColumns: string[] = ['select', 'name', 'modifiedAt', 'keywords','buttons'];
+  displayedColumns: string[] = ['select', 'name', 'createdAt', 'keywords','buttons'];
 
   @ViewChild(MatTable)
   table!: MatTable<LightResume>;
@@ -89,7 +89,7 @@ export class ResumeListComponent
     const index: number = this.resumes.findIndex(r => r.id === id);
     if (index === -1)
       return;
-    ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Resume', 'Do you want to delete this resume?', () =>
+    ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Resume', `Do you want to delete the resume "${this.resumes[index].name}"?`, () =>
     {
       this.resumeService.deleteResume(id).subscribe(res =>
       {

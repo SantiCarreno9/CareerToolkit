@@ -26,7 +26,7 @@ export class AiTextSectionFormComponent
 
   protected readonly resume: Resume;
   protected aiInstructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
-  protected sectionInfo: SectionInfoText = new SectionInfoText('', '', '');
+  protected sectionInfo: SectionInfoText = new SectionInfoText('', ResumeSectionType.Text, '');
   protected aiResponse: string = '';
 
   @Input() areInstructionsOptional: boolean = false;

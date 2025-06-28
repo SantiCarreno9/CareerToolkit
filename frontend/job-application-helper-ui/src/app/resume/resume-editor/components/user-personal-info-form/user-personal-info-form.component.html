@@ -1,0 +1,220 @@
+<div id="personal-info-form" class="d-flex flex-column justify-content-center">
+  <h2 style="text-align: center">My Info</h2>
+  <form [formGroup]="userInfoFormGroup" (submit)="submit()" class="form p-3">
+    <div class="mb-3">
+      <div class="mb-3">
+        <label for="fullName">Full Name</label>
+        <input
+          id="fullName"
+          type="text"
+          class="form-control"
+          formControlName="fullName"
+        />
+        @if (fullName?.invalid && (fullName?.touched || fullName?.dirty)) {
+        <div class="alert alert-danger p-2">
+          @if (fullName?.hasError('required')) {
+          <div>Full Name is required.</div>
+          }
+        </div>
+        }
+      </div>
+      <select class="form-select" (change)="addContactInfo($event)">
+        <option value="" selected>Add Contact Info</option>
+        <option
+          *ngFor="let item of this.availableContactOptions; index as i"
+          [value]="item.key"
+        >
+          {{ item.value }}
+        </option>
+      </select>
+    </div>
+    <div
+      cdkDropList
+      class="drag-drop-list mb-2"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <cdk-accordion class="accordion d-flex flex-column">
+        @for (contactInfo of this.userPersonalInfo.contactInfo; track
+        contactInfo;let index=$index) {
+        <div class="draggable-box" cdkDrag>
+          <div class="drag-icon h-100">
+            <i class="bi bi-three-dots-vertical"></i>
+            <i class="bi bi-three-dots-vertical"></i>
+          </div>
+          <cdk-accordion-item
+            #accordionItem="cdkAccordionItem"
+            class="accordion-item w-100"
+          >
+            <button
+              type="button"
+              class="accordion-item-header"
+              (click)="accordionItem.toggle()"
+              tabindex="0"
+              [attr.id]="'contact-accordion-header-' + contactInfo.name"
+              [attr.aria-expanded]="accordionItem.expanded"
+              [attr.aria-controls]="'contact-accordion-body' + contactInfo.name"
+            >
+              {{ contactInfo.name }}
+              <span class="accordion-item-description m-0">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger delete-btn"
+                  (click)="removeContactInfo(contactInfo.name)"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+                Click to {{ accordionItem.expanded ? "close" : "open" }}
+              </span>
+            </button>
+            @if(accordionItem.expanded) {
+            <div
+              class="accordion-item-body"
+              role="region"
+              [style.display]="accordionItem.expanded ? '' : 'none'"
+              [attr.id]="'contact-accordion-body' + contactInfo.name"
+              [attr.aria-labelledby]="
+                'contact-accordion-header-' + contactInfo.name
+              "
+            >
+              <div class="d-flex flex-column">
+                <label class="" [htmlFor]="'contact-value-' + contactInfo.name"
+                  >Value</label
+                >
+                <input
+                  [id]="'contact-value-' + contactInfo.name"
+                  type="text"
+                  class="form-control flex-grow-1"
+                  placeholder="Value"
+                  [formControlName]="'contact-value-' + contactInfo.name"
+                />
+                @if (getContactInfoControl('contact-value-' +
+                contactInfo.name)?.invalid &&
+                (getContactInfoControl('contact-value-' +
+                contactInfo.name)?.touched ||
+                getContactInfoControl('contact-value-' +
+                contactInfo.name)?.dirty)) {
+                <div class="alert alert-danger p-2">
+                  @if (getContactInfoControl('contact-value-' +
+                  contactInfo.name)?.hasError('required')) {
+                  <div>Value is required.</div>
+                  }
+                </div>
+                }
+                <div class="form-check my-2">
+                  <input
+                    [id]="'checkbox-' + contactInfo.name"
+                    class="form-check-input"
+                    type="checkbox"
+                    (change)="displayTextInput.toggleAttribute('disabled')"
+                  />
+                  <label
+                    class="form-check-label"
+                    [htmlFor]="'checkbox-' + contactInfo.name"
+                    >Change display text</label
+                  >
+                </div>
+                <div>
+                  <label
+                    class=""
+                    [htmlFor]="'contact-display-text-' + contactInfo.name"
+                    >Display Text</label
+                  >
+                  <input
+                    #displayTextInput
+                    [id]="'contact-display-text-' + contactInfo.name"
+                    type="text"
+                    class="form-control flex-grow-1"
+                    placeholder="Value"                  
+                    [formControlName]="
+                      'contact-display-text-' + contactInfo.name
+                    "
+                  />
+                </div>                
+              </div>
+            </div>
+            }
+          </cdk-accordion-item>
+        </div>
+
+        <!-- <div class="draggable-box" cdkDrag>
+          <div class="drag-icon h-100">
+            <i class="bi bi-three-dots-vertical"></i>
+            <i class="bi bi-three-dots-vertical"></i>
+          </div>
+          <div class="d-inline-flex gap-1">
+            <button
+              class="accordion"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="`collapse-${contactInfo.name}`"
+              aria-expanded="false"
+              aria-controls="`collapse-${contactInfo.name}`"
+            >
+              {{ contactInfo.name }}
+            </button>
+          </div>
+          <div class="collapse" [id]="'collapse-' + contactInfo.name">
+            <div class="card card-body">
+              <label class="" [htmlFor]="'contact-value-' + contactInfo.name"
+                >Value</label
+              >
+              <input
+                [id]="'contact-value-' + contactInfo.name"
+                type="text"
+                class="form-control flex-grow-1"
+                placeholder="Value"
+                [formControlName]="'contact-value-' + contactInfo.name"
+              />
+              <div class="form-check">
+                <input
+                  [id]="'checkbox-' + contactInfo.name"
+                  class="form-check-input"
+                  type="checkbox"
+                  (change)="displayTextContainer.toggleAttribute('hidden')"
+                />
+                <label
+                  class="form-check-label"
+                  [htmlFor]="'checkbox-' + contactInfo.name"
+                  >Change display text</label
+                >
+              </div>
+              <div #displayTextContainer [hidden]="true">
+                <label
+                  class=""
+                  [htmlFor]="'contact-display-text-' + contactInfo.name"
+                  >Display Text</label
+                >
+                <input
+                  [id]="'contact-display-text-' + contactInfo.name"
+                  type="text"
+                  class="form-control flex-grow-1"
+                  placeholder="Value"
+                  [formControlName]="'contact-display-text-' + contactInfo.name"
+                />
+              </div>
+              <button
+                type="button"
+                class="btn btn-outline-danger delete-btn mt-2"
+                (click)="removeContactInfo(contactInfo.name)"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-3 w-100"></div>
+        </div> -->
+        }
+      </cdk-accordion>
+    </div>
+    <div class="justify-content-end d-flex">
+      <button type="submit" class="btn btn-outline-dark mx-2">Save</button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

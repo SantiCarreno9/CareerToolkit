@@ -12,7 +12,7 @@ internal sealed class Create : IEndpoint
 {
     public sealed record Request(
     string Name,
-    UserInfo UserInfo,
+    string UserInfo,
     List<ProfileEntry> ProfileEntries,
     string ResumeInfo,
     string Keywords,

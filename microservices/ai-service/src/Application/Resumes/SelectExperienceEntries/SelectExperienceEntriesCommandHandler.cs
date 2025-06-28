@@ -21,7 +21,7 @@ internal sealed class SelectExperienceEntriesCommandHandler(
         prompt += "\n Please always try to highlight keywords relevant to the job.";
         if (!string.IsNullOrWhiteSpace(command.Instruction.Instruction))
         {
-            prompt += $"\n\nAdditional instructions:\n{command.Instruction.Instruction}";
+            prompt += $"\n\nAdditional instructions with higher priority:\n{command.Instruction.Instruction}";
         }
         string instruction = "You are an expert resume writer. Always use professional language. Provide clear, concise responses optimized for job applications.\r\n";
         return await service.GenerateText<List<string>>(new InstructionToAi(prompt, instruction));

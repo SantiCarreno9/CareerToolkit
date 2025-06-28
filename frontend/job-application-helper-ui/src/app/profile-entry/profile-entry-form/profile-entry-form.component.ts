@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { QuillModule } from 'ngx-quill';
 import { ProfileEntry } from '../shared/models/profile-entry';
 import { HelperMethods } from '../../core/helper-methods';
+import { ProfileEntryHelperMethods } from '../shared/profile-entry-helper-methods';
 
 @Component({
   selector: 'app-profile-entry-form',
@@ -65,10 +66,15 @@ export class ProfileEntryFormComponent
       startDate: new FormControl(HelperMethods.convertDateToDateOnlyString(this.profileEntry.startDate), [
         Validators.required
       ]),
-      endDate: new FormControl(this.profileEntry.endDate!==null ? HelperMethods.convertDateToDateOnlyString(this.profileEntry.endDate) : ''),
+      endDate: new FormControl(this.profileEntry.endDate !== null ? HelperMethods.convertDateToDateOnlyString(this.profileEntry.endDate) : ''),
       isCurrent: new FormControl(this.profileEntry.isCurrent),
       description: new FormControl(this.profileEntry.description)
     });
+  }
+
+  get header()
+  {
+    return ProfileEntryHelperMethods.getCategoryName(this.profileEntry.category);
   }
 
   get title()
@@ -107,7 +113,17 @@ export class ProfileEntryFormComponent
     return this.profileEntryFormGroup.get('description');
   }
 
-  protected submit():void
+  protected cleanDescription(): void
+  {
+    this.profileEntryFormGroup.patchValue({ 'description': '' });
+  }
+
+  protected isDescriptionEmpty(): boolean
+  {
+    return this.description?.value ===null || this.description?.value.length == 0;
+  }
+
+  protected submit(): void
   {
     if (this.profileEntryFormGroup.invalid)
     {
@@ -120,13 +136,13 @@ export class ProfileEntryFormComponent
     const updatedEntry: ProfileEntry = {
       ...this.profileEntry,
       ...this.profileEntryFormGroup.value,
-      startDate:startDate,
+      startDate: startDate,
       endDate: endDate
-    };    
+    };
     this.onSubmit.emit(updatedEntry);
   }
 
-  protected cancel():void
+  protected cancel(): void
   {
     this.onCancel.emit();
   }

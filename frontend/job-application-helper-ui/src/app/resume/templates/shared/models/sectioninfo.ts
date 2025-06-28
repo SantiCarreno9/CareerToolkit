@@ -2,7 +2,7 @@ import { ResumeSectionType } from "../../../shared/models/resume-section-type";
 
 export class SectionInfoBase
 {
-    constructor(public id: string, public title: string, public sectionType: ResumeSectionType)
+    constructor(public title: string, public sectionType: ResumeSectionType, public additionalInfo?: string)
     {
     }
 }
@@ -10,17 +10,16 @@ export class SectionInfoBase
 export class SectionInfoText extends SectionInfoBase
 {
 
-    constructor(id: string, title: string, public content: string, sectionType: ResumeSectionType = ResumeSectionType.Text)
+    constructor(title: string, sectionType: ResumeSectionType = ResumeSectionType.Text, public content: string, additionalInfo?: string)
     {
-        super(id, title, sectionType);
+        super(title, sectionType, additionalInfo);
     }
 }
 
 export class SectionInfoProfileEntry extends SectionInfoBase
 {
-
-    constructor(id: string, title: string, public entriesId: string[])
+    constructor(title: string, public entriesId: string[], additionalInfo?: string)
     {
-        super(id, title, ResumeSectionType.ProfileEntry);
+        super(title, ResumeSectionType.ProfileEntry, additionalInfo);
     }
 }

@@ -8,8 +8,8 @@ internal sealed class CreateResumeCommandValidator : AbstractValidator<CreateRes
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name is required.");
-        RuleFor(x => x.UserInfo)
-            .NotNull()
+        RuleFor(x => x.UserInfo)            
+            .NotEmpty()
             .WithMessage("UserInfo is required.");
         RuleFor(x => x.ProfileEntries)
             .NotEmpty()

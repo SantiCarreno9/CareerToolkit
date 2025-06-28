@@ -10,6 +10,12 @@ export enum ContentType
   Summary
 };
 
+export interface Instruction{
+  key:string,
+  value:AiInstructionType,
+  description:string
+};
+
 @Component({
   selector: 'app-ai-section-tool',
   imports: [ReactiveFormsModule, CommonModule, MatTooltipModule],
@@ -21,7 +27,7 @@ export class AiSectionToolComponent implements OnInit, OnChanges
   @Input() instructionsPlaceholder: string = "e.g. 3 bullet points, shorter";
   @Input() submitButtonText: string = "Submit";
   @Input() responseText: string = '';
-  @Input() instructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
+  @Input() instructionTypeOptions: Instruction[] = [];
   @Input() areInstructionsOptional: boolean = true;
 
   @Output() onSubmit = new EventEmitter<AiInstruction>();
@@ -40,10 +46,10 @@ export class AiSectionToolComponent implements OnInit, OnChanges
     });
 
     this.instructionTypeOptions = [
-      { key: 'Generate', value: AiInstructionType.Generate },
-      { key: 'Tailor', value: AiInstructionType.Tailor },
-      { key: 'Improve', value: AiInstructionType.Improve },
-      { key: 'Custom', value: AiInstructionType.Custom }
+      { key: 'Generate', value: AiInstructionType.Generate, description:'Generate text' },
+      { key: 'Tailor', value: AiInstructionType.Tailor, description:'Tailor text' },
+      { key: 'Improve', value: AiInstructionType.Improve, description:'Improve text' },
+      { key: 'Custom', value: AiInstructionType.Custom, description:'' }
     ];
   }
   ngOnChanges(changes: SimpleChanges): void
@@ -58,6 +64,13 @@ export class AiSectionToolComponent implements OnInit, OnChanges
       'instruction': '',
       'instructionType': this.instructionTypeOptions[0].value
     });
+  }
+
+  protected getCurrentInstructionDescription():string{    
+    if(this.instructionType?.value===undefined || this.instructionType?.value===null)
+      return '';
+    const value = this.instructionTypeOptions.find((i:Instruction)=>i.key===(this.instructionType?.value as AiInstructionType).toString())?.value;
+    return value !== undefined ? String(value) : '';
   }
 
   get instructionType()

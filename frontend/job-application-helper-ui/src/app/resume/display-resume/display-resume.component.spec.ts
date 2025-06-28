@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DisplayResumeComponent } from './displayresume.component';
+import { DisplayResumeComponent } from './display-resume.component';
 
 describe('DisplayresumeComponent', () => {
   let component: DisplayResumeComponent;

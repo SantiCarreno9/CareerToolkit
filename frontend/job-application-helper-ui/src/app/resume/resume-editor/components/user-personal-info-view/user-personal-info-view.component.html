@@ -1,0 +1,41 @@
+<div>
+  <div class="mb-3">
+    <label class="form-label data-label">Full Name</label>
+    <div class="d-flex flex-row">
+      <div class="align-content-center">
+        {{ this.userPersonalInfo.fullName }}
+      </div>
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(this.userPersonalInfo.fullName)"
+        [cdkCopyToClipboard]="this.userPersonalInfo.fullName"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngFor="let item of this.userPersonalInfo.contactInfo" class="mb-3">
+    <label class="form-label data-label">{{ item.name }}</label>
+    <div class="d-flex flex-row">
+      @if(item.isUrl){
+      <a
+        id="{{ item.name }}"
+        class="align-content-center"
+        href="{{ item.value }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ item.displayText }}</a
+      >
+      }@else {
+      <div class="align-content-center">{{ item.displayText }}</div>
+      }
+      <button
+        class="btn btn-icon"
+        *ngIf="!isEmptyOrWhitespace(item.value)"
+        [cdkCopyToClipboard]="item.value"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
+  </div>
+</div>

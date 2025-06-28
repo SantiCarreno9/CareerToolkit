@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { ProfileEntryService } from '../../../../core/services/profile-entry.service';
+import { ProfileEntryCategory } from '../../../../core/enums/profile-entry-category';
 
 export interface Entry
 {
@@ -58,7 +59,7 @@ export class ProfileEntriesImporterComponent implements OnInit
     return entriesManager.entries.some(t => t.selected) && !entriesManager.entries.every(t => t.selected);
   });
 
-  constructor(@Inject(DIALOG_DATA) public data: { entries: { [key: string]: ProfileEntry[] } })
+  constructor(@Inject(DIALOG_DATA) public data: { entries: { [key in ProfileEntryCategory]: ProfileEntry[] } })
   {
     if (data && data.entries)
       this.entries = data.entries;
@@ -85,6 +86,11 @@ export class ProfileEntriesImporterComponent implements OnInit
       }
       return { ...entry };
     });
+  }
+
+  protected getTitle(entryId: string): string
+  {
+    return ProfileEntryHelperMethods.getCategoryName(Number(entryId));
   }
 
   protected isSelected(id: string): boolean

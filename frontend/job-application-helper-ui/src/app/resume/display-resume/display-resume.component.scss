@@ -1,7 +1,48 @@
+.display-container {
+  height: 100%;  
+  // max-width: 100vw;
+}
+
 .top-bar {
+  background-color: white;
   padding: 1rem;
-  display: flex;
-  justify-content: space-between;
+  border: solid;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-color: gray;
+  width: 100%;
+  align-items: center;
+  display: flex;  
+
+  .btn{
+    margin: 0 0.5rem;
+  }
+}
+
+.title {
+  font-size: x-large;
+  font-weight: 500;
+}
+
+.title-buttons {
+  flex: 1;
+  justify-content: end;  
+}
+
+#resume-container {
+  flex: 1;    
+  // overflow: scroll;
+  // size: 21cm 29.7cm;
+  // min-width: 60vw;
+}
+
+@media screen and (max-width: 800px) {
+  .resume-container {
+    display: flex;
+    // overflow: scroll;
+    overflow-x: scroll;
+    // white-space: nowrap;
+  }
 }
 
 // .resume-container {

@@ -78,24 +78,17 @@ export class ProfileEntryHelperMethods
         return timeFrame;
     }
 
-    public static getGroupedProfileEntriesByCategory(entries: ProfileEntry[]): { [key: string]: ProfileEntry[] }
+    public static getGroupedProfileEntriesByCategory(entries: ProfileEntry[]): { [key in ProfileEntryCategory]?: ProfileEntry[] }
     {
-        const grouped: { [key: string]: ProfileEntry[] } = {};
-        const categories = Object.keys(ProfileEntryCategory)
-            .filter(k => isNaN(Number(k))) // filter out numeric keys
-            .map(key => ({
-                key: key.split(/(?=[A-Z])/).join(' '), // Convert camelCase to spaced words
-                value: ProfileEntryCategory[key as keyof typeof ProfileEntryCategory]
-            }));
+        const grouped: { [key in ProfileEntryCategory]?: ProfileEntry[] } = {};        
         for (const entry of entries)
         {
             const key = entry.category;
-            const keyName = categories[key].key;
-            if (!grouped[keyName])
+            if (!grouped[key])
             {
-                grouped[keyName] = [];
+                grouped[key] = [];
             }
-            grouped[keyName].push(entry);
+            grouped[key].push(entry);
         }
         return grouped;
     }
@@ -108,5 +101,20 @@ export class ProfileEntryHelperMethods
             organization: entry.organization,
             description: entry.description ? HelperMethods.cleanTextForAI(HelperMethods.convertToPlainText(entry.description)) : '',
         };
+    }
+
+    public static getCategoryName(category: ProfileEntryCategory): string
+    {        
+        switch (category)
+        {
+            case ProfileEntryCategory.Education:
+                return 'Education';
+            case ProfileEntryCategory.WorkExperience:
+                return 'Work Experience';
+            case ProfileEntryCategory.Project:
+                return 'Project';
+            default:
+                return 'Unknown';
+        }
     }
 }

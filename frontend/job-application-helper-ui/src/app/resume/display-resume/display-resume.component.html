@@ -1,0 +1,58 @@
+<div class="display-container">
+  <div class="top-bar">
+    <button
+      class="btn btn-outline-secondary"
+      #tooltip="matTooltip"
+      matTooltip="Go Back"
+      [matTooltipPosition]="'below'"
+      (click)="goBack()"
+    >
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div class="mw-75" style="max-width: 70%">
+      <div class="title d-flex flex-row">
+        <div
+          style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis"
+        >
+          {{ resume.name }}
+        </div>
+      </div>
+      <div class="d-flex flex-row">
+        <strong>Keywords:</strong
+        ><span
+          class="badge rounded-pill text-bg-warning m-1"
+          style="font-weight: 400"
+          *ngFor="let keyword of this.resume.keywords"
+          >{{ keyword }}</span
+        >
+      </div>
+      <div
+        class="form-control-plaintext"
+        style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+      >
+        <strong>Job Posting:</strong>
+        {{ this.resume.jobPosting }}
+      </div>
+      {{ this.modifiedAtTime }}
+    </div>
+
+    <div class="title-buttons d-flex flex-wrap flex-grow-1">
+      <button
+        class="btn btn-outline-success m-1"
+        #tooltip="matTooltip"
+        matTooltip="Download PDF"
+        [matTooltipPosition]="'above'"
+        (click)="download()"
+      >
+        <i class="bi bi-file-earmark-arrow-down"></i>
+      </button>
+    </div>
+  </div>
+  @if(this.template!==undefined){
+  <div id="resume-container" class="resume-container">
+    <ng-container
+      *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
+    ></ng-container>
+  </div>
+  }
+</div>
