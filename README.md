@@ -25,10 +25,4 @@ Career Toolkit is a microservices-based web application designed to simplify the
 - **Cloud Provider**: Microsoft Azure
 
 ## 🛠️ Architecture Overview
-Frontend (Angular)
-│
-API Gateway
-┌───┴───┬────────┬─────────┬
-User Resume CoverLetter AIService
-  │     │        │         │
-     PostgreSQL         Gemini AI 
+Frontend (Angular)->API Gateway ->User | Resume | CoverLetter | AIService -> PostgreSQL | Gemini AI
