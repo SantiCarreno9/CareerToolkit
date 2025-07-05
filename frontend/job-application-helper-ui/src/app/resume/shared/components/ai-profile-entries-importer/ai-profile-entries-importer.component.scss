@@ -1,13 +1,13 @@
 .ai-importer-container {
   display: flex;  
-  overflow: scroll;
+  overflow: auto;
   max-height: 90vh;  
   width: 500px;
   max-width: 90vw;
 }
 .ai-section {
   display: flex;
-  overflow-y: scroll;
+  overflow-y: auto;
   //   flex: 1;
   //   width: 300px;
 }

@@ -59,7 +59,7 @@ export class ResumeHelperMethods
             userPersonalInfo.contactInfo.push(
                 {
                     name: ContactOptions.Email,
-                    value: email,
+                    value: 'mailto:'+email,
                     displayText: email,
                     isUrl: true
                 }

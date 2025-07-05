@@ -40,13 +40,17 @@ internal sealed class TailorSummaryCommandHandler(
             _ => "\nWrite a resume summary based on this information. It should be a short, professional paragraph (2–4 sentences)."
         };
 
-        // ✅ Update this instruction block for paragraph summaries
         string instruction =
-        "You are a resume assistant. Respond ONLY with a short professional summary in paragraph form.\n" +
-        "Limit the summary to 2–4 sentences.\n" +
-        "Focus on relevant experience, key strengths, and technical qualifications that match the job.\n" +
-        "Use clear, direct language. Avoid buzzwords and fluff.\n" +
-        "Do NOT use bullet points, lists, or headings.";
+            "You are a resume assistant. Respond ONLY with a short professional summary in paragraph form for my resume.\n" +
+            "Limit the summary to 2–4 sentences.\n" +
+            "Focus on my actual experience, technical skills, and strengths that relate to the job.\n" +
+            "Use clear, direct, and natural-sounding language.\n" +
+            "DO NOT use buzzwords like 'showcasing', 'aligning', 'mirroring', 'demonstrating passion', or similar vague terms.\n" +
+            "DO NOT reference the job posting, company, or role explicitly.\n" +
+            "DO NOT say things like 'I am applying for' or 'this role'—this summary goes directly on the resume.\n" +
+            "DO NOT use bullet points, lists, or headings.\n" +
+            "Write in a neutral, professional tone.";
+
 
         if (!string.IsNullOrWhiteSpace(command.Instruction.Instruction) && command.Instruction.AiInstructionType != AiInstruction.Custom)
         {

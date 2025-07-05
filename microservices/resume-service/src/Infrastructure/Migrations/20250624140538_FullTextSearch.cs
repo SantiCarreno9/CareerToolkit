@@ -10,17 +10,17 @@ namespace Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"
-    CREATE INDEX ix_resumes_fulltext
-    ON public.resumes
-    USING GIN (
-        (
-            setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
-            setweight(to_tsvector('english', coalesce(job_posting, '')), 'B') ||
-            setweight(to_tsvector('english', coalesce(keywords, '')), 'C')
-        )
-    );
-");
+//            migrationBuilder.Sql(@"
+//    CREATE INDEX ix_resumes_fulltext
+//    ON public.resumes
+//    USING GIN (
+//        (
+//            setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
+//            setweight(to_tsvector('english', coalesce(job_posting, '')), 'B') ||
+//            setweight(to_tsvector('english', coalesce(keywords, '')), 'C')
+//        )
+//    );
+//");
 
 
 

@@ -5,7 +5,7 @@ import { Resume } from '../../../shared/models/resume';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { AiService } from '../../../../core/services/ai.service';
 import { AiInstruction, AiResumeInstruction } from '../../../shared/models/ai-resume-instruction';
-import { AiSectionToolComponent } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
+import { AiSectionToolComponent, Instruction } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
 import { ResumeSectionType } from '../../../shared/models/resume-section-type';
 import { AiInstructionType } from '../../../../core/models/ai-instruction-type';
 import { HelperMethods } from '../../../../core/helper-methods';
@@ -25,7 +25,7 @@ export class AiTextSectionFormComponent
   @ViewChild('textSectionForm') textSectionForm!: TextSectionFormComponent;
 
   protected readonly resume: Resume;
-  protected aiInstructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
+  protected aiInstructionTypeOptions: Instruction[] = [];
   protected sectionInfo: SectionInfoText = new SectionInfoText('', ResumeSectionType.Text, '');
   protected aiResponse: string = '';
 
@@ -44,10 +44,10 @@ export class AiTextSectionFormComponent
       this.sectionInfo.sectionType === ResumeSectionType.Skills;
     // if(this.sectionInfo)
     this.aiInstructionTypeOptions = [
-      { key: 'Generate', value: AiInstructionType.Generate },
-      { key: 'Tailor', value: AiInstructionType.Tailor },
-      { key: 'Improve', value: AiInstructionType.Improve },
-      { key: 'Custom', value: AiInstructionType.Custom }
+      { key: 'Generate', value: AiInstructionType.Generate, description: '' },
+      { key: 'Tailor', value: AiInstructionType.Tailor, description: '' },
+      { key: 'Improve', value: AiInstructionType.Improve, description: '' },
+      { key: 'Custom', value: AiInstructionType.Custom, description: '' }
     ]
   }
 
@@ -72,6 +72,10 @@ export class AiTextSectionFormComponent
         {
           this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value);
         }
+        else
+        {
+          this.aiResponse = 'Error';
+        }
       })
     }
     else if (this.sectionInfo.sectionType === ResumeSectionType.Skills)
@@ -86,6 +90,10 @@ export class AiTextSectionFormComponent
         {
           this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(res.value);
         }
+        else
+        {
+          this.aiResponse = 'Error';
+        }
       })
     }
     else
@@ -98,6 +106,10 @@ export class AiTextSectionFormComponent
         if (res.success && res.value)
         {
           this.aiResponse = HelperMethods.convertPlainTextToHtml(res.value);
+        }
+        else
+        {
+          this.aiResponse = 'Error';
         }
       });
     }

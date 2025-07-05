@@ -56,7 +56,7 @@ export class ResumeSectionEditorComponent
       console.error('Form is invalid');
       return;
     }
-    this.sections[this.sectionIndex].title = this.sectionEditorForm.value.title;    
+    // this.sections[this.sectionIndex].title = this.sectionEditorForm.value.title;    
     this.onSubmit.emit(this.sections);
   }
 

@@ -5,6 +5,9 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+		<ContainerRegistry>docker.io</ContainerRegistry>
+		<ContainerRepository>santiagocarreno9/career-toolkit-ai-service</ContainerRepository>
+		<ContainerImageTags>v1.0.0;latest</ContainerImageTags>
 	</PropertyGroup>
 
 	<ItemGroup>

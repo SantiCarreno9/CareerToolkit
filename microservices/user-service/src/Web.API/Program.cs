@@ -42,6 +42,8 @@ app.MapHealthChecks("health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
+app.MapGet("api/test", () => "Hello World");
+
 app.UseRequestContextLogging();
 
 app.UseSerilogRequestLogging();

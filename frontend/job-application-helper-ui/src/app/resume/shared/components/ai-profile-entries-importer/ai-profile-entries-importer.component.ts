@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, inject, Input, Output, ViewChild } from '@angular/core';
 import { ProfileEntriesImporterComponent } from '../profile-entries-importer/profile-entries-importer.component';
-import { AiSectionToolComponent } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
+import { AiSectionToolComponent, Instruction } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
 import { AiService } from '../../../../core/services/ai.service';
 import { AiInstructionType } from '../../../../core/models/ai-instruction-type';
 import { ProfileEntry } from '../../../../profile-entry/shared/models/profile-entry';
@@ -21,7 +21,7 @@ export class AiProfileEntriesImporterComponent
 
   // protected showAiTools:boolean
   @ViewChild('profileEntriesImporter') profileEntriesImporter!: ProfileEntriesImporterComponent;
-  protected aiInstructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
+  protected aiInstructionTypeOptions: Instruction[] = [];
   protected aiResponse: string = '';
 
   @Input() jobPosting?: string;
@@ -39,7 +39,7 @@ export class AiProfileEntriesImporterComponent
     this.jobPosting = data.jobPosting;
     // if(this.sectionInfo)
     this.aiInstructionTypeOptions = [
-      { key: 'Select', value: AiInstructionType.Custom }
+      { key: 'Select', value: AiInstructionType.Custom, description: '' }
     ]
   }
 
@@ -55,7 +55,7 @@ export class AiProfileEntriesImporterComponent
     this.aiService.selectExperienceEntries(resumeInstruction, experienceEntries).subscribe(res =>
     {
       if (res.success && res.value)
-      {        
+      {
         const ids = res.value.map((id: string) => id.split(',')[0]);
         this.profileEntriesImporter?.selectEntries(ids);
         const reasons = res.value.map((id: string) => id.split(',')[1]);
@@ -68,6 +68,10 @@ export class AiProfileEntriesImporterComponent
           reasons[i] += ': ' + originalReason;
         }
         this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(reasons);
+      }
+      else
+      {
+        this.aiResponse = 'Error';
       }
     });
   }

@@ -10,7 +10,7 @@ a {
 }
 
 p,
-div{
+div {
   font-size: 1rem;
 }
 
@@ -48,8 +48,8 @@ div{
       text-align: center;
       min-width: 30%;
       display: flex;
-      p{
-        flex:1;
+      p {
+        flex: 1;
       }
     }
   }
@@ -57,23 +57,25 @@ div{
 
 .section {
   margin-bottom: 1rem;
+  break-inside: avoid-column;
 
   .title {
     text-transform: uppercase;
     font-size: x-large;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    break-inside: avoid;
   }
 }
 
-.entry-container {  
+.entry-container {
   margin-bottom: 1rem;
   break-inside: avoid;
 
   .title-container {
     display: flex;
     width: 100%;
-    break-inside: avoid;    
+    break-inside: avoid;
 
     div {
       flex: 1;
