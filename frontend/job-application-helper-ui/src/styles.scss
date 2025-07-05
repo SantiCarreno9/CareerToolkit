@@ -114,7 +114,7 @@ body {
   resize: vertical;
 
   /* Firefox shows scrollbar on growth, you can hide like this. */
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .grow-wrap > textarea,
 .grow-wrap::after {
@@ -171,7 +171,7 @@ body {
 
 .accordion-item-body {
   padding: 1rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 60vh;
 }
 
@@ -192,6 +192,11 @@ body {
 
 @media print {
   .navbar {
+    display: none;
+  }
+
+  .mat-mdc-tooltip-surface, 
+  .mdc-tooltip__surface{
     display: none;
   }
 

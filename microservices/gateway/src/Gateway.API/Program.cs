@@ -1,5 +1,4 @@
 using Gateway.API.Extensions;
-using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Inject, Input, Output, output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Inject, Output, ViewChild } from '@angular/core';
 import { ProfileEntryFormComponent } from '../../../../profile-entry/profile-entry-form/profile-entry-form.component';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { Resume } from '../../../shared/models/resume';
@@ -6,9 +6,8 @@ import { ProfileEntry } from '../../../../profile-entry/shared/models/profile-en
 import { ProfileEntryCategory } from '../../../../core/enums/profile-entry-category';
 import { AiInstruction, AiResumeInstruction } from '../../../shared/models/ai-resume-instruction';
 import { AiService } from '../../../../core/services/ai.service';
-import { ExperienceEntry } from '../../../../core/models/experience-entry';
 import { HelperMethods } from '../../../../core/helper-methods';
-import { AiSectionToolComponent } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
+import { AiSectionToolComponent, Instruction } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
 import { AiInstructionType } from '../../../../core/models/ai-instruction-type';
 import { ProfileEntryHelperMethods } from '../../../../profile-entry/shared/profile-entry-helper-methods';
 
@@ -27,7 +26,7 @@ export class AiProfileEntryFormComponent
 
   protected readonly profileEntry: ProfileEntry;
   protected readonly resume: Resume;
-  protected aiInstructionTypeOptions: { key: string, value: AiInstructionType }[] = [];
+  protected aiInstructionTypeOptions: Instruction[] = [];
   protected aiResponse: string = '';
   @Output() onSubmit = new EventEmitter<ProfileEntry>();
   @Output() onCancel = new EventEmitter<void>();
@@ -52,10 +51,10 @@ export class AiProfileEntryFormComponent
 
     this.resume = data.resume;
     this.aiInstructionTypeOptions = [
-      { key: 'Generate', value: AiInstructionType.Generate },
-      { key: 'Tailor', value: AiInstructionType.Tailor },
-      { key: 'Improve', value: AiInstructionType.Improve },
-      { key: 'Custom', value: AiInstructionType.Custom }
+      { key: 'Generate', value: AiInstructionType.Generate, description: '' },
+      { key: 'Tailor', value: AiInstructionType.Tailor, description: '' },
+      { key: 'Improve', value: AiInstructionType.Improve, description: '' },
+      { key: 'Custom', value: AiInstructionType.Custom, description: '' }
     ]
   }
 
@@ -69,13 +68,17 @@ export class AiProfileEntryFormComponent
     resumeInstruction.jobPosting = this.resume.jobPosting || '';
     if (this.profileEntryForm !== undefined && this.profileEntryForm.description?.value)
       this.profileEntry.description = this.profileEntryForm.description?.value;
-    
+
     const experienceEntry = ProfileEntryHelperMethods.convertProfileEntryToExperienceEntry(this.profileEntry);
     this.aiService.tailorProfileEntry(resumeInstruction, experienceEntry).subscribe(res =>
     {
       if (res.success && res.value)
       {
         this.aiResponse = HelperMethods.convertPlainTextArrayToHtml(res.value);
+      }
+      else
+      {
+        this.aiResponse = 'Error';
       }
     })
   }

@@ -60,6 +60,7 @@ div {
 
 .section {
   margin-bottom: 1rem;
+  break-inside: avoid-column;
 
   .title {
     text-transform: uppercase;

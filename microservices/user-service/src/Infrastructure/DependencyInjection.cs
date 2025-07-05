@@ -24,7 +24,7 @@ public static class DependencyInjection
             .AddServices()
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
-            .AddAuthenticationInternal(/*configuration*/)
+            .AddAuthenticationInternal(configuration)
             .AddAuthorizationInternal();
 
     private static IServiceCollection AddServices(this IServiceCollection services)
@@ -60,35 +60,36 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAuthenticationInternal(
-        this IServiceCollection services)
+    private static IServiceCollection AddAuthenticationInternal(        
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
-        //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddJwtBearer(o =>
-        //    {
-        //        o.RequireHttpsMetadata = false;
-        //        o.TokenValidationParameters = new TokenValidationParameters
-        //        {
-        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
-        //            ValidIssuer = configuration["Jwt:Issuer"],
-        //            ValidAudience = configuration["Jwt:Audience"],
-        //            ClockSkew = TimeSpan.Zero
-        //        };
+        //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ClockSkew = TimeSpan.Zero
+                };
 
-        //        o.Events = new JwtBearerEvents
-        //        {
-        //            OnMessageReceived = context =>
-        //            {
-        //                if(context.Request.Cookies.TryGetValue("accessToken", out string? accessToken))
-        //                {
-        //                    context.Token = accessToken;
-        //                }                        
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.TryGetValue("accessToken", out string? accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
 
-        //                return Task.CompletedTask;
-        //            },
-        //        };
-        //    });
+                        return Task.CompletedTask;
+                    },
+                };
+            });
 
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();

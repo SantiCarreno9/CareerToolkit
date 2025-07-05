@@ -126,6 +126,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
         return;
       }
 
+      this.resume.resumeInfo = {templateId:'',sections:[]};
       this.resume = res.value;
       this.updateTemplate();
     })
