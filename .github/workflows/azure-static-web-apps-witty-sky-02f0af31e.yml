@@ -19,6 +19,9 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Replace Backend Endpoint in environment.production.ts
+        run: |
+          sed -i 's|#{BACKEND_ENDPOINT}#|${{ secrets.BACKEND_ENDPOINT }}|' frontend/job-application-helper-ui/src/environments/environment.production.ts
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
