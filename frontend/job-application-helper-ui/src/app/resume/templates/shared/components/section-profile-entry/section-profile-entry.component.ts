@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SectionInfoProfileEntry } from '../../models/sectioninfo';
 import { ProfileEntryComponent } from '../profile-entry/profile-entry.component';
 import { ProfileEntry } from '../../../../../profile-entry/shared/models/profile-entry';

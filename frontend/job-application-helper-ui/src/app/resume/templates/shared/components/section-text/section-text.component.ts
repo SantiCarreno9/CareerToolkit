@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SectionInfoText } from '../../models/sectioninfo';
 import { HelperMethods } from '../../../../../core/helper-methods';
 import { ResumeSectionType } from '../../../../shared/models/resume-section-type';

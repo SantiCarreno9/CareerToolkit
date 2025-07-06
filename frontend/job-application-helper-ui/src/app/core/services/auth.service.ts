@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, Subject, Subscription, tap } from 'rxjs';
+import { map, Observable, Subject, tap } from 'rxjs';
 import { RequestResponse as CustomResponse, RequestResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
 import { UserBasicInfo } from '../../auth/shared/models/user-basic-info';

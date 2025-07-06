@@ -203,24 +203,10 @@ body {
   @page {
     padding: 0.6in;
   }
-  // div:not(#resume-container){
-  //   visibility: hidden;
-  // }
-  // *:not(html,body,.resume-container) {
-  //   visibility:hidden;
-  // }
-  // body *{
-  //   visibility: collapse;
-  // }
 
   #resume-container {
     word-break: keep-all;
     overflow-wrap: break-word;
     white-space: normal;
-    // white-space: normal;
-    // display: table;
-    // table-layout: fixed;
-    // padding: 1in;
-    // margin: 1in;
   }
 }

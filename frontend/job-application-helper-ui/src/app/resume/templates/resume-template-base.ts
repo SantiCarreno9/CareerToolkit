@@ -11,7 +11,6 @@ import { SectionInfoProfileEntry } from "./shared/models/sectioninfo";
 import { ProfileEntryHelperMethods } from "../../profile-entry/shared/profile-entry-helper-methods";
 import { ResumeHelperMethods } from "../shared/resume-helper-methods";
 import { HelperMethods } from "../../core/helper-methods";
-import { UserInfoHelperMethods } from "../../user/shared/user-info-helper-methods";
 import { ContactInfo, ContactOptions } from "../shared/models/user-personal-info";
 import { ContactItem } from "./shared/models/contact-item";
 
@@ -24,7 +23,6 @@ export abstract class ResumeTemplateBase implements OnInit
 {
     ProfileEntryHelperMethods = ProfileEntryHelperMethods;
     HelperMethods = HelperMethods;
-    UserInfoHelperMethods = UserInfoHelperMethods;
     protected resumeService = inject(ResumeService);
     protected templateService = inject(ResumeTemplateService);
 

@@ -1,5 +1,5 @@
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
-import { Component, EventEmitter, inject, Inject, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 
 @Component({
   selector: 'app-confirmation-dialog',

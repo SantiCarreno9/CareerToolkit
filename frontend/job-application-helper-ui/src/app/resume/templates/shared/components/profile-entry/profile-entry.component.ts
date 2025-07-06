@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ProfileEntryCategory } from '../../../../../core/enums/profile-entry-category';
 import { ProfileEntry } from '../../../../../profile-entry/shared/models/profile-entry';
 import { HelperMethods } from '../../../../../core/helper-methods';

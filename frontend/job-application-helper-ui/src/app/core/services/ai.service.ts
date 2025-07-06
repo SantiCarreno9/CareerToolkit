@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { RequestResponse } from '../models/requestresponse';
 import { map, Observable } from 'rxjs';
 import { ExperienceEntry } from '../models/experience-entry';
-import { AiInstruction, AiResumeInstruction } from '../../resume/shared/models/ai-resume-instruction';
+import { AiResumeInstruction } from '../../resume/shared/models/ai-resume-instruction';
 
 @Injectable({
   providedIn: 'root'

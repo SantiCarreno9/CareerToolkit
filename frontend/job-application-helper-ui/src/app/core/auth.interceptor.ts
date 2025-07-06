@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { HttpEvent, HttpRequest, HttpErrorResponse, HttpHandlerFn } from '@angular/common/http';
-import { EMPTY, Observable, catchError, map, switchMap, throwError } from 'rxjs';
+import { EMPTY, Observable, catchError, switchMap } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 

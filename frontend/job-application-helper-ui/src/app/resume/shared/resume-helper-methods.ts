@@ -59,7 +59,7 @@ export class ResumeHelperMethods
             userPersonalInfo.contactInfo.push(
                 {
                     name: ContactOptions.Email,
-                    value: 'mailto:'+email,
+                    value: 'mailto:' + email,
                     displayText: email,
                     isUrl: true
                 }
@@ -76,10 +76,10 @@ export class ResumeHelperMethods
                 let displayText = '';
                 if (this.doesWebsiteHaveUsername(key as ContactOptions))
                 {
-                    displayText = ResumeHelperMethods.getUsername(url);                                        
+                    displayText = ResumeHelperMethods.getUsername(url);
                 }
                 else
-                {                                      
+                {
                     displayText = HelperMethods.cleanUrl(url);
                 }
 

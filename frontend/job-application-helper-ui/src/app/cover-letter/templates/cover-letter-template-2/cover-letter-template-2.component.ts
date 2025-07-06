@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HelperMethods } from '../../../core/helper-methods';
 import { CoverLetterTemplateBase } from '../cover-letter-template-base.component';
 
 @Component({
