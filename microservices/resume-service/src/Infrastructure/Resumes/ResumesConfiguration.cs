@@ -34,8 +34,8 @@ internal sealed class ResumesConfiguration : IEntityTypeConfiguration<Resume>
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                 v => JsonSerializer.Deserialize<List<ProfileEntry>>(v, (JsonSerializerOptions)null));
 
-        //builder.Property(r => r.Keywords)
-        //    .HasColumnType("text");
+        builder.Property(r => r.Keywords)
+            .HasColumnType("text");
         //builder.property(r => r.keywords)
         //    .hascolumntype("jsonb")
         //    .hasconversion(
