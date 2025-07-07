@@ -4,10 +4,16 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'frontend/job-application-helper-ui/**'
+      - '.github/workflows/frontend-AutoDeployTrigger.yml'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - master
+    paths:
+      - 'frontend/job-application-helper-ui/**'
+      - '.github/workflows/frontend-AutoDeployTrigger.yml'
 
 jobs:
   build_and_deploy_job:
