@@ -4,11 +4,17 @@ name: Trigger auto deployment for resume-service
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
+    branches:
       [ master ]
     paths:
-    - '**'
-    - '.github/workflows/resume-service-AutoDeployTrigger-734f57ab-d4c4-4cd5-a015-55ffe8b2cb3e.yml'
+      - 'microservices/resume-service/**'
+      - '.github/workflows/resume-service-AutoDeployTrigger.yml'
+  pull_request:
+    branches:
+      [ master ]
+    paths:
+      - 'microservices/resume-service/**'
+      - '.github/workflows/resume-service-AutoDeployTrigger.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -34,15 +40,15 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}/microservices/resume-service/src/Web.Api
-          _dockerfilePathKey_: _dockerfilePath_
+          appSourcePath: ${{ github.workspace }}/microservices/resume-service/
+          dockerfilePath: /src/Web.Api/Dockerfile  
           _targetLabelKey_: _targetLabel_
           registryUrl: docker.io
           registryUsername: ${{ secrets.RESUMESERVICE_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.RESUMESERVICE_REGISTRY_PASSWORD }}
           containerAppName: resume-service
           resourceGroup: CareerToolkit
-          imageToBuild: santiagocarreno9/resume-service:${{ github.sha }}
+          imageToBuild: santiagocarreno9/career-toolkit-resume-service:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
 
