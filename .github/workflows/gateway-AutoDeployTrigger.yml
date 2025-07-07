@@ -4,11 +4,17 @@ name: Trigger auto deployment for gateway
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
+    branches:
       [ master ]
     paths:
-    - '**'
-    - '.github/workflows/gateway-AutoDeployTrigger-6d4da72b-dab8-417f-b4b0-af3df3c6db19.yml'
+      - 'microservices/gateway/**'
+      - '.github/workflows/gateway-AutoDeployTrigger.yml'
+  pull_request:
+    branches:
+      [ master ]
+    paths:
+      - 'microservices/gateway/**'
+      - '.github/workflows/gateway-AutoDeployTrigger.yml'  
 
   # Allow manual trigger 
   workflow_dispatch:      
