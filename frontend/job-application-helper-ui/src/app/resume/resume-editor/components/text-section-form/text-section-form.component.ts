@@ -52,6 +52,16 @@ export class TextSectionFormComponent
     return this.sectionInfoForm.get('content');
   }
 
+  protected cleanContent(): void
+  {
+    this.sectionInfoForm.patchValue({ 'content': '' });
+  }
+
+  protected isContentEmpty(): boolean
+  {
+    return this.content?.value ===null || this.content?.value.length == 0;
+  }
+
   submit(): void
   {
     if (this.sectionInfoForm.invalid)

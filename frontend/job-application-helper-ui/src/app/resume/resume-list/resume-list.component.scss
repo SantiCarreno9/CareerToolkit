@@ -12,7 +12,7 @@
 
 .input-wrapper {
   position: relative;
-  display: inline-block;
+  display: inline-block;  
 }
 
 .input-wrapper input {
@@ -30,4 +30,33 @@
 
 table{
     background-color: transparent;
+}
+
+#table-container{
+  max-width: 100vw;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+
+#create-btn{
+width: fit-content;
+}
+
+@media (max-width: 530px) {
+  #search-bar{
+    display: flex;
+  }
+
+  .input-wrapper{
+    flex: 1;
+  }
+
+  .btn-group{    
+    min-width: 90vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    justify-items: start;
+    gap: 0.5rem;
+  }
 }

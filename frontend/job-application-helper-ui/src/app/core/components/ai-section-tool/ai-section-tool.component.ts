@@ -1,19 +1,21 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AiInstructionType } from '../../models/ai-instruction-type';
 import { AiInstruction } from '../../../resume/shared/models/ai-resume-instruction';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HelperMethods } from '../../helper-methods';
 export enum ContentType
 {
   ExperienceEntry,
   Summary
 };
 
-export interface Instruction{
-  key:string,
-  value:AiInstructionType,
-  description:string
+export interface Instruction
+{
+  key: string,
+  value: AiInstructionType,
+  description: string
 };
 
 @Component({
@@ -33,6 +35,8 @@ export class AiSectionToolComponent implements OnInit, OnChanges
   @Output() onSubmit = new EventEmitter<AiInstruction>();
 
   AiInstruction = AiInstructionType;
+
+  @ViewChild('responseContainer') responseContainer!: ElementRef;
   // protected instructionType?: AiInstructionType;
 
   protected readonly aiSectionForm: FormGroup;
@@ -46,10 +50,10 @@ export class AiSectionToolComponent implements OnInit, OnChanges
     });
 
     this.instructionTypeOptions = [
-      { key: 'Generate', value: AiInstructionType.Generate, description:'Generate text' },
-      { key: 'Tailor', value: AiInstructionType.Tailor, description:'Tailor text' },
-      { key: 'Improve', value: AiInstructionType.Improve, description:'Improve text' },
-      { key: 'Custom', value: AiInstructionType.Custom, description:'' }
+      { key: 'Generate', value: AiInstructionType.Generate, description: 'Generate text' },
+      { key: 'Tailor', value: AiInstructionType.Tailor, description: 'Tailor text' },
+      { key: 'Improve', value: AiInstructionType.Improve, description: 'Improve text' },
+      { key: 'Custom', value: AiInstructionType.Custom, description: '' }
     ];
   }
   ngOnChanges(changes: SimpleChanges): void
@@ -66,10 +70,11 @@ export class AiSectionToolComponent implements OnInit, OnChanges
     });
   }
 
-  protected getCurrentInstructionDescription():string{    
-    if(this.instructionType?.value===undefined || this.instructionType?.value===null)
+  protected getCurrentInstructionDescription(): string
+  {
+    if (this.instructionType?.value === undefined || this.instructionType?.value === null)
       return '';
-    const value = this.instructionTypeOptions.find((i:Instruction)=>i.key===(this.instructionType?.value as AiInstructionType).toString())?.value;
+    const value = this.instructionTypeOptions.find((i: Instruction) => i.key === (this.instructionType?.value as AiInstructionType).toString())?.value;
     return value !== undefined ? String(value) : '';
   }
 
@@ -87,6 +92,16 @@ export class AiSectionToolComponent implements OnInit, OnChanges
 
   async copyToClipboard()
   {
+    if (HelperMethods.IsMobileDevice())
+    {
+      const div: HTMLElement = this.responseContainer.nativeElement;
+      const range = document.createRange();
+      range.selectNodeContents(div);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+      return;
+    }
     const blob = new Blob([this.responseText], { type: 'text/html' });
     const clipboardItem = new ClipboardItem({ 'text/html': blob });
 
@@ -101,7 +116,7 @@ export class AiSectionToolComponent implements OnInit, OnChanges
   protected submit(): void
   {
     this.isWaitingForResponse = true;
-    const instructionType: AiInstructionType = parseInt(this.aiSectionForm.value.instructionType) as AiInstructionType;    
+    const instructionType: AiInstructionType = parseInt(this.aiSectionForm.value.instructionType) as AiInstructionType;
     this.onSubmit.emit({
       aiInstructionType: instructionType,
       instruction: this.aiSectionForm.value.instruction,

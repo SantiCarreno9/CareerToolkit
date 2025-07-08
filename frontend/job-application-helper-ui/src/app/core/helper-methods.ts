@@ -91,7 +91,12 @@ export class HelperMethods
         return newUrl;
     }
 
-    public static isNullOrEmpty(text?:string):boolean{
-        return text===null || text===undefined || text.length==0 || text.trim()==='';
+    public static isNullOrEmpty(text?: string): boolean
+    {
+        return text === null || text === undefined || text.length == 0 || text.trim() === '';
     }
+
+    public static IsMobileDevice(): boolean{
+    return navigator.maxTouchPoints > 1;
+}
 }

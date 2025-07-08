@@ -5,7 +5,7 @@ services:
     container_name: gateway-api
     build:
       context: .
-      dockerfile: gateway/src/Gateway.API/Dockerfile
+      dockerfile: gateway/src/Gateway.Api/Dockerfile
     ports:
         - "5000:5000"
         - "5001:5001"
