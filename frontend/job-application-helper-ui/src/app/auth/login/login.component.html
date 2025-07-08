@@ -38,7 +38,18 @@
           }
         </div>
         <div class="justify-content-center d-flex">
-          <button type="submit" class="btn btn-outline-dark w-100" [disabled]="isLoading">Login</button>
+          <button
+            type="submit"
+            class="btn btn-outline-dark w-100"
+            [disabled]="isLoggingIn"
+          >
+            @if(isLoggingIn){
+            <span
+              class="spinner-border spinner-border-sm mx-2"
+              aria-hidden="true"
+            ></span>
+            } Login
+          </button>
         </div>
 
         <div class="text-center mt-3">
@@ -49,5 +60,5 @@
         </div>
       </form>
     </div>
-  </div>  
+  </div>
 </div>

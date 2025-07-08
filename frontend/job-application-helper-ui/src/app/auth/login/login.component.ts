@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { LoginModel } from '../shared/models/loginmodel';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { DisplayMessageService } from '../../core/services/display-message.service';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,11 @@ import { AuthService } from '../../core/services/auth.service';
 export class LoginComponent
 {
   protected authService: AuthService = inject(AuthService);
-  protected route = inject(Router);
+  protected route = inject(Router);  
+  private displayMessageService = inject(DisplayMessageService);
 
-  protected isLoading:boolean=false;
-  
+  protected isLoggingIn: boolean = false;
+
   protected loginForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -32,12 +34,12 @@ export class LoginComponent
   {
     return this.loginForm.get('email');
   }
-  protected  get password()
+  protected get password()
   {
     return this.loginForm.get('password');
   }
 
-  protected login():void
+  protected login(): void
   {
     if (this.loginForm.invalid)
     {
@@ -48,20 +50,20 @@ export class LoginComponent
       email: this.loginForm.get('email')?.value ?? '',
       password: this.loginForm.get('password')?.value ?? ''
     }
-    this.isLoading=true;
+    this.isLoggingIn = true;
     this.authService.loginWithCookies(loginData).subscribe(res =>
     {
-      this.isLoading=false;
+      this.isLoggingIn = false;
       if (res.success)
-      {        
+      {
         this.loginForm.reset();
         this.route.navigate(['/']);
       }
       else
       {
-        console.error('Login failed:', res.error);
-        alert('Invalid email or password');
+        this.displayMessageService.showMessage('Login failed: ' + res.error);
       }
-    });
+    }
+    );
   }
 }

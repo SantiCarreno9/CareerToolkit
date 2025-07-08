@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
 import { ProfileEntryCategory } from '../../core/enums/profile-entry-category';
 import { environment } from '../../../environments/environment';
@@ -56,21 +56,33 @@ export class ProfileEntryService
   getProfileEntries(): Observable<RequestResponse<ProfileEntry[]>>
   {
     return this.http.get<ProfileEntry[]>(`${this.baseUrl}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, ProfileEntryHelperMethods.convertResponseToProfileEntries(res.body), res.statusText))
+      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, ProfileEntryHelperMethods.convertResponseToProfileEntries(res.body), res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
   getProfileEntryById(id: string): Observable<RequestResponse<ProfileEntry>>
   {
     return this.http.get<ProfileEntry>(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<ProfileEntry>(res.status === 200, ProfileEntryHelperMethods.convertResponseToProfileEntry(res.body), res.statusText))
+      map((res) => new RequestResponse<ProfileEntry>(res.status === 200, ProfileEntryHelperMethods.convertResponseToProfileEntry(res.body), res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
   getProfileEntriesByCategory(category: ProfileEntryCategory): Observable<RequestResponse<ProfileEntry[]>>
   {
     return this.http.get<ProfileEntry[]>(`${this.baseUrl}/category/${category}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, ProfileEntryHelperMethods.convertResponseToProfileEntries(res.body), res.statusText))
+      map((res) => new RequestResponse<ProfileEntry[]>(res.status === 200, ProfileEntryHelperMethods.convertResponseToProfileEntries(res.body), res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
@@ -78,7 +90,11 @@ export class ProfileEntryService
   {
     const request: ProfileEntryCommand = ProfileEntryHelperMethods.convertProfileEntryToProfileEntryCommand(data);
     return this.http.post<string>(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string>(res.status === 201, res.body, res.statusText))
+      map((res) => new RequestResponse<string>(res.status === 201, res.body, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
@@ -86,14 +102,22 @@ export class ProfileEntryService
   {
     const request: ProfileEntryCommand = ProfileEntryHelperMethods.convertProfileEntryToProfileEntryCommand(data);
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
+      map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
   deleteProfileEntry(id: string): Observable<RequestResponse<any>>
   {
     return this.http.delete(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText))
+      map((res) => new RequestResponse<any>(res.status === 204, null, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 

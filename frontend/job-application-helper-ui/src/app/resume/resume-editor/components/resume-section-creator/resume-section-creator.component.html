@@ -49,23 +49,14 @@
           <i class="bi bi-three-dots-vertical"></i>
         </div>
         <div class="p-2">
-          @if(index===this.newSectionIndex){
+          @if(section === this.section){
           {{ this.sectionCreatorForm.value.title }}
           }@else {
           {{ section.title }}
           }
         </div>
       </div>
-      }
-      <!-- <div class="draggable-box" cdkDrag>
-        <div class="drag-icon">
-          <i class="bi bi-three-dots-vertical"></i>
-          <i class="bi bi-three-dots-vertical"></i>
-        </div>
-        <div class="p-2">
-          {{ this.sectionCreatorForm.value.title }}
-        </div>
-      </div> -->
+      }      
     </div>
     <div class="justify-content-end d-flex mt-3">
       <button type="submit" class="btn btn-success mx-2">Create</button>

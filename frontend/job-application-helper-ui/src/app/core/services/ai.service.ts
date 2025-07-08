@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { RequestResponse } from '../models/requestresponse';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { ExperienceEntry } from '../models/experience-entry';
 import { AiResumeInstruction } from '../../resume/shared/models/ai-resume-instruction';
 
@@ -23,7 +23,11 @@ export class AiService
       experienceEntry: experienceEntry
     };
     return this.http.post<string[]>(`${this.baseUrl}/tailor-experience-entry`, body, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText))
+      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
@@ -35,7 +39,11 @@ export class AiService
       currentSummary: currentSummary
     };
     return this.http.post<string>(`${this.baseUrl}/tailor-summary`, body, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string>(res.status === 200, res.body, res.statusText))
+      map((res) => new RequestResponse<string>(res.status === 200, res.body, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
@@ -47,7 +55,11 @@ export class AiService
       currentSkills: currentSkills
     };
     return this.http.post<string[]>(`${this.baseUrl}/tailor-skills`, body, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText))
+      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
@@ -58,7 +70,11 @@ export class AiService
       sectionContent: sectionContent
     };
     return this.http.post<string>(`${this.baseUrl}/tailor-section`, body, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string>(res.status === 200, res.body, res.statusText))
+      map((res) => new RequestResponse<string>(res.status === 200, res.body, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
@@ -69,7 +85,11 @@ export class AiService
       experienceEntries: experienceEntries
     };
     return this.http.post<string[]>(`${this.baseUrl}/select-experience-entries`, body, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText))
+      map((res) => new RequestResponse<string[]>(res.status === 200, res.body, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 

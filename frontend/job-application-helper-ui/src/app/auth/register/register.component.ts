@@ -4,6 +4,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RegisterModel } from '../shared/models/registermodel';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DisplayMessageService } from '../../core/services/display-message.service';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +17,7 @@ export class RegisterComponent
 {
   protected router = inject(Router);
   protected authService: AuthService = inject(AuthService);
+  private displayMessageService = inject(DisplayMessageService);
 
   protected registerForm = new FormGroup({
     fullName: new FormControl('', Validators.required),
@@ -58,14 +61,15 @@ export class RegisterComponent
     {
       if (res.success)
       {
-        alert('Registration successful');
+        this.displayMessageService.showMessage('Registration successful');
         this.registerForm.reset();
         this.router.navigate(['/login']);
         return;
       }
       else
       {
-        alert(res.error);
+        if (res.error !== null)
+          this.displayMessageService.showMessage(res.error);
         return;
       }
     });

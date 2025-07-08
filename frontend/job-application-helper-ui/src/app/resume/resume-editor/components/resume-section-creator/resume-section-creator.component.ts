@@ -18,7 +18,7 @@ export class ResumeSectionCreatorComponent
   ResumeSectionType = ResumeSectionType;
   protected readonly sectionCreatorForm: FormGroup;
   protected sections: any[] = [];
-  protected newSectionIndex: number;
+  protected section: any;
 
   protected resumeSectionType: ResumeSectionType = ResumeSectionType.ProfileEntry;
 
@@ -31,8 +31,8 @@ export class ResumeSectionCreatorComponent
     {
       this.sections = [...data.sections];
     }
-    this.newSectionIndex = this.sections.length;
-    this.sections.push(new SectionInfoBase('', this.resumeSectionType));
+    this.section = new SectionInfoBase('', this.resumeSectionType)
+    this.sections.push(this.section);
     this.sectionCreatorForm = new FormGroup({
       title: new FormControl('', [
         Validators.required,
@@ -68,8 +68,6 @@ export class ResumeSectionCreatorComponent
 
   protected drop(event: CdkDragDrop<string[]>)
   {
-    if (this.newSectionIndex === event.previousIndex)
-      this.newSectionIndex = event.currentIndex;
     moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
   }
 
@@ -81,7 +79,9 @@ export class ResumeSectionCreatorComponent
       console.error('Form is invalid');
       return;
     }
-    this.sections[this.newSectionIndex] = (this.resumeSectionType === ResumeSectionType.ProfileEntry) ?
+    this.section.title = this.sectionCreatorForm.value.title;
+    const index = this.sections.findIndex((s) => s === this.section);
+    this.sections[index] = (this.resumeSectionType === ResumeSectionType.ProfileEntry) ?
       new SectionInfoProfileEntry(this.sectionCreatorForm.value.title, []) :
       new SectionInfoText(this.sectionCreatorForm.value.title, this.resumeSectionType, '');
     for (let i = 0; i < this.sections.length; i++)

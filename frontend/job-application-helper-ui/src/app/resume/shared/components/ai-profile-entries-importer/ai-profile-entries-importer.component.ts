@@ -8,6 +8,7 @@ import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { AiInstruction, AiResumeInstruction } from '../../models/ai-resume-instruction';
 import { ProfileEntryHelperMethods } from '../../../../profile-entry/shared/profile-entry-helper-methods';
 import { HelperMethods } from '../../../../core/helper-methods';
+import { DisplayMessageService } from '../../../../core/services/display-message.service';
 
 @Component({
   selector: 'app-ai-profile-entries-importer',
@@ -18,7 +19,7 @@ import { HelperMethods } from '../../../../core/helper-methods';
 export class AiProfileEntriesImporterComponent
 {
   protected aiService: AiService = inject(AiService);
-
+ private displayMessageService = inject(DisplayMessageService);
   // protected showAiTools:boolean
   @ViewChild('profileEntriesImporter') profileEntriesImporter!: ProfileEntriesImporterComponent;
   protected aiInstructionTypeOptions: Instruction[] = [];
@@ -71,6 +72,7 @@ export class AiProfileEntriesImporterComponent
       }
       else
       {
+        this.displayMessageService.showMessage('Error: ' + res.error);
         this.aiResponse = 'Error';
       }
     });

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { HttpEvent, HttpRequest, HttpErrorResponse, HttpHandlerFn } from '@angular/common/http';
-import { EMPTY, Observable, catchError, switchMap } from 'rxjs';
+import { EMPTY, Observable, catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 
@@ -37,7 +37,8 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
             }
             if (error.status === 429)
                 return EMPTY;
-            throw error;
+
+            return throwError(() => error.status === 500 ? new Error('Server Error') : error);
         })
     );
 }

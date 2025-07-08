@@ -15,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DisplayMessageService } from '../../core/services/display-message.service';
 
 @Component({
   selector: 'app-resume-list',
@@ -27,6 +29,7 @@ export class ResumeListComponent
   protected resumeService = inject(ResumeService);
   protected dialog = inject(Dialog);
   protected router = inject(Router);
+  private displayMessageService = inject(DisplayMessageService);
 
   protected length = 0;
   protected pageSize: number = 15;
@@ -39,7 +42,7 @@ export class ResumeListComponent
   protected isLoading: boolean = false;
   protected searchTermForm: FormControl = new FormControl('');
   protected selection = new SelectionModel<LightResume>(true, []);
-  displayedColumns: string[] = ['select', 'name', 'createdAt', 'keywords','buttons'];
+  displayedColumns: string[] = ['select', 'name', 'createdAt', 'keywords', 'buttons'];
 
   @ViewChild(MatTable)
   table!: MatTable<LightResume>;
@@ -58,6 +61,10 @@ export class ResumeListComponent
       {
         this.resumes = res.value.items;
         this.length = res.value.totalCount;
+      }
+      else
+      {
+        this.displayMessageService.showMessage('There was an error. Please try again later');
       }
       this.isLoading = false;
     })
@@ -94,9 +101,12 @@ export class ResumeListComponent
       this.resumeService.deleteResume(id).subscribe(res =>
       {
         if (res.success)
+        {
           this.resumes.splice(index, 1);
-        this.length--;
-        this.table.renderRows();
+          this.length--;
+          this.table.renderRows();
+          this.displayMessageService.showMessage('Resume deleted successfully!');
+        }
       })
     });
   }

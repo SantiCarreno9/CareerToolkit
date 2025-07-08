@@ -15,6 +15,7 @@ import { ProfileEntryHelperMethods } from '../../../profile-entry/shared/profile
 import { ProfileEntryService } from '../../services/profile-entry.service';
 import { UserService } from '../../services/user.service';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { DisplayMessageService } from '../../services/display-message.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,6 +33,7 @@ export class ProfileComponent
   protected dialog = inject(Dialog);
   protected userService: UserService = inject(UserService);
   protected profileEntryService: ProfileEntryService = inject(ProfileEntryService);
+  private displayMessageService = inject(DisplayMessageService);
 
   protected userInfo: UserInfo = {
     id: '',
@@ -85,7 +87,7 @@ export class ProfileComponent
           dialogRef.close(result);
         } else
         {
-          console.error('Failed to update user info');
+          this.displayMessageService.showMessage('Failed to update user info');
         }
       });
     })
@@ -113,6 +115,7 @@ export class ProfileComponent
           return true;
         } else
         {
+          this.displayMessageService.showMessage('Failed to update user info');
           console.error('Failed to update user info', response.error);
           return false;
         }
@@ -165,6 +168,7 @@ export class ProfileComponent
           dialogRef.close(result);
         } else
         {
+          this.displayMessageService.showMessage('Failed to create profile entry');
           console.error('Failed to create profile entry', response.error);
         }
       });
@@ -197,6 +201,7 @@ export class ProfileComponent
           dialogRef.close();
         } else
         {
+          this.displayMessageService.showMessage('Failed to create profile entry');
           console.error('Failed to create profile entry', response.error);
         }
       });
@@ -235,6 +240,7 @@ export class ProfileComponent
         this.profileEntries = response.value;
       } else
       {
+        this.displayMessageService.showMessage('Failed to load profile entries');
         console.error('Failed to load profile entries', response.error);
       }
     });

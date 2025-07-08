@@ -22,7 +22,6 @@ import { ResumeSectionType } from '../shared/models/resume-section-type';
 import { AiProfileEntryFormComponent } from './components/ai-profile-entry-form/ai-profile-entry-form.component';
 import { ProfileEntryService } from '../../core/services/profile-entry.service';
 import { ResumeService } from '../../core/services/resume.service';
-import { UserService } from '../../core/services/user.service';
 import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
 import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
 import { AiTextSectionFormComponent } from './components/ai-text-section-form/ai-text-section-form.component';
@@ -52,7 +51,6 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
   private router = inject(Router);
   private resumeService = inject(ResumeService);
   protected templateService = inject(ResumeTemplateService);
-  private userService: UserService = inject(UserService);
   private profileEntryService = inject(ProfileEntryService);
 
   @ViewChild(NgComponentOutlet, { static: false }) ngComponentOutlet?: NgComponentOutlet;
@@ -126,7 +124,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
         return;
       }
 
-      this.resume.resumeInfo = {templateId:'',sections:[]};
+      this.resume.resumeInfo = { templateId: '', sections: [] };
       this.resume = res.value;
       this.updateTemplate();
     })
@@ -239,8 +237,8 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
       const updatedInfo: UserPersonalInfo = {
         fullName: result.fullName,
         contactInfo: result.contactInfo
-      }      
-      this.resume.userInfo = updatedInfo;      
+      }
+      this.resume.userInfo = updatedInfo;
       this.hasUnsavedChanges = true;
       dialogRef.close();
     })
@@ -305,6 +303,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
     ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Section', `Do you want to delete this section?`, () =>
     {
       this.resume.resumeInfo.sections.splice(index, 1);
+      this.hasUnsavedChanges = true;
     });
   }
 

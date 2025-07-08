@@ -10,6 +10,7 @@ import { ResumeSectionType } from '../../../shared/models/resume-section-type';
 import { AiInstructionType } from '../../../../core/models/ai-instruction-type';
 import { HelperMethods } from '../../../../core/helper-methods';
 import { ProfileEntryHelperMethods } from '../../../../profile-entry/shared/profile-entry-helper-methods';
+import { DisplayMessageService } from '../../../../core/services/display-message.service';
 
 @Component({
   selector: 'app-ai-text-section-form',
@@ -21,6 +22,7 @@ export class AiTextSectionFormComponent
 {
 
   protected aiService: AiService = inject(AiService);
+  private displayMessageService = inject(DisplayMessageService);
 
   @ViewChild('textSectionForm') textSectionForm!: TextSectionFormComponent;
 
@@ -74,6 +76,7 @@ export class AiTextSectionFormComponent
         }
         else
         {
+          this.displayMessageService.showMessage('Error: ' + res.error);
           this.aiResponse = 'Error';
         }
       })
@@ -92,6 +95,7 @@ export class AiTextSectionFormComponent
         }
         else
         {
+          this.displayMessageService.showMessage('Error: ' + res.error);
           this.aiResponse = 'Error';
         }
       })
@@ -109,6 +113,7 @@ export class AiTextSectionFormComponent
         }
         else
         {
+          this.displayMessageService.showMessage('Error: ' + res.error);
           this.aiResponse = 'Error';
         }
       });

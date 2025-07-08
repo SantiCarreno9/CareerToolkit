@@ -14,8 +14,7 @@ export class ResumeSectionEditorComponent
 {
   protected readonly sectionEditorForm: FormGroup;
   protected sections: any[] = [];
-  protected sectionIndex: number = 0;
-  protected section:any={};
+  protected section: any;
 
   @Output() onSubmit = new EventEmitter<any[]>();
   @Output() onCancel = new EventEmitter<void>();
@@ -24,9 +23,8 @@ export class ResumeSectionEditorComponent
   {
     if (data)
     {
-      this.sections =[...data.sections];
-      this.sectionIndex = data.sectionIndex;
-      this.section = {...this.sections[this.sectionIndex]};
+      this.sections = [...data.sections];
+      this.section = this.sections[data.sectionIndex];
     }
     this.sectionEditorForm = new FormGroup({
       title: new FormControl(this.section.title, [
@@ -34,7 +32,7 @@ export class ResumeSectionEditorComponent
         Validators.minLength(2)
       ])
     });
-  }  
+  }
 
   get title()
   {
@@ -42,10 +40,8 @@ export class ResumeSectionEditorComponent
   }
 
   protected drop(event: CdkDragDrop<string[]>)
-  {     
+  {
     moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
-    if (event.previousIndex == this.sectionIndex)
-      this.sectionIndex = event.currentIndex;
   }
 
   protected submit(): void
@@ -56,6 +52,7 @@ export class ResumeSectionEditorComponent
       console.error('Form is invalid');
       return;
     }
+    this.section.title = this.sectionEditorForm.value.title;
     // this.sections[this.sectionIndex].title = this.sectionEditorForm.value.title;    
     this.onSubmit.emit(this.sections);
   }

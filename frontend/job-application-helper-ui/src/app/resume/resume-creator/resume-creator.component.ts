@@ -16,6 +16,7 @@ import { UserService } from '../../core/services/user.service';
 import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
 import { AiProfileEntriesImporterComponent } from '../shared/components/ai-profile-entries-importer/ai-profile-entries-importer.component';
 import { ResumeHelperMethods } from '../shared/resume-helper-methods';
+import { DisplayMessageService } from '../../core/services/display-message.service';
 
 @Component({
   selector: 'app-resume-creator',
@@ -25,10 +26,11 @@ import { ResumeHelperMethods } from '../shared/resume-helper-methods';
 })
 export class ResumeCreatorComponent
 {
-  resumeService = inject(ResumeService);
-  userService = inject(UserService);
-  profileEntryService = inject(ProfileEntryService);
-  router = inject(Router);
+  private resumeService = inject(ResumeService);
+  private userService = inject(UserService);
+  private profileEntryService = inject(ProfileEntryService);
+  private router = inject(Router);
+  private displayMessageService = inject(DisplayMessageService);
 
   @Output() onResumeCreated = new EventEmitter<Resume>();
   @Output() onCancel = new EventEmitter<void>();
@@ -92,6 +94,7 @@ export class ResumeCreatorComponent
     {
       if (!res.success || !res.value)
       {
+        this.displayMessageService.showMessage('Error retrieving entries');
         console.log(res.error);
         return;
       }
@@ -104,9 +107,12 @@ export class ResumeCreatorComponent
   {
     const userInfo = await lastValueFrom(this.userService.getUserInfo());
     if (!userInfo.success || !userInfo.value)
+    {
+      this.displayMessageService.showMessage('Error retrieving user info');
       return;
+    }
 
-    if(this.resume.profileEntries === undefined || this.resume.profileEntries === null || this.resume.profileEntries.length === 0)
+    if (this.resume.profileEntries === undefined || this.resume.profileEntries === null || this.resume.profileEntries.length === 0)
     {
       const entries = await lastValueFrom(this.profileEntryService.getProfileEntries());
       if (!entries.success || !entries.value)
@@ -123,6 +129,10 @@ export class ResumeCreatorComponent
       if (res.success && res.value)
       {
         this.onResumeCreated.emit(res.value);
+      }
+      else
+      {
+        this.displayMessageService.showMessage('There was an error creating the resume. Please try again later.');
       }
     })
   }

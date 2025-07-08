@@ -10,6 +10,7 @@ import { HelperMethods } from '../../../../core/helper-methods';
 import { AiSectionToolComponent, Instruction } from '../../../../core/components/ai-section-tool/ai-section-tool.component';
 import { AiInstructionType } from '../../../../core/models/ai-instruction-type';
 import { ProfileEntryHelperMethods } from '../../../../profile-entry/shared/profile-entry-helper-methods';
+import { DisplayMessageService } from '../../../../core/services/display-message.service';
 
 @Component({
   selector: 'app-ai-profile-entry-form',
@@ -21,6 +22,7 @@ export class AiProfileEntryFormComponent
 {
 
   protected aiService: AiService = inject(AiService);
+  private displayMessageService = inject(DisplayMessageService);
 
   @ViewChild('profileEntryForm') profileEntryForm!: ProfileEntryFormComponent;
 
@@ -78,6 +80,7 @@ export class AiProfileEntryFormComponent
       }
       else
       {
+        this.displayMessageService.showMessage('Error: ' + res.error);
         this.aiResponse = 'Error';
       }
     })

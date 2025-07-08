@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
 import { RequestResponse } from '../../core/models/requestresponse';
 import { PagedList } from '../../core/models/pagedlist';
 import { ProfileEntry } from '../../profile-entry/shared/models/profile-entry';
@@ -25,13 +25,21 @@ export class ResumeService
   getResumes(searchTerm: string, page: number, pageSize: number): Observable<RequestResponse<PagedList<LightResume>>>
   {
     return this.http.get(`${this.baseUrl}?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<PagedList<LightResume>>(res.status === 200, this.convertResponseToPagedList(res.body), res.statusText)))
+      map((res) => new RequestResponse<PagedList<LightResume>>(res.status === 200, this.convertResponseToPagedList(res.body), res.statusText)),      
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }))
   }
 
   getResumeById(id: string): Observable<RequestResponse<Resume>>
   {
     return this.http.get(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
+      map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)),      
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
   }
 
   createResume(data: Resume): Observable<RequestResponse<Resume>>
@@ -49,7 +57,11 @@ export class ResumeService
       jobPosting: data.jobPosting || ''
     };
     return this.http.post(`${this.baseUrl}`, request, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<Resume>(res.status === 201, this.convertToResume(res.body), res.statusText)));
+      map((res) => new RequestResponse<Resume>(res.status === 201, this.convertToResume(res.body), res.statusText)),      
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
   }
 
   updateResume(id: string, data: Resume): Observable<RequestResponse<Resume>>
@@ -68,13 +80,21 @@ export class ResumeService
       jobPosting: data.jobPosting || ''
     };
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)));
+      map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)),      
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
   }
 
   deleteResume(id: string): Observable<RequestResponse<any>>
   {
     return this.http.delete(`${this.baseUrl}/${id}`, { withCredentials: true, observe: 'response' }).pipe(
-      map((res) => new RequestResponse<Resume>(res.status === 204, null, res.statusText)));
+      map((res) => new RequestResponse<Resume>(res.status === 204, null, res.statusText)),      
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
   }
 
   private convertToResume(response: any): Resume

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable, Subject, tap } from 'rxjs';
-import { RequestResponse as CustomResponse, RequestResponse } from '../../core/models/requestresponse';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, Observable, of, Subject, tap } from 'rxjs';
+import { RequestResponse } from '../../core/models/requestresponse';
 import { environment } from '../../../environments/environment';
 import { UserBasicInfo } from '../../auth/shared/models/user-basic-info';
 import { RegisterModel } from '../../auth/shared/models/registermodel';
@@ -14,7 +14,7 @@ export class AuthService
 {
   private readonly baseUrl = environment.apiUrl + 'users';
   private onLoggedInStatusChange = new Subject<boolean>();
-  
+
   onLoggedInStatusChange$ = this.onLoggedInStatusChange.asObservable();
   isLoggedIn: boolean = false;
   userBasicInfo: UserBasicInfo = {
@@ -27,14 +27,14 @@ export class AuthService
   {
   }
 
-  register(data: RegisterModel): Observable<CustomResponse<any>>
+  register(data: RegisterModel): Observable<RequestResponse<any>>
   {
     return this.http.post(`${this.baseUrl}/register`, data, { observe: 'response' }).pipe(
-      map(res => new CustomResponse<void>(res.status === 204, null, res.statusText))
+      map(res => new RequestResponse<void>(res.status === 204, null, res.statusText))
     );
   }
 
-  loginWithCookies(data: LoginModel): Observable<CustomResponse<any>>
+  loginWithCookies(data: LoginModel): Observable<RequestResponse<any>>
   {
     return this.http.post(`${this.baseUrl}/login?useCookies=true`, data, { withCredentials: true, observe: 'response' }).pipe(
       tap(res =>
@@ -49,11 +49,17 @@ export class AuthService
           this.onLoggedInStatusChange.next(this.isLoggedIn);
         }
       }),
-      map(res => new CustomResponse<void>(res.status === 200, null, res.statusText))
+      map((res) => new RequestResponse<void>(res.status === 200, null, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        this.isLoggedIn = false;
+        this.onLoggedInStatusChange.next(false);
+        return of(new RequestResponse<any>(false, null, error.error));
+      })
     );
   }
 
-  logout(): Observable<CustomResponse<any>>
+  logout(): Observable<RequestResponse<any>>
   {
     return this.http.post(`${this.baseUrl}/logout`, {}, { withCredentials: true, observe: 'response' }).pipe(
       tap(res =>
@@ -61,7 +67,11 @@ export class AuthService
         this.isLoggedIn = !(res.status === 204);
         this.onLoggedInStatusChange.next(this.isLoggedIn);
       }),
-      map(res => new CustomResponse<void>(res.status === 204, null, res.statusText)));
+      map(res => new RequestResponse<void>(res.status === 204, null, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
   }
 
   isAuthenticated(): Observable<boolean>
@@ -71,10 +81,10 @@ export class AuthService
     );
   }
 
-  getCurrentUser(): Observable<CustomResponse<UserBasicInfo>>
+  getCurrentUser(): Observable<RequestResponse<UserBasicInfo>>
   {
     return this.http.get(`${this.baseUrl}/me`, { withCredentials: true, observe: 'response' }).pipe(
-      map(res => new CustomResponse<UserBasicInfo>(res.status === 200, res.body as UserBasicInfo, res.statusText)),
+      map(res => new RequestResponse<UserBasicInfo>(res.status === 200, res.body as UserBasicInfo, res.statusText)),
       tap({
         next: (res) =>
         {
@@ -93,6 +103,10 @@ export class AuthService
           }
           this.onLoggedInStatusChange.next(this.isLoggedIn);
         }
+      }),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
       })
     );
   }
@@ -103,7 +117,6 @@ export class AuthService
     {
       if (!res.success)
       {
-        console.log('Hey 4');
         this.refreshLoginWithCookies().subscribe();
       }
     });
@@ -124,7 +137,10 @@ export class AuthService
           this.onLoggedInStatusChange.next(this.isLoggedIn);
         }
       }),
-      map(res => new RequestResponse<void>(res.status === 200, null, res.statusText))
-    );
+      map(res => new RequestResponse<void>(res.status === 200, null, res.statusText)),
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
   }
 }
