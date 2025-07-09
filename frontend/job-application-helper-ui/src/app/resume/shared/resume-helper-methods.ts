@@ -47,7 +47,7 @@ export class ResumeHelperMethods
         {
             userPersonalInfo.contactInfo.push({
                 name: ContactOptions.PhoneNumber,
-                value: phoneNumber,
+                value: HelperMethods.getFormattedPhoneNumber(phoneNumber) ?? phoneNumber,
                 displayText: HelperMethods.getFormattedPhoneNumber(phoneNumber) ?? phoneNumber,
                 isUrl: false
             }

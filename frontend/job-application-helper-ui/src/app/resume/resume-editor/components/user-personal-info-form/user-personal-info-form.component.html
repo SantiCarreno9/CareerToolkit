@@ -22,7 +22,7 @@
         <option value="" selected>Add Contact Info</option>
         <option
           *ngFor="let item of this.availableContactOptions; index as i"
-          [value]="item.key"
+          [value]="item.value"
         >
           {{ item.value }}
         </option>
@@ -99,13 +99,13 @@
                   <div>Value is required.</div>
                   }
                 </div>
-                }
+                } @if(needDisplayText(contactInfo.name)){
                 <div class="form-check my-2">
                   <input
                     [id]="'checkbox-' + contactInfo.name"
                     class="form-check-input"
                     type="checkbox"
-                    (change)="displayTextInput.toggleAttribute('disabled')"
+                    (change)="displayTextInput.toggleAttribute('hidden')"
                   />
                   <label
                     class="form-check-label"
@@ -113,23 +113,23 @@
                     >Change display text</label
                   >
                 </div>
-                <div>
+                <div #displayTextInput hidden>
                   <label
                     class=""
                     [htmlFor]="'contact-display-text-' + contactInfo.name"
                     >Display Text</label
                   >
                   <input
-                    #displayTextInput
                     [id]="'contact-display-text-' + contactInfo.name"
                     type="text"
                     class="form-control flex-grow-1"
-                    placeholder="Value"                  
+                    placeholder="Value"
                     [formControlName]="
                       'contact-display-text-' + contactInfo.name
                     "
                   />
-                </div>                
+                </div>
+                }
               </div>
             </div>
             }

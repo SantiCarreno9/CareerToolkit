@@ -1,6 +1,12 @@
 <main>
   <app-navbar></app-navbar>
   <section class="content">
+    @if(!isCheckingLoggedInStatus){
     <router-outlet></router-outlet>
+    } @else{
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    }
   </section>
 </main>

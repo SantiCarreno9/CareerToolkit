@@ -68,7 +68,7 @@ export class UserPersonalInfoFormComponent
     if (!this.userInfoFormGroup.contains('contact-value-' + key))
     {
       this.userInfoFormGroup.addControl('contact-value-' + key, new FormControl(value.value));
-      this.userInfoFormGroup.addControl('contact-display-text-' + key, new FormControl({ value: value.displayText, disabled: true }));
+      this.userInfoFormGroup.addControl('contact-display-text-' + key, new FormControl(value.displayText??value.value));
       this.updateAvailableContactOptions();
     }
   }
@@ -141,8 +141,10 @@ export class UserPersonalInfoFormComponent
   protected drop(event: CdkDragDrop<string[]>)
   {
     moveItemInArray(this.userPersonalInfo.contactInfo, event.previousIndex, event.currentIndex);
-    // if (event.previousIndex == this.sectionIndex)
-    //   this.sectionIndex = event.currentIndex;
+  }
+
+  protected needDisplayText(name:string):boolean{
+    return !(name === ContactOptions.Address || name === ContactOptions.Other || name === ContactOptions.PhoneNumber);
   }
 
   protected getContactInfoControl(name: string)
@@ -151,8 +153,7 @@ export class UserPersonalInfoFormComponent
   }
 
   submit(): void
-  {
-    console.log('submit');
+  {  
     if (this.userInfoFormGroup.invalid)
     {
       this.userInfoFormGroup.markAllAsTouched();
@@ -170,18 +171,20 @@ export class UserPersonalInfoFormComponent
         continue;
       if (control && control.value)
       {
-        const index = this.userPersonalInfo.contactInfo.findIndex(ci => ci.name === name);
+        const index = this.userPersonalInfo.contactInfo.findIndex(ci => ci.name === name);        
         if (index === -1)
         {
           continue;
-        }
+        }        
         if (key.includes('value'))
         {
           this.userPersonalInfo.contactInfo[index].value = control.value;
+          this.userPersonalInfo.contactInfo[index].displayText = control.value;
         } else
         {
-          if (control.value.trim() !== '' &&
-            control.value !== this.userPersonalInfo.contactInfo[index].value)
+          if (control.value.trim() === '')
+            this.userPersonalInfo.contactInfo[index].displayText = this.userPersonalInfo.contactInfo[index].value;
+          else
             this.userPersonalInfo.contactInfo[index].displayText = control.value;
         }
       }
