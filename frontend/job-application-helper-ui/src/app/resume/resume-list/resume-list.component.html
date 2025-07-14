@@ -114,6 +114,15 @@
                 <i class="bi bi-pencil-square"></i>
               </a>
               <button
+                class="btn btn-outline-secondary"
+                #tooltip="matTooltip"
+                matTooltip="Duplicate"
+                [matTooltipPosition]="'above'"
+                (click)="openDuplicateResumeDialog(resume.id)"
+              >
+                <i class="bi bi-copy"></i>
+              </button>
+              <button
                 class="btn btn-outline-danger"
                 #tooltip="matTooltip"
                 matTooltip="Delete"

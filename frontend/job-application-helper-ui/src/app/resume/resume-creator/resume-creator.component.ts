@@ -41,6 +41,7 @@ export class ResumeCreatorComponent
   protected resume: Resume = new Resume();
   protected quickResume: boolean = false;
   protected entriesForImporter: any = {};
+  protected isCreating: boolean = false;
 
   constructor(@Inject(DIALOG_DATA) public data: { quickResume: boolean })
   {
@@ -103,12 +104,31 @@ export class ResumeCreatorComponent
     });
   }
 
+  protected goBackToPreviousPage(): void
+  {
+    if (this.currentPage === ResumeCreatorPages.ResumeName)
+      return;
+
+    if (this.currentPage === ResumeCreatorPages.TemplateSelector)
+    {
+      this.currentPage = this.quickResume ? ResumeCreatorPages.ResumeName : ResumeCreatorPages.ProfileEntriesImporter;
+      return;
+    }
+
+    if (this.currentPage === ResumeCreatorPages.ProfileEntriesImporter)
+    {
+      this.currentPage = ResumeCreatorPages.ResumeName;    
+    }
+  }
+
   protected async create(): Promise<void>
   {
+    this.isCreating = true;    
     const userInfo = await lastValueFrom(this.userService.getUserInfo());
     if (!userInfo.success || !userInfo.value)
     {
       this.displayMessageService.showMessage('Error retrieving user info');
+      this.isCreating = false;
       return;
     }
 
@@ -118,6 +138,7 @@ export class ResumeCreatorComponent
       if (!entries.success || !entries.value)
       {
         console.log(entries.error);
+        this.isCreating = false;
         return;
       }
       this.resume.profileEntries = entries.value;
@@ -126,6 +147,7 @@ export class ResumeCreatorComponent
     this.resume.resumeInfo.templateId = this.selectedTemplateId;
     this.resumeService.createResume(this.resume).subscribe(res =>
     {
+      this.isCreating = false;
       if (res.success && res.value)
       {
         this.onResumeCreated.emit(res.value);

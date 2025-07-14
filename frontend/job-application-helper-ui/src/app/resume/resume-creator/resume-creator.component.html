@@ -1,16 +1,30 @@
 <div id="resume-creator">
   <div class="form-container">
-    <h5>{{(quickResume?"Quick Resume":"Custom Resume")}}</h5>
-    @if(currentPage==ResumeCreatorPages.ResumeName){
+    <div class="d-flex flex-row align-items-center mb-2">
+      <button
+        class="btn btn-outline-secondary"
+        matTooltip="Go Back"
+        [hidden]="this.currentPage === ResumeCreatorPages.ResumeName"
+        [disabled]="isCreating"
+        (click)="goBackToPreviousPage()"
+      >
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="mx-2" style="font-size: larger; font-weight: 500">
+        {{ quickResume ? "Quick Resume" : "Custom Resume" }}
+      </div>
+    </div>
+    <!-- @if(){ -->
     <app-resume-basic-info-form
+      [hidden]="currentPage != ResumeCreatorPages.ResumeName"
       [acceptButtonText]="'Next'"
       (onSave)="saveResumeBasicInfo($event)"
       (onCancel)="cancel()"
     ></app-resume-basic-info-form>
-    } @if(currentPage==ResumeCreatorPages.ProfileEntriesImporter){
+    <!-- }  -->
     @if(this.resume.jobPosting!==null){
     <app-ai-profile-entries-importer
-      style="width: 700px"
+      [hidden]="currentPage != ResumeCreatorPages.ProfileEntriesImporter"
       [jobPosting]="this.resume.jobPosting"
       [acceptButtonText]="'Next'"
       [entries]="entriesForImporter"
@@ -19,18 +33,33 @@
     ></app-ai-profile-entries-importer>
     }@else {
     <app-profile-entries-importer
+      [hidden]="currentPage != ResumeCreatorPages.ProfileEntriesImporter"
       [acceptButtonText]="'Next'"
       [entries]="entriesForImporter"
       (onSubmit)="importProfileEntries($event)"
       (onCancel)="cancel()"
     ></app-profile-entries-importer>
-    } } @if(currentPage==ResumeCreatorPages.TemplateSelector){
+    } 
+    @if(currentPage==ResumeCreatorPages.TemplateSelector){ @if(!isCreating){
     <app-resume-template-selector
       [acceptButtonText]="'Create'"
       (onSelectTemplate)="selectTemplate($event)"
       (onCancel)="cancel()"
     ></app-resume-template-selector>
-    }
+    } @else {
+    <div
+      class="d-flex justify-content-center align-items-center"
+      style="width: 500px; height: 50vh; max-width: 90vw; max-height: 90vh"
+    >
+      <div
+        class="spinner-border"
+        style="width: 5rem; height: 5rem"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    } }
     <!-- <button class="btn btn-secondary" (click)="cancel()">Cancel</button> -->
   </div>
 </div>

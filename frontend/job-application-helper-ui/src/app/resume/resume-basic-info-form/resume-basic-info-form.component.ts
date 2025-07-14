@@ -15,11 +15,13 @@ export class ResumeBasicInfoFormComponent
 {
   protected readonly basicInfoForm: FormGroup;
   protected keywords: KeyValue<string, string>[] = [];
-
+  
   @Input() acceptButtonText: string = "Save"
   @Output() onSave = new EventEmitter<ResumeBasicInfo>();
   @Output() onCancel = new EventEmitter<void>();
 
+  protected isLoading: boolean = false;
+  
   constructor(@Inject(DIALOG_DATA) public data: { name: string, keywords: string[], jobPosting: string }, private formBuilder: FormBuilder)
   {
     this.basicInfoForm = this.formBuilder.group({
@@ -61,6 +63,10 @@ export class ResumeBasicInfoFormComponent
       this.basicInfoForm.removeControl('keyword-' + key);
       this.keywords.splice(index, 1);
     }
+  }
+
+  public setIsLoading(isLoading: boolean): void{
+    this.isLoading = isLoading;
   }
 
   protected save(): void

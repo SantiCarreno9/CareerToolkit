@@ -1,6 +1,8 @@
 import { ProfileEntryCategory } from "../../core/enums/profile-entry-category";
 import { HelperMethods } from "../../core/helper-methods";
 import { UserInfo } from "../../user/shared/models/user-info";
+import { LightResume } from "./models/light-resume";
+import { Resume } from "./models/resume";
 import { ContactOptions, UserPersonalInfo } from "./models/user-personal-info";
 
 
@@ -128,5 +130,15 @@ export class ResumeHelperMethods
             default:
                 return '';
         }
+    }
+
+    public static convertResumeToLightResume(resume: Resume): LightResume{
+        return {
+            id: resume.id,
+            name: resume.name,
+            keywords: resume.keywords,
+            createdAt: resume.createdAt,
+            modifiedAt: resume.modifiedAt
+        };
     }
 }

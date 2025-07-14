@@ -1,4 +1,7 @@
-<div id="basic-info-form-container" class="d-flex flex-column justify-content-center">  
+<div
+  id="basic-info-form-container"
+  class="d-flex flex-column justify-content-center"
+>
   <form [formGroup]="basicInfoForm" (submit)="save()" class="form p-3">
     <div class="mb-3">
       <div class="mb-3">
@@ -24,7 +27,7 @@
           >Keywords
           <button
             type="button"
-            class="btn btn-outline-success add-btn"            
+            class="btn btn-outline-success add-btn"
             (click)="addKeyword()"
           >
             <i class="bi bi-plus-lg"></i></button
@@ -54,7 +57,7 @@
             id="jobPosting"
             type="textarea"
             class="form-control"
-            formControlName="jobPosting"            
+            formControlName="jobPosting"
             >{{ jobPosting }}</textarea
           >
         </div>
@@ -64,8 +67,14 @@
       <button
         type="submit"
         class="btn btn-outline-dark m-2"
-        [disabled]="this.basicInfoForm.invalid"
+        [disabled]="this.basicInfoForm.invalid || isLoading"
       >
+        @if(isLoading) {
+        <span
+          class="spinner-border spinner-border-sm mx-2"
+          aria-hidden="true"
+        ></span>
+        }
         {{ acceptButtonText }}
       </button>
       <button

@@ -5,8 +5,15 @@
       #tooltip="matTooltip"
       matTooltip="Go Back"
       [matTooltipPosition]="'below'"
+      [disabled]="isGoingBack"
       (click)="goBack()"
     >
+      @if(isGoingBack){
+      <span
+        class="spinner-border spinner-border-sm mx-2"
+        aria-hidden="true"
+      ></span>
+      }
       <i class="bi bi-arrow-left"></i>
     </button>
     <div class="mw-50" style="max-width: 60%">
@@ -249,13 +256,13 @@
           </button>
         </div>
       </ng-container>
-    </cdk-accordion>    
-      @if(this.template!==undefined){
-      <div id="resume-container" class="resume-container">
-        <ng-container
-          *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
-        ></ng-container>
-      </div>
-      }    
+    </cdk-accordion>
+    @if(this.template!==undefined){
+    <div id="resume-container" class="resume-container">
+      <ng-container
+        *ngComponentOutlet="this.template; inputs: { resume: this.resume }"
+      ></ng-container>
+    </div>
+    }
   </div>
 </div>

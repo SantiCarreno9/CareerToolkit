@@ -3,8 +3,10 @@ h2 {
 }
 
 #basic-info-form-container {
+  max-width: 90vw;
+  max-height: 90vh;
   width: 500px;
-  max-width: 80vw;
+  // max-width: 80vw;
 }
 .grow-wrap {
   max-height: 20rem;

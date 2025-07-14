@@ -63,6 +63,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
   protected resume: Resume = new Resume();
   protected template: any;
   protected isSaving: boolean = false;
+  protected isGoingBack: boolean = false;
 
   constructor()
   {
@@ -78,6 +79,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
   {
     if (this.hasUnsavedChanges)
     {
+      this.isGoingBack = false;
       return confirm('You have unsaved changes. Do you want to leave?');
     }
     return true;
@@ -97,6 +99,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
   {
     if (this.hasUnsavedChanges)
     {
+      this.isGoingBack = false;
       event.preventDefault();
     }
   };
@@ -155,6 +158,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
 
   protected goBack(): void
   {
+    this.isGoingBack = true;
     this.router.navigate(['/resumes']);
   }
 
@@ -397,7 +401,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
     const dialogRef = this.dialog.open(ProfileEntryFormComponent, {
       width: '500px',
       data: {
-        profileEntry: profileEntry
+        profileEntry: {...profileEntry}
       },
       panelClass: ['custom-dialog-container', 'p-3'],
       disableClose: true

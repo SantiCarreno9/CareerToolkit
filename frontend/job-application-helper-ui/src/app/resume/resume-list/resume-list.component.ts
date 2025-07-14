@@ -15,8 +15,11 @@ import { MatInputModule } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DisplayMessageService } from '../../core/services/display-message.service';
+import { ResumeBasicInfoFormComponent } from '../resume-basic-info-form/resume-basic-info-form.component';
+import { ResumeBasicInfo } from '../shared/models/basic-resume-info';
+import { HelperMethods } from '../../core/helper-methods';
+import { ResumeHelperMethods } from '../shared/resume-helper-methods';
 
 @Component({
   selector: 'app-resume-list',
@@ -89,6 +92,52 @@ export class ResumeListComponent
     {
       dialogRef.close();
     })
+  }
+
+  protected openDuplicateResumeDialog(resumeId: string): void
+  {
+    this.resumeService.getResumeById(resumeId).subscribe(res =>
+    {
+      if (!res.success || res.value === null || res.value === undefined)
+      {
+        this.displayMessageService.showMessage('Error fetching existing resume details');
+        return;
+      }
+
+      const resume: Resume = res.value;
+      const dialogRef = this.dialog.open(ResumeBasicInfoFormComponent, {
+        data: {
+          name: resume.name + ' (Copy)',
+          keywords: resume.keywords,
+          jobPosting: resume.jobPosting
+        },
+        panelClass: ['custom-dialog-container', 'p-3'],
+        disableClose: true
+      });
+
+      dialogRef.componentInstance?.onSave.subscribe((ResumeBasicInfo: ResumeBasicInfo) =>
+      {
+        dialogRef.componentInstance?.setIsLoading(true);
+        this.resumeService.duplicateResume(resumeId, ResumeBasicInfo).subscribe(res =>
+        {
+          dialogRef.componentInstance?.setIsLoading(false);
+          if (!res.success || res.value === null || res.value === undefined)
+          {
+            this.displayMessageService.showMessage('Error duplicating resume');
+            return;
+          }          
+          this.resumes.unshift(ResumeHelperMethods.convertResumeToLightResume(res.value));
+          this.length++;
+          this.table.renderRows();
+          this.displayMessageService.showMessage('Resume duplicated successfully!');
+          dialogRef.close();
+        })
+      });
+      dialogRef.componentInstance?.onCancel.subscribe(() =>
+      {
+        dialogRef.close();
+      })
+    });
   }
 
   protected deleteResume(id: string): void

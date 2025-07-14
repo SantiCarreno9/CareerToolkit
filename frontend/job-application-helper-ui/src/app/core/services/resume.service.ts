@@ -10,6 +10,7 @@ import { Resume } from '../../resume/shared/models/resume';
 import { CreateResumeCommandRequest, UpdateResumeCommandRequest } from '../../resume/shared/models/resume-command-request';
 import { LightResume } from '../../resume/shared/models/light-resume';
 import { ResumeHelperMethods } from '../../resume/shared/resume-helper-methods';
+import { ResumeBasicInfo } from '../../resume/shared/models/basic-resume-info';
 
 @Injectable({
   providedIn: 'root'
@@ -81,6 +82,22 @@ export class ResumeService
     };
     return this.http.put(`${this.baseUrl}/${id}`, request, { withCredentials: true, observe: 'response' }).pipe(
       map((res) => new RequestResponse<Resume>(res.status === 200, this.convertToResume(res.body), res.statusText)),      
+      catchError((error: HttpErrorResponse) =>
+      {
+        return of(new RequestResponse<any>(false, null, error.error));
+      }));
+  }
+
+  duplicateResume(id: string, resumeBasicInfo: ResumeBasicInfo): Observable<RequestResponse<Resume>>
+  {
+    const request = {
+      id: id,
+      name: resumeBasicInfo.name,
+      keywords: JSON.stringify(resumeBasicInfo.keywords),
+      jobPosting: resumeBasicInfo.jobPosting || ''
+    };
+    return this.http.post(`${this.baseUrl}/duplicate`, request, { withCredentials: true, observe: 'response' }).pipe(
+      map((res) => new RequestResponse<Resume>(res.status === 201, this.convertToResume(res.body), res.statusText)),      
       catchError((error: HttpErrorResponse) =>
       {
         return of(new RequestResponse<any>(false, null, error.error));
