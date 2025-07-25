@@ -31,16 +31,17 @@
     @if(this.templateService.isSectionText(section)){
     <div class="section">
       <div class="title">{{ section.title }}</div>
-      <p
+      <div
         class="text content"
         [innerHTML]="HelperMethods.cleanHtmlString(section.content)"
-      ></p>
+        style="margin-bottom: 0;"
+      ></div>
     </div>
     } @else if(this.templateService.isSectionProfileEntry(section)){
 
     <div class="section">
       <div class="title">{{ section.title }}</div>
-      <div *ngFor="let id of section.entriesId">
+      <ng-container *ngFor="let id of section.entriesId">
         @let entry = getProfileEntryById(id); @if(entry!==undefined){
         <div class="entry-container">
           <div class="title-container">
@@ -54,13 +55,13 @@
             {{ `${entry.organization}, ${entry.location}` }}
           </div>
           }
-          <p
+          <div
             class="description text"
-            [innerHTML]="HelperMethods.cleanHtmlString(entry.description)"
-          ></p>
+            [innerHTML]="HelperMethods.cleanHtmlString(entry.description)"            
+          ></div>
         </div>
         }
-      </div>
+      </ng-container>
     </div>
     }
   </div>

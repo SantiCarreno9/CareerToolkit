@@ -1,4 +1,6 @@
 $base-color: black;
+$text-font-size: 0.8rem;
+$profile-entry-title-font-size: 0.9rem;
 :host {
   color: $base-color;
   font-size: 1rem;
@@ -11,7 +13,7 @@ a {
 
 p,
 div {
-  font-size: 1rem;
+  font-size: $text-font-size;
 }
 
 .resume {
@@ -24,7 +26,7 @@ div {
     margin-bottom: 1rem;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .contact-info-container {
@@ -35,8 +37,7 @@ div {
     margin-bottom: 1rem;
 
     p {
-      flex: 1;
-      margin-bottom: 0.5rem;
+      flex: 1;      
       text-align: center;
       word-wrap: break-word;
       word-break: keep-all;
@@ -56,12 +57,12 @@ div {
 }
 
 .section {
-  margin-bottom: 1rem;
+  margin-bottom: $text-font-size;
   break-inside: avoid-column;
 
   .title {
     text-transform: uppercase;
-    font-size: x-large;
+    font-size: $profile-entry-title-font-size;
     font-weight: 600;
     margin-bottom: 0.5rem;
     break-inside: avoid;
@@ -69,7 +70,7 @@ div {
 }
 
 .entry-container {
-  margin-bottom: 1rem;
+  margin-bottom: $text-font-size;
   break-inside: avoid;
 
   .title-container {
@@ -83,12 +84,12 @@ div {
     .title {
       text-align: left;
       text-transform: none;
-      font-size: 1.2rem;
+      font-size: $profile-entry-title-font-size;
       margin-bottom: 0;
     }
     .time-frame {
       text-align: right;
-      font-size: 1.1rem;
+      font-size: $profile-entry-title-font-size;
     }
   }
 }

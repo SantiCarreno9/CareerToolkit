@@ -1,4 +1,7 @@
 $base-color: black;
+$text-font-size: 0.8rem;
+$profile-entry-title-font-size: 0.9rem;
+
 :host {
   color: $base-color;
   font-size: 1rem;
@@ -11,25 +14,18 @@ a {
 
 p,
 div {
-  font-size: 1rem;
-}
-
-.resume {
-  // padding: 1rem;
+  font-size: $text-font-size;
 }
 
 #header {
   display: flex;
   .name {
     text-align: left;
-    // text-wrap: nowrap;
     text-wrap-mode: nowrap;
-    margin-bottom: 1rem;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     width: fit-content;
-    // flex-grow: 1;
   }
 
   .contact-info-container {
@@ -38,42 +34,40 @@ div {
     flex-direction: column;
     flex-wrap: nowrap;
     text-wrap-mode: nowrap;
-    // margin-bottom: 1rem;
     text-align: end;
 
     a,
     p {
-      flex: 1;
-      margin-bottom: 0;
+      flex: 1;      
       text-align: end;
       word-wrap: break-word;
       word-break: keep-all;
       min-width: 50%;
+      margin-bottom: 0 !important;
     }
-
-    // a {
-    //   flex: 1;
-    //   // text-align: center;
-    // }
   }
 }
 
 .section {
-  margin-bottom: 1rem;
+  margin-bottom: $text-font-size;
   break-inside: avoid-column;
 
   .title {
     text-transform: uppercase;
-    font-size: 1.2rem;
+    font-size: $profile-entry-title-font-size;
     font-weight: 600;
     margin-bottom: 0.5rem;
     width: 100%;
     border-bottom: solid black;
   }
+
+  p{
+    margin-bottom: 0 !important;
+  }
 }
 
 .entry-container {
-  margin-bottom: 1rem;
+  margin-bottom: $text-font-size;
   break-inside: avoid;
 
   .title-container {
@@ -87,13 +81,17 @@ div {
     .title {
       text-align: left;
       text-transform: none;
-      font-size: 1.1rem;
+      font-size: $profile-entry-title-font-size;
       margin-bottom: 0;
       border: none;
     }
     .time-frame {
       text-align: right;
-      font-size: 1.1rem;
+      font-size: $profile-entry-title-font-size;
     }
+  }
+
+  .organization-info {
+    font-size: $profile-entry-title-font-size;
   }
 }
