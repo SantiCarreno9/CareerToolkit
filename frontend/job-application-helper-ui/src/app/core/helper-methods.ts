@@ -96,7 +96,17 @@ export class HelperMethods
         return text === null || text === undefined || text.length == 0 || text.trim() === '';
     }
 
-    public static IsMobileDevice(): boolean{
-    return navigator.maxTouchPoints > 1;
-}
+    public static IsMobileDevice(): boolean
+    {
+        return navigator.maxTouchPoints > 1;
+    }
+
+    public static SelectText(element: HTMLElement): void
+    {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+    }
 }

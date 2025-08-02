@@ -123,6 +123,16 @@ export class ProfileEntryFormComponent
     return this.description?.value ===null || this.description?.value.length == 0;
   }
 
+  protected cleanField(fieldName: string): void
+  {
+    this.profileEntryFormGroup.get(fieldName)?.patchValue('');
+  }
+
+  protected isFieldEmpty(fieldName: string): boolean
+  {
+    return this.profileEntryFormGroup.get(fieldName)?.value.length > 0;
+  }
+
   protected submit(): void
   {
     if (this.profileEntryFormGroup.invalid)

@@ -4,7 +4,36 @@
 >
   <form [formGroup]="basicInfoForm" (submit)="save()" class="form p-3">
     <div class="mb-3">
-      <div class="mb-3">
+<div class="mb-1">
+        <div class="d-flex form-floating">          
+          <input
+            id="name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+          />
+          <button
+            [hidden]="!isFieldEmpty('name')"
+            type="button"
+            class="btn btn-icon"
+            (click)="cleanField('name')"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+          <label for="name">Name</label>
+        </div>
+        @if (name?.invalid && (name?.touched || name?.dirty)) {
+        <div class="alert alert-danger p-2 mb-0">
+          @if (name?.hasError('required')) {
+          <div>Name is required.</div>
+          } @else if(name?.hasError('minLength')){
+          <div>Name is too short.</div>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- <div class="mb-3">
         <label for="name">Name</label>
         <input
           id="name"
@@ -21,7 +50,7 @@
           }
         </div>
         }
-      </div>
+      </div> -->
       <div class="mb-3">
         <label class="form-label"
           >Keywords
@@ -51,7 +80,17 @@
         </div>
       </div>
       <div class="mb-3" style="flex: 1">
-        <label for="jobPosting">Job Posting (optional)</label>
+        <div>
+          <label for="jobPosting">Job Posting (optional)</label>
+          <button
+            [hidden]="!isFieldEmpty('jobPosting')"
+            type="button"
+            class="btn btn-icon"
+            (click)="cleanField('jobPosting')"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>        
         <div>
           <textarea
             id="jobPosting"

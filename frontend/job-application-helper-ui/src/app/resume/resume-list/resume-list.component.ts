@@ -45,7 +45,7 @@ export class ResumeListComponent
   protected isLoading: boolean = false;
   protected searchTermForm: FormControl = new FormControl('');
   protected selection = new SelectionModel<LightResume>(true, []);
-  displayedColumns: string[] = ['select', 'name', 'createdAt', 'keywords', 'buttons'];
+  displayedColumns: string[] = ['name', 'createdAt', 'keywords', 'buttons'];
 
   @ViewChild(MatTable)
   table!: MatTable<LightResume>;
@@ -125,7 +125,7 @@ export class ResumeListComponent
           {
             this.displayMessageService.showMessage('Error duplicating resume');
             return;
-          }          
+          }
           this.resumes.unshift(ResumeHelperMethods.convertResumeToLightResume(res.value));
           this.length++;
           this.table.renderRows();
@@ -170,6 +170,7 @@ export class ResumeListComponent
 
   protected search(): void
   {
+    this.pageIndex = 0;
     this.requestResumes();
   }
 

@@ -2,18 +2,30 @@
   <h2 style="text-align: center">My Info</h2>
   <form [formGroup]="userInfoFormGroup" (submit)="submit()" class="form p-3">
     <div class="mb-3">
-      <div class="mb-3">
-        <label for="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          class="form-control"
-          formControlName="fullName"
-        />
+      <div class="mb-1">
+        <div class="d-flex form-floating">
+          <input
+            id="fullName"
+            type="text"
+            class="form-control"
+            formControlName="fullName"
+          />
+          <button
+            [hidden]="!isFieldEmpty('fullName')"
+            type="button"
+            class="btn btn-icon"
+            (click)="cleanField('fullName')"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+          <label for="title">Title</label>
+        </div>
         @if (fullName?.invalid && (fullName?.touched || fullName?.dirty)) {
-        <div class="alert alert-danger p-2">
+        <div class="alert alert-danger p-2 mb-0">
           @if (fullName?.hasError('required')) {
-          <div>Full Name is required.</div>
+          <div>Name is required.</div>
+          } @if(fullName?.hasError('minlength')){
+          <div>Minimun 2 characters</div>
           }
         </div>
         }

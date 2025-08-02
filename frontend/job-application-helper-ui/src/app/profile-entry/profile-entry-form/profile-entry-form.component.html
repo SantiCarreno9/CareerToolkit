@@ -6,16 +6,26 @@
     class="form p-3"
   >
     <div class="mb-3">
-      <div class="form-floating mb-3">
-        <input
-          id="title"
-          type="text"
-          class="form-control"
-          formControlName="title"
-        />
-        <label for="title">Title</label>
+      <div class="mb-1">
+        <div class="d-flex form-floating">
+          <input
+            id="title"
+            type="text"
+            class="form-control"
+            formControlName="title"
+          />
+          <button
+            [hidden]="!isFieldEmpty('title')"
+            type="button"
+            class="btn btn-icon"
+            (click)="cleanField('title')"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+          <label for="title">Title</label>
+        </div>
         @if (title?.invalid && (title?.touched || title?.dirty)) {
-        <div class="alert alert-danger p-2">
+        <div class="alert alert-danger p-2 mb-0">
           @if (title?.hasError('required')) {
           <div>Title is required.</div>
           } @if(title?.hasError('minlength')){
@@ -24,27 +34,47 @@
         </div>
         }
       </div>
-      <div class="form-floating mb-3">
-        <input
-          id="organization"
-          type="text"
-          class="form-control disabled"
-          formControlName="organization"
-        />
-        <label for="organization">{{
-          profileEntry.category === ProfileEntryCategory.Education
-            ? "Institution"
-            : "Company"
-        }}</label>
+      <div class="mb-1">
+        <div class="d-flex form-floating">
+          <input
+            id="organization"
+            type="text"
+            class="form-control"
+            formControlName="organization"
+          />
+          <button
+            [hidden]="!isFieldEmpty('organization')"
+            type="button"
+            class="btn btn-icon"
+            (click)="cleanField('organization')"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+          <label for="organization">{{
+            profileEntry.category === ProfileEntryCategory.Education
+              ? "Institution"
+              : "Company"
+          }}</label>
+        </div>
       </div>
-      <div class="form-floating mb-3">
-        <input
-          id="location"
-          type="text"
-          class="form-control"
-          formControlName="location"
-        />
-        <label for="location">Location</label>
+      <div class="mb-1">
+        <div class="d-flex form-floating">
+          <input
+            id="location"
+            type="text"
+            class="form-control"
+            formControlName="location"
+          />
+          <button
+            [hidden]="!isFieldEmpty('location')"
+            type="button"
+            class="btn btn-icon"
+            (click)="cleanField('location')"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+          <label for="location">Location</label>
+        </div>
       </div>
       <div class="form-floating mb-3">
         <input
@@ -78,17 +108,17 @@
         <div>
           <label class="form-label">Description</label>
           <i
-        [hidden]="isDescriptionEmpty()"
-        class="btn bi bi-x-lg"
-        (click)="cleanDescription()"
-      ></i>
-        </div>        
+            [hidden]="isDescriptionEmpty()"
+            class="btn bi bi-x-lg"
+            (click)="cleanDescription()"
+          ></i>
+        </div>
         <quill-editor
           [modules]="descriptionQuillModules"
           formControlName="description"
         >
         </quill-editor>
-      </div>      
+      </div>
     </div>
     <div class="justify-content-end d-flex">
       <button type="submit" class="btn btn-outline-dark mx-2">Save</button>

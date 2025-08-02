@@ -105,4 +105,14 @@ export class ResumeBasicInfoFormComponent
     this.onCancel.emit();
   }
 
+  protected cleanField(fieldName: string): void
+  {
+    this.basicInfoForm.get(fieldName)?.patchValue('');
+  }
+
+  protected isFieldEmpty(fieldName: string): boolean
+  {
+    return this.basicInfoForm.get(fieldName)?.value.length > 0;
+  }
+
 }

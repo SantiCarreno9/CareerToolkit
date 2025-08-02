@@ -48,7 +48,7 @@
   <div class="mt-4">
     <div id="table-container">
       <table mat-table [dataSource]="this.resumes">
-        <ng-container matColumnDef="select">
+        <!-- <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
               (change)="$event ? toggleAllRows() : null"
@@ -65,7 +65,7 @@
             >
             </mat-checkbox>
           </td>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Name</th>

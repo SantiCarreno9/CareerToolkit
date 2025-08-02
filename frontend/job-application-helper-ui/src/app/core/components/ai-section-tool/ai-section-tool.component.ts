@@ -90,18 +90,9 @@ export class AiSectionToolComponent implements OnInit, OnChanges
       this.isWaitingForResponse;
   }
 
-  async copyToClipboard()
+  async copyToClipboard(element: HTMLElement)
   {
-    if (HelperMethods.IsMobileDevice())
-    {
-      const div: HTMLElement = this.responseContainer.nativeElement;
-      const range = document.createRange();
-      range.selectNodeContents(div);
-      const selection = window.getSelection();
-      selection?.removeAllRanges();
-      selection?.addRange(range);
-      return;
-    }
+    HelperMethods.SelectText(element);
     const blob = new Blob([this.responseText], { type: 'text/html' });
     const clipboardItem = new ClipboardItem({ 'text/html': blob });
 
