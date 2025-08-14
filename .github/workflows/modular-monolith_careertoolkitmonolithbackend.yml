@@ -1,14 +1,17 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - CareerToolkitMonolithBackend
+name: Build and deploy Backend
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - Modular-Monolith
-  workflow_dispatch:
-
+      - Modular-Monolith  
+env:
+  AZURE_WEBAPP_NAME: 'CareerToolkitMonolithBackend'
+  AZURE_WEBAPP_PACKAGE_PATH: "./publish"
+  
 jobs:
   build:
     runs-on: windows-latest
@@ -23,11 +26,15 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Restore
+        run: dotnet restore ./backend/Backend.sln
+        
+      - name: Build
+        run: dotnet build ./backend/Backend.sln --configuration Release --no-restore
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+      - name: Publish
+        run: dotnet publish ./backend/Backend.sln --configuration Release --no-build -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        #run: dotnet publish ./backend/Backend.sln --configuration Release --no-build -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -49,7 +56,8 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'CareerToolkitMonolithBackend'
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
-          package: .
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A7666EF6C1C94046872AA5FAD3F46095 }}
