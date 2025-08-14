@@ -6,6 +6,9 @@ name: Build and deploy Backend
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/modular-monolith-backend-AutoDeployTrigger.yml'
     branches:
       - Modular-Monolith  
 env:
