@@ -36,21 +36,21 @@ jobs:
         run: dotnet publish ./backend/Backend.sln --configuration Release --no-build -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
         #run: dotnet publish ./backend/Backend.sln --configuration Release --no-build -o "${{env.DOTNET_ROOT}}/myapp"
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+      #- name: Upload artifact for deployment job
+       # uses: actions/upload-artifact@v4
+        #with:
+         # name: .net-app
+          #path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
     needs: build
     
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
+      #- name: Download artifact from build job
+       # uses: actions/download-artifact@v4
+        #with:
+         # name: .net-app
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -61,3 +61,4 @@ jobs:
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A7666EF6C1C94046872AA5FAD3F46095 }}
+
