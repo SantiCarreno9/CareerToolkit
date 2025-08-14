@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+	  <Compile Remove="Extensions\**" />
+	  <Compile Remove="Resumes\Shared\**" />
+	  <EmbeddedResource Remove="Extensions\**" />
+	  <EmbeddedResource Remove="Resumes\Shared\**" />
+	  <None Remove="Extensions\**" />
+	  <None Remove="Resumes\Shared\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Scrutor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\SharedKernel\SharedKernel.csproj" />
+		<ProjectReference Include="..\Module.AI.Domain\Module.AI.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
