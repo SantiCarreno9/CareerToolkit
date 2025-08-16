@@ -306,6 +306,7 @@ export class ResumeEditorComponent implements CanComponentDeactivate, OnInit, On
 
     ConfirmationDialogComponent.OpenConfirmationDialog(this.dialog, 'Delete Section', `Do you want to delete this section?`, () =>
     {
+      this.resume.profileEntries = this.resume.profileEntries.filter(pe => !this.resume.resumeInfo.sections[index].entriesId.includes(pe.id));
       this.resume.resumeInfo.sections.splice(index, 1);
       this.hasUnsavedChanges = true;
     });

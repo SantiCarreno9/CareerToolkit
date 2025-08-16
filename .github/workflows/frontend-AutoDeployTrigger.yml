@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - Modular-Monolith
     paths:
       - 'frontend/job-application-helper-ui/**'
       - '.github/workflows/frontend-AutoDeployTrigger.yml'
