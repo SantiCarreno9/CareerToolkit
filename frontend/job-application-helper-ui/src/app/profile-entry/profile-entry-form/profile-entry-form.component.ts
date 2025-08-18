@@ -129,8 +129,8 @@ export class ProfileEntryFormComponent
   }
 
   protected isFieldEmpty(fieldName: string): boolean
-  {
-    return this.profileEntryFormGroup.get(fieldName)?.value.length > 0;
+  {    
+    return this.profileEntryFormGroup.get(fieldName)?.value?.length > 0;
   }
 
   protected submit(): void
