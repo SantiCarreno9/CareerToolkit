@@ -51,7 +51,7 @@ export class UserInfoFormComponent
     });
 
     this.fullContactOptions = Object.entries(ContactOptions).map(([key, value]) => ({ key, value }));
-
+    this.updateAvailableContactOptions();
     for (const key of Object.keys(this.userInfo.additionalContactInfo || {}))
     {
       this.addAdditionalContactInfoControl(key, this.userInfo.additionalContactInfo[key]);
