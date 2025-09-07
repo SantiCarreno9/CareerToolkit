@@ -37,9 +37,10 @@ internal sealed class TailorSkillsCommandHandler(
         };
 
         // Strong final instruction block
-        string instruction = "You are a resume assistant. Respond ONLY with 2–3 short, structured bullet points, each starting with a bolded skill group (e.g., **Game Development**).\n" +
+        string instruction = "You are a resume assistant who writes resumes that stand out and ALWAYS passes the ATS filters. Respond ONLY with 2–3 short, structured bullet points, each starting with a bolded skill group (e.g., **Game Development**).\n" +
                             "Each bullet should list related skills after the colon. Do not use verbs or full sentences. Do NOT write a summary or description.\n" +
                             "One bullet must cover soft skills or workflow-related strengths.\n" +
+                            "Since this points are in a resume, they need to be relevant enough so my resume stands out and it passes the ATS filters, ALWAYS keep it in mind.\n" +
                             "Be truthful and write the actual skills from my previous experience that are relevant to the job posting, don't just copy the skills mentioned on the job posting.\n" +
                             "Format: '**Group Name:** skill1, skill2, skill3'\n" +
                             "No paragraphs, no introductions, no full phrases.";

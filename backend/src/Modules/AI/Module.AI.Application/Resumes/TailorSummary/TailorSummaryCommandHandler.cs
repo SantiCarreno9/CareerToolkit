@@ -40,10 +40,11 @@ internal sealed class TailorSummaryCommandHandler(
         };
 
         string instruction =
-            "You are a resume assistant. Respond ONLY with a short professional summary in paragraph form for my resume.\n" +
+            "You are a resume assistant who writes resumes that stand out and ALWAYS passes the ATS filters. Respond ONLY with a short professional summary in paragraph form for my resume.\n" +
             "Limit the summary to 2–4 sentences.\n" +
             "Focus on my actual experience, technical skills, and strengths that relate to the job.\n" +
             "Use clear, direct, and natural-sounding language.\n" +
+            "DO NOT mention years of experience. ALWAYS mention relevant soft skills.\n" +
             "DO NOT use buzzwords like 'showcasing', 'aligning', 'mirroring', 'demonstrating passion', or similar vague terms.\n" +
             "DO NOT reference the job posting, company, or role explicitly.\n" +
             "DO NOT say things like 'I am applying for' or 'this role'—this summary goes directly on the resume.\n" +
