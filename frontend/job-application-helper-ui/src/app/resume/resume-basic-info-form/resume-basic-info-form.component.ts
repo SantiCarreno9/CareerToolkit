@@ -112,7 +112,7 @@ export class ResumeBasicInfoFormComponent
 
   protected isFieldEmpty(fieldName: string): boolean
   {
-    return this.basicInfoForm.get(fieldName)?.value.length > 0;
+    return this.basicInfoForm.get(fieldName)?.value?.length > 0;
   }
 
 }
